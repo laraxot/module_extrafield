@@ -1,0 +1,11 @@
+{
+    "name": "ExtraField",
+    "alias": "extrafield",
+    "description": "",
+    "keywords": [],
+    "priority": 0,
+    "providers": [
+        "Modules\\ExtraField\\Providers\\ExtraFieldServiceProvider"
+    ],
+    "files": []
+}
