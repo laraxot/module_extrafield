@@ -37,6 +37,9 @@ class CreateExtraFieldMorphTable extends XotBaseMigration {
                 if (! $this->hasColumn('value_class')) {
                     $table->string('value_class')->nullable();
                 }
+                if (! $this->hasColumn('uuid')) {
+                    $table->string('uuid')->nullable();
+                }
             }
         );
     }
