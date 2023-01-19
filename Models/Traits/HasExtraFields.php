@@ -20,6 +20,7 @@ trait HasExtraFields {
         return $this->morphToMany(ExtraField::class, 'model', $pivot_table)
             ->using($pivot_class)
             ->withPivot($pivot_fields)
-            ->withTimestamps();
+            // ->withTimestamps()
+        ;
     }
 }
