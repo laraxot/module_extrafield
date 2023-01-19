@@ -46,5 +46,6 @@ class ExtraFieldMorph extends BaseMorphPivot {
         'user_id',
         'value',
         'value_class',
+        'uuid',
     ];
 }
