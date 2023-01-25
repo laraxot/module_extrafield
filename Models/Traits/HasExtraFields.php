@@ -10,8 +10,10 @@ namespace Modules\ExtraField\Models\Traits;
 use Modules\ExtraField\Models\ExtraField;
 use Modules\ExtraField\Models\ExtraFieldMorph;
 
-trait HasExtraFields {
-    public function extraFields() {
+trait HasExtraFields
+{
+    public function extraFields()
+    {
         $pivot_class = ExtraFieldMorph::class;
         $pivot = app($pivot_class);
         $pivot_table = $pivot->getTable();

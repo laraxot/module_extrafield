@@ -11,6 +11,6 @@
 |
 */
 
-Route::prefix('extrafield')->group(function() {
+Route::prefix('extrafield')->group(function () {
     Route::get('/', 'ExtraFieldController@index');
 });
