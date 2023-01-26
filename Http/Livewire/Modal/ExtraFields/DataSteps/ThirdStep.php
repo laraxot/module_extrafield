@@ -95,5 +95,8 @@ class ThirdStep extends StepComponent {
             $value = collect($this->form2_data)->get($row->name);
             $model->extraFields()->attach($row->id, ['value' => $value, 'uuid' => $uuid]);
         }
+
+        $this->emit('refreshExtraFields');
+        session()->flash('message', 'Post successfully updated.');
     }
 }

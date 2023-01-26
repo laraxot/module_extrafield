@@ -13,7 +13,7 @@ use Modules\Blog\Models\Category;
 
 // use Modules\PFed\Models\Profile as ProfileModel;
 
-class ExtraFields extends Component {
+class UserExtraFields extends Component {
     /**
      * Summary of user_id.
      *
@@ -51,7 +51,7 @@ class ExtraFields extends Component {
         /**
          * @phpstan-var view-string
          */
-        $view = 'extrafield::livewire.extra_fields.'.$this->tpl;
+        $view = 'extrafield::livewire.user_extra_fields.'.$this->tpl;
 
         $categories = Category::ofType($this->model_type)->get();
 
@@ -83,10 +83,11 @@ class ExtraFields extends Component {
         }
         $this->category_name = $category->name;
 
-        $res = $this->model->extraFields()
+        $res = $this->model->extraFields()->get();
+        dddx($res);
 
-            // ->wherePivot('user_id', $this->user_id)
-            ->withAnyCategories($id);
+        // ->wherePivot('user_id', $this->user_id)
+        // ->withAnyCategories($id);
         // dddx(rowsToSql($res));
         $rows = $res->get();
 
@@ -102,5 +103,9 @@ class ExtraFields extends Component {
             });
 
         $this->groups = $res->all();
+    }
+
+    public function prova() {
+        return 'preso';
     }
 }
