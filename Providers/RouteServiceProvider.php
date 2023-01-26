@@ -1,69 +1,26 @@
 <?php
 
+declare(strict_types=1);
+
 namespace Modules\ExtraField\Providers;
 
-use Illuminate\Support\Facades\Route;
-use Illuminate\Foundation\Support\Providers\RouteServiceProvider as ServiceProvider;
+// -------models-----------
+// use Modules\Lang\Models\Post;
 
-class RouteServiceProvider extends ServiceProvider
-{
-    /**
-     * The module namespace to assume when generating URLs to actions.
-     *
-     * @var string
-     */
-    protected $moduleNamespace = 'Modules\ExtraField\Http\Controllers';
+// --- bases ---
+use Modules\Xot\Providers\XotBaseRouteServiceProvider;
 
-    /**
-     * Called before routes are registered.
-     *
-     * Register any model bindings or pattern based filters.
-     *
-     * @return void
-     */
-    public function boot()
-    {
-        parent::boot();
-    }
+/**
+ * Class RouteServiceProvider.
+ */
+class RouteServiceProvider extends XotBaseRouteServiceProvider {
+    protected string $moduleNamespace = 'Modules\ExtraField\Http\Controllers';
 
-    /**
-     * Define the routes for the application.
-     *
-     * @return void
-     */
-    public function map()
-    {
-        $this->mapApiRoutes();
+    protected string $module_dir = __DIR__;
 
-        $this->mapWebRoutes();
-    }
+    protected string $module_ns = __NAMESPACE__;
 
-    /**
-     * Define the "web" routes for the application.
-     *
-     * These routes all receive session state, CSRF protection, etc.
-     *
-     * @return void
-     */
-    protected function mapWebRoutes()
-    {
-        Route::middleware('web')
-            ->namespace($this->moduleNamespace)
-            ->group(module_path('ExtraField', '/Routes/web.php'));
-    }
+    // public function bootCallback(){
 
-    /**
-     * Define the "api" routes for the application.
-     *
-     * These routes are typically stateless.
-     *
-     * @return void
-     */
-    protected function mapApiRoutes()
-    {
-        Route::prefix('api')
-            ->middleware('api')
-            ->namespace($this->moduleNamespace)
-            ->group(module_path('ExtraField', '/Routes/api.php'));
-    }
+    // }
 }
