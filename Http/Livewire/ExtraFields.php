@@ -52,13 +52,13 @@ class ExtraFields extends Component {
         $categories = Category::ofType($type)->get();
 
         if (0 == $categories->count()) {
-            $all = config($type.'.categories');
+            $config_key = $type.'.categories';
+            $all = config($config_key);
             if (! is_array($all)) {
-                dddx($type.'.categories');
+                $msg = 'create config key ['.$config_key.']';
+                throw new \Exception($msg);
             }
-            // $profile = $this->profile;
             $res = $this->model->attachCategories($all);
-            // dddx($res);
         }
 
         $this->showCat($this->cat_id);
