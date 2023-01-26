@@ -26,6 +26,9 @@ class ExtraFields extends Component {
 
     public Model $model;
 
+    public string $model_type;
+    public int $model_id;
+
     public ?string $category_name;
 
     public array $groups = [];
@@ -34,6 +37,8 @@ class ExtraFields extends Component {
 
     public function mount(Model $model, string $tpl = 'v1'): void {
         $this->model = $model;
+        $this->model_id = $this->model->id;
+        $this->model_type = Str::snake(class_basename($this->model));
         $this->user_id = Auth::id();
         $this->tpl = $tpl;
     }
@@ -47,18 +52,17 @@ class ExtraFields extends Component {
          * @phpstan-var view-string
          */
         $view = 'extrafield::livewire.extra_fields.'.$this->tpl;
-        $type = Str::snake(class_basename($this->model));
 
-        $categories = Category::ofType($type)->get();
+        $categories = Category::ofType($this->model_type)->get();
 
         if (0 == $categories->count()) {
-            $config_key = $type.'.categories';
-            $all = config($config_key);
+            $all = config($this->model_.'.categories');
             if (! is_array($all)) {
-                $msg = 'create config key ['.$config_key.']';
-                throw new \Exception($msg);
+                dddx($this->model_.'.categories');
             }
+            // $profile = $this->profile;
             $res = $this->model->attachCategories($all);
+            // dddx($res);
         }
 
         $this->showCat($this->cat_id);

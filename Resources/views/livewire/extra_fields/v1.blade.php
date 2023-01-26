@@ -53,7 +53,8 @@
                     </x-slot>
                     <x-slot name="footer">
                         <button class="btn btn-primary"
-                            onclick="Livewire.emit('modal.open', 'modal.extra-fields.add-data', {'cat_id': {{ $cat_id }}})">
+                            {{-- onclick="Livewire.emit('modal.open', 'modal.extra-fields.add-data', {'cat_id': {{ $cat_id }}})"> --}}
+                            onclick="Livewire.emit('modal.open', 'modal.extra-fields.add-data', {'cat_id': {{ $cat_id }},'model_type': '{{ $model_type }}','model_id': {{$model_id}}})">
                             Add
                         </button>
                     </x-slot>

@@ -2,17 +2,15 @@
 
 declare(strict_types=1);
 
-namespace Modules\PFed\Http\Livewire\Modal\Profile\DataSteps;
+namespace Modules\ExtraField\Http\Livewire\Modal\ExtraFields\DataSteps;
 
 use Illuminate\Contracts\Support\Renderable;
 use Illuminate\Database\Eloquent\Relations\Relation;
 use Illuminate\Support\Str;
 use Modules\ExtraField\Models\ExtraField;
-use Modules\PFed\Models\Profile;
 use Spatie\LivewireWizard\Components\StepComponent;
 
-class ThirdStep extends StepComponent
-{
+class ThirdStep extends StepComponent {
     public array $form_data = [];
     public array $form1_data = [];
     public array $form2_data = [];
@@ -20,10 +18,9 @@ class ThirdStep extends StepComponent
     public bool $is_first = false;
     public bool $is_last = true;
 
-    public function mount(): void
-    {
-        $this->form1_data = $this->state()->all()['modal.profile.data-steps.first-step']['form_data'];
-        $this->form2_data = $this->state()->all()['modal.profile.data-steps.second-step']['form_data'];
+    public function mount(): void {
+        $this->form1_data = $this->state()->all()['modal.extra-fields.data-steps.first-step']['form_data'];
+        $this->form2_data = $this->state()->all()['modal.extra-fields.data-steps.second-step']['form_data'];
         // $this->form_data = array_merge($data01, $data02);
         // dddx(['01' => $data01, '02' => $data02]);
         /*
@@ -38,8 +35,7 @@ class ThirdStep extends StepComponent
     */
     }
 
-    public function render(): Renderable
-    {
+    public function render(): Renderable {
         /**
          * @phpstan-var view-string
          */
@@ -52,16 +48,14 @@ class ThirdStep extends StepComponent
         return view($view, $view_params);
     }
 
-    public function stepInfo(): array
-    {
+    public function stepInfo(): array {
         return [
             'label' => 'Data Description',
             'icon' => 'fa-shopping-cart',
         ];
     }
 
-    public function goNextStep(): void
-    {
+    public function goNextStep(): void {
         // dddx($this->form_data);
 
         // $this->emit('update_form_data', $this->form_data);
@@ -69,19 +63,20 @@ class ThirdStep extends StepComponent
         // $this->nextStep();
     }
 
-    public function save(): void
-    {
+    public function save(): void {
         $morph_map = [
             'extra_field' => 'Modules\ExtraField\Models\ExtraField',
         ];
 
         Relation::morphMap($morph_map);
-        // dddx($this->form_data);
         $user_id = $this->form1_data['user_id'];
         $group_id = $this->form1_data['group_id'];
         $cat_id = $this->form1_data['cat_id'];
-        $profile = Profile::firstOrCreate(['user_id' => $user_id]);
-        // dddx($profile->extraFields());
+        $model_type = $this->form1_data['model_type'];
+        $model_id = $this->form1_data['model_id'];
+        // dddx($model_type);
+        $model = config('morph_map')[$model_type]::findOrFail($model_id);
+
         $res = ExtraField::where('group_id', $group_id)
             ->withAnyCategories($cat_id)
         ;
@@ -98,7 +93,7 @@ class ThirdStep extends StepComponent
         $uuid = Str::uuid();
         foreach ($rows as $row) {
             $value = collect($this->form2_data)->get($row->name);
-            $profile->extraFields()->attach($row->id, ['value' => $value, 'uuid' => $uuid]);
+            $model->extraFields()->attach($row->id, ['value' => $value, 'uuid' => $uuid]);
         }
     }
 }

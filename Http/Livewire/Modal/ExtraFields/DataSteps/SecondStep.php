@@ -2,7 +2,7 @@
 
 declare(strict_types=1);
 
-namespace Modules\PFed\Http\Livewire\Modal\Profile\DataSteps;
+namespace Modules\ExtraField\Http\Livewire\Modal\ExtraFields\DataSteps;
 
 use Illuminate\Contracts\Support\Renderable;
 use Illuminate\Database\Eloquent\Relations\Relation;
@@ -12,8 +12,7 @@ use Modules\UI\Datas\FieldData;
 use Spatie\LaravelData\DataCollection;
 use Spatie\LivewireWizard\Components\StepComponent;
 
-class SecondStep extends StepComponent
-{
+class SecondStep extends StepComponent {
     public string $group_id = '';
     public string $cat_id = '';
     public array $form_data = [];
@@ -30,16 +29,15 @@ class SecondStep extends StepComponent
     */
     public array $fields;
 
-    public function mount(): void
-    {
+    public function mount(): void {
         $morph_map = [
             'extra_field' => 'Modules\ExtraField\Models\ExtraField',
         ];
 
         Relation::morphMap($morph_map);
 
-        $this->group_id = (string) $this->state()->all()['modal.profile.data-steps.first-step']['form_data']['group_id'];
-        $this->cat_id = (string) $this->state()->all()['modal.profile.data-steps.first-step']['form_data']['cat_id'];
+        $this->group_id = (string) $this->state()->all()['modal.extra-fields.data-steps.first-step']['form_data']['group_id'];
+        $this->cat_id = (string) $this->state()->all()['modal.extra-fields.data-steps.first-step']['form_data']['cat_id'];
         // dddx($this->cat_id);
         // $this->attrs = $this->getAttrs($this->data_id);
         $res = ExtraField::where('group_id', $this->group_id)
@@ -96,8 +94,7 @@ class SecondStep extends StepComponent
     }
     */
 
-    public function render(): Renderable
-    {
+    public function render(): Renderable {
         /**
          * @phpstan-var view-string
          */
@@ -111,16 +108,14 @@ class SecondStep extends StepComponent
         return view($view, $view_params);
     }
 
-    public function stepInfo(): array
-    {
+    public function stepInfo(): array {
         return [
             'label' => 'Input Data',
             'icon' => 'fa-shopping-cart',
         ];
     }
 
-    public function goNextStep(): void
-    {
+    public function goNextStep(): void {
         // $this->form_data['value'] = $this->form_data;
         // $this->emit('update_form_data', $this->form_data);
         $this->nextStep();

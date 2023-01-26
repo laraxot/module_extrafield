@@ -2,7 +2,7 @@
 
 declare(strict_types=1);
 
-namespace Modules\PFed\Http\Livewire\Modal\Profile;
+namespace Modules\ExtraField\Http\Livewire\Modal\Profile;
 
 use Illuminate\Contracts\Support\Renderable;
 use Illuminate\Support\Facades\Auth;
@@ -10,15 +10,13 @@ use Modules\PFed\Models\Profile as ProfileModel;
 use Modules\UI\Datas\FieldData;
 use WireElements\Pro\Components\Modal\Modal;
 
-class EditData extends Modal
-{
+class EditData extends Modal {
     public string $title;
     public array $form_data = [];
     public string $user_id;
     public string $uuid;
 
-    public function mount(string $uuid): void
-    {
+    public function mount(string $uuid): void {
         $this->user_id = (string) Auth::id();
         $this->uuid = $uuid;
 
@@ -29,13 +27,11 @@ class EditData extends Modal
         $this->form_data = $data;
     }
 
-    public function getProfileProperty()
-    {
+    public function getProfileProperty() {
         return ProfileModel::where('user_id', $this->user_id)->first();
     }
 
-    public function getRowsProperty()
-    {
+    public function getRowsProperty() {
         $rows = $this->profile
         ->extraFields()
         ->wherePivot('uuid', $this->uuid)
@@ -44,8 +40,7 @@ class EditData extends Modal
         return $rows;
     }
 
-    public function render(): Renderable
-    {
+    public function render(): Renderable {
         /**
          * @phpstan-var view-string
          */
@@ -59,8 +54,7 @@ class EditData extends Modal
         return view($view, $view_params);
     }
 
-    public static function attributes(): array
-    {
+    public static function attributes(): array {
         return [
             // Set the modal size to 2xl, you can choose between:
             // xs, sm, md, lg, xl, 2xl, 3xl, 4xl, 5xl, 6xl, 7xl
@@ -68,8 +62,7 @@ class EditData extends Modal
         ];
     }
 
-    public function save()
-    {
+    public function save() {
         $rows = $this->rows;
         foreach ($rows as $row) {
             $value = collect($this->form_data)->get($row->name);

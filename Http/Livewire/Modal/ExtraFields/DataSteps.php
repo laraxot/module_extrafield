@@ -13,9 +13,13 @@ use Spatie\LivewireWizard\Components\WizardComponent;
 class DataSteps extends WizardComponent {
     public int $cat_id;
     public string $user_id;
+    public Model $model;
 
-    public function mount(int $cat_id): void {
+    public function mount(int $cat_id, string $model_type, int $model_id): void {
+        // dddx(['model_type' => $model_type, 'model_id' => $model_id]);
         $this->cat_id = $cat_id;
+        $this->model_type = $model_type;
+        $this->model_id = $model_id;
         $this->user_id = (string) Auth::id();
     }
 
@@ -29,10 +33,12 @@ class DataSteps extends WizardComponent {
 
     public function initialState(): array {
         return [
-            'modal.profile.data-steps.first-step' => [
+            'modal.extra-fields.data-steps.first-step' => [
                 'cat_id' => $this->cat_id,
+                'model_type' => $this->model_type,
+                'model_id' => $this->model_id,
             ],
-            'modal.profile.data-steps.second-step' => [
+            'modal.extra-fields.data-steps.second-step' => [
                 // 'data_id' => $this->data_id,
             ],
         ];

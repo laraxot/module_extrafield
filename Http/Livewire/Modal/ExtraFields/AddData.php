@@ -13,6 +13,8 @@ class AddData extends Modal {
     public array $form_data = [];
     public string $cat_id;
     public string $user_id;
+    public string $model_type;
+    public int $model_id;
 
     /**
      * @var array<string, string>
@@ -22,24 +24,19 @@ class AddData extends Modal {
         'save' => 'save',
     ];
 
-    public function mount(string $cat_id): void {
+    public function mount(string $cat_id, string $model_type, int $model_id): void {
+        // $this->model = config('morph_map')[$model_type]::find($model_id);
+        $this->model_type = $model_type;
+        $this->model_id = $model_id;
         $this->user_id = (string) Auth::id();
         $this->cat_id = $cat_id;
-        /*
-        $category = Category::find($cat_id);
-        if (! is_null($category)) {
-            $this->title = $category->name;
-        }
-        */
-        // $this->user_datum = UserDatum::find($user_datum_id);
-        // dddx($this->user_datum->data->category);
     }
 
     public function render(): Renderable {
         /**
          * @phpstan-var view-string
          */
-        $view = 'pfed::livewire.modal.profile.add_data';
+        $view = 'pfed::livewire.modal.model.add_data';
 
         $view_params = [
             'view' => $view,
