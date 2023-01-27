@@ -26,7 +26,8 @@ class ExtraFieldsAction extends XotBasePanelAction {
         /**
          *  @phpstan-var view-string
          */
-        $view = 'extrafield::admin.acts.user.extra_fields';
+        // $view = 'extrafield::admin.acts.user.extra_fields';
+        $view = 'extrafield::admin.acts.extra_fields';
 
         $view_params = [
             'view' => $view,
