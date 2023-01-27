@@ -36,7 +36,6 @@
                     <x-slot name="txt">
                         @foreach ($groups as $group)
                             <h3>{{ $group['label'] }}</h3>
-
                             @foreach ($group['items_grouped'] as $uuid => $groups1)
                                 {{-- <h4>{{$uuid}}</h4> --}}
                                 @foreach ($groups1 as $k1 => $group2)

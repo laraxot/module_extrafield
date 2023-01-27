@@ -80,10 +80,8 @@ class ExtraFields extends Component {
         $this->category_name = $category->name;
 
         $res = $this->model->extraFields()
-
-            // ->wherePivot('user_id', $this->user_id)
+            ->wherePivot('user_id', null)
             ->withAnyCategories($id);
-        // dddx(rowsToSql($res));
         $rows = $res->get();
 
         $res = $rows->groupBy('group_id')

@@ -4,8 +4,7 @@
             <div class="card card-primary card-outline">
                 <div class="card-body box-profile">
                     <div class="text-center">
-                        <img class="profile-user-img img-fluid img-circle" src="{{ $model->avatar() }}"
-                            alt="">
+                        <img class="profile-user-img img-fluid img-circle" src="{{ $model->avatar() }}" alt="">
                     </div>
                     <h3 class="profile-username text-center">{{ $model->handle() }}</h3>
 
@@ -34,20 +33,19 @@
                     <x-slot name="title">{{ $category_name }}</x-slot>
 
                     <x-slot name="txt">
-                        @foreach($groups as $group)
+                        @foreach ($groups as $group)
                             <h3>{{ $group['label'] }}</h3>
-                            
-                            @foreach($group['items_grouped'] as $uuid => $groups1)
-                               
-                                @foreach($groups1 as $k1 => $item)
-                                    <br/>{{ $item->name }}:  {{--$this->getFromUserTable($item)--}}
-                                    {{$item->pivot->userValue($this->user_id)}}
+
+                            @foreach ($group['items_grouped'] as $uuid => $groups1)
+                                @foreach ($groups1 as $k1 => $item)
+                                    <br />{{ $item->name }}: {{-- $this->getFromUserTable($item) --}}
+                                    {{ $item->pivot->userValue($this->user_id) }}
                                 @endforeach
-                                <button type="button" class="btn btn-primary" 
-                                    wire:click="$emit('modal.open', 'modal.extra-fields.edit-data',{'uuid':'{{ $uuid }}','model_type': '{{ $model_type }}','model_id': {{$model_id}}})">Edit</button>Edit</button>
-                                <hr/>
+                                <button type="button" class="btn btn-primary"
+                                    wire:click="$emit('modal.open', 'modal.extra-fields.user.edit-data',{'uuid':'{{ $uuid }}','model_type': '{{ $model_type }}','model_id': {{ $model_id }}})">
+                                    Edit</button>
+                                <hr />
                             @endforeach
-                            
                         @endforeach
 
 
@@ -55,6 +53,6 @@
                 </x-card>
             @endif
         </div>
-       
+
     </div>
 </div>

@@ -77,6 +77,7 @@ class ExtraFieldMorph extends BaseMorphPivot {
     }
 
     public function updateUserValue(string $user_id, $value) {
+        // si creano dei doppioni con update. perchè?
         $row = ExtraFieldMorph::firstOrCreate([
             'user_id' => $user_id,
             'model_type' => $this->model_type,
