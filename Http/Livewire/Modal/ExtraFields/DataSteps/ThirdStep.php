@@ -39,7 +39,7 @@ class ThirdStep extends StepComponent {
         /**
          * @phpstan-var view-string
          */
-        $view = 'pfed::livewire.modal.profile.data_steps.third_step';
+        $view = 'extrafield::livewire.modal.profile.data_steps.third_step';
 
         $view_params = [
             'view' => $view,
@@ -74,7 +74,6 @@ class ThirdStep extends StepComponent {
         $cat_id = $this->form1_data['cat_id'];
         $model_type = $this->form1_data['model_type'];
         $model_id = $this->form1_data['model_id'];
-        // dddx($model_type);
         $model = config('morph_map')[$model_type]::findOrFail($model_id);
 
         $res = ExtraField::where('group_id', $group_id)
@@ -96,6 +95,7 @@ class ThirdStep extends StepComponent {
             $model->extraFields()->attach($row->id, ['value' => $value, 'uuid' => $uuid]);
         }
 
+        $this->close();
         $this->emit('refreshExtraFields');
         session()->flash('message', 'Post successfully updated.');
     }

@@ -61,7 +61,7 @@ class FirstStep extends StepComponent {
         /**
          * @phpstan-var view-string
          */
-        $view = 'pfed::livewire.modal.model.data_steps.first_step';
+        $view = 'extrafield::livewire.modal.model.data_steps.first_step';
 
         $view_params = [
             'view' => $view,

@@ -46,7 +46,7 @@
                                     <br/>{{ $group2->name }}: {{ $group2->pivot->value }}
                                 @endforeach
                                 <button type="button" class="btn btn-primary" 
-                                    wire:click="$emit('modal.open', 'modal.extra-fields.edit-data',{'uuid':'{{ $uuid }}'})">Edit</button>
+                                    wire:click="$emit('modal.open', 'modal.extra-fields.edit-data',{'uuid':'{{ $uuid }}','model_type': '{{ $model_type }}','model_id': {{$model_id}}})">Edit</button>Edit</button>
                                 <hr/>
                             @endforeach
                             

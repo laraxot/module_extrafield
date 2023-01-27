@@ -7,7 +7,7 @@ namespace Modules\ExtraField\Http\Livewire\Modal\ExtraFields\DataSteps;
 use Illuminate\Contracts\Support\Renderable;
 use Illuminate\Database\Eloquent\Relations\Relation;
 use Modules\ExtraField\Models\ExtraField;
-use Modules\PFed\Models\Data;
+// use Modules\PFed\Models\Data;
 use Modules\UI\Datas\FieldData;
 use Spatie\LaravelData\DataCollection;
 use Spatie\LivewireWizard\Components\StepComponent;
@@ -98,7 +98,7 @@ class SecondStep extends StepComponent {
         /**
          * @phpstan-var view-string
          */
-        $view = 'pfed::livewire.modal.profile.data_steps.second_step';
+        $view = 'extrafield::livewire.modal.profile.data_steps.second_step';
 
         $view_params = [
             'view' => $view,

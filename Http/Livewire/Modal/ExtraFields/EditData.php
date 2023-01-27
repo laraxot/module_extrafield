@@ -2,11 +2,11 @@
 
 declare(strict_types=1);
 
-namespace Modules\ExtraField\Http\Livewire\Modal\Profile;
+namespace Modules\ExtraField\Http\Livewire\Modal\ExtraFields;
 
 use Illuminate\Contracts\Support\Renderable;
+use Illuminate\Database\Eloquent\Model;
 use Illuminate\Support\Facades\Auth;
-use Modules\PFed\Models\Profile as ProfileModel;
 use Modules\UI\Datas\FieldData;
 use WireElements\Pro\Components\Modal\Modal;
 
@@ -15,8 +15,15 @@ class EditData extends Modal {
     public array $form_data = [];
     public string $user_id;
     public string $uuid;
+    public string $model_type;
+    public int $model_id;
+    public Model $model;
 
-    public function mount(string $uuid): void {
+    public function mount(string $uuid, string $model_type, int $model_id): void {
+        $this->model_type = $model_type;
+        $this->model_id = $model_id;
+        $this->model = config('morph_map')[$this->model_type]::findOrFail($this->model_id);
+
         $this->user_id = (string) Auth::id();
         $this->uuid = $uuid;
 
@@ -27,12 +34,12 @@ class EditData extends Modal {
         $this->form_data = $data;
     }
 
-    public function getProfileProperty() {
-        return ProfileModel::where('user_id', $this->user_id)->first();
+    public function getModelProperty() {
+        return $this->model::where('user_id', $this->user_id)->first();
     }
 
     public function getRowsProperty() {
-        $rows = $this->profile
+        $rows = $this->model
         ->extraFields()
         ->wherePivot('uuid', $this->uuid)
         ->get();
@@ -44,7 +51,7 @@ class EditData extends Modal {
         /**
          * @phpstan-var view-string
          */
-        $view = 'pfed::livewire.modal.profile.edit_data';
+        $view = 'extrafield::livewire.modal.model.edit_data';
 
         $view_params = [
             'view' => $view,
@@ -68,6 +75,9 @@ class EditData extends Modal {
             $value = collect($this->form_data)->get($row->name);
             $row->pivot->update(['value' => $value]);
         }
-        $this->emit('refreshProfile');
+
+        $this->close();
+        $this->emit('refreshExtraFields');
+        session()->flash('message', 'Post successfully updated.');
     }
 }

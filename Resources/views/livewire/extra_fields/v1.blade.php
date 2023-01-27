@@ -43,7 +43,7 @@
                                     <br/>{{ $group2->name }}: {{ $group2->pivot->value }}
                                 @endforeach
                                 <button type="button" class="btn btn-primary" 
-                                    wire:click="$emit('modal.open', 'modal.extra-fields.edit-data',{'uuid':'{{ $uuid }}'})">Edit</button>
+                                    wire:click="$emit('modal.open', 'modal.extra-fields.edit-data',{'uuid':'{{ $uuid }}','model_type': '{{ $model_type }}','model_id': {{$model_id}}})">Edit</button>
                                 <hr/>
                             @endforeach
                             
@@ -53,7 +53,6 @@
                     </x-slot>
                     <x-slot name="footer">
                         <button class="btn btn-primary"
-                            {{-- onclick="Livewire.emit('modal.open', 'modal.extra-fields.add-data', {'cat_id': {{ $cat_id }}})"> --}}
                             onclick="Livewire.emit('modal.open', 'modal.extra-fields.add-data', {'cat_id': {{ $cat_id }},'model_type': '{{ $model_type }}','model_id': {{$model_id}}})">
                             Add
                         </button>

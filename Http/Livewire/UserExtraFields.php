@@ -83,11 +83,10 @@ class UserExtraFields extends Component {
         }
         $this->category_name = $category->name;
 
-        $res = $this->model->extraFields()->get();
-        dddx($res);
+        $res = $this->model->extraFields()
 
-        // ->wherePivot('user_id', $this->user_id)
-        // ->withAnyCategories($id);
+            // ->wherePivot('user_id', $this->user_id)
+            ->withAnyCategories($id);
         // dddx(rowsToSql($res));
         $rows = $res->get();
 
