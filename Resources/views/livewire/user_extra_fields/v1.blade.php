@@ -40,10 +40,8 @@
                             @foreach($group['items_grouped'] as $uuid => $groups1)
                                
                                 @foreach($groups1 as $k1 => $item)
-
-                                   
-
-                                    <br/>{{ $item->name }}:  {{$this->getFromUserTable($item)}}
+                                    <br/>{{ $item->name }}:  {{--$this->getFromUserTable($item)--}}
+                                    {{$item->pivot->userValue($this->user_id)}}
                                 @endforeach
                                 <button type="button" class="btn btn-primary" 
                                     wire:click="$emit('modal.open', 'modal.extra-fields.edit-data',{'uuid':'{{ $uuid }}','model_type': '{{ $model_type }}','model_id': {{$model_id}}})">Edit</button>Edit</button>

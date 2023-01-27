@@ -29,8 +29,21 @@ class EditData extends Modal {
 
         // $fields = FieldData::collection($rows);
 
-        $value = $this->rows->first()->pivot->extraFieldMorphUserValues()->where('user_id', Auth::id())->get()->last()->value ?? '';
-        $data = $this->rows->pluck($value, 'name')->all();
+        // $data = $this->rows->map(function ($item) {
+        //     // dddx($item);
+
+        //     return [$item->name => $item->pivot->extraFieldMorphUserValues()->where('user_id', $this->user_id)->get()->last()->value ?? ''];
+        // });
+        // dddx($this->rows);
+        // $data = $this->rows->pluck('pivot.value', 'name')->all();
+
+        $data = $this->rows->map(function ($item) {
+            return [
+                'name' => $item->name,
+                'value' => $item->pivot->userValue($this->user_id),
+            ];
+        })->pluck('value', 'name')
+        ->all();
 
         $this->form_data = $data;
     }
@@ -42,7 +55,9 @@ class EditData extends Modal {
     public function getRowsProperty() {
         $rows = $this->model
         ->extraFields()
+        // ->wherePivot('user_id', $this->user_id)
         ->wherePivot('uuid', $this->uuid)
+        ->wherePivot('user_id', null)
         ->get();
 
         return $rows;
@@ -52,7 +67,7 @@ class EditData extends Modal {
         /**
          * @phpstan-var view-string
          */
-        $view = 'extrafield::livewire.modal.model.edit_data';
+        $view = 'extrafield::livewire.modal.extra_fields.edit_data';
 
         $view_params = [
             'view' => $view,
@@ -75,10 +90,11 @@ class EditData extends Modal {
         foreach ($rows as $row) {
             $value = collect($this->form_data)->get($row->name);
             // $row->pivot->update(['value' => $value]);
-            $row->pivot->extraFieldMorphUserValues()->create(['value' => $value, 'user_id' => Auth::id()]);
+            // $row->pivot->extraFieldMorphUserValues()->create(['value' => $value, 'user_id' => $this->user_id]);
+            $row->pivot->updateUserValue($this->user_id, $value);
         }
 
-        $this->close();
+        // $this->close();
         $this->emit('refreshExtraFields');
         session()->flash('message', 'Post successfully updated.');
     }

@@ -5,6 +5,7 @@ declare(strict_types=1);
 namespace Modules\ExtraField\Models;
 
 use Illuminate\Database\Eloquent\Relations\HasMany;
+use Illuminate\Support\Facades\Auth;
 
 /**
  * Modules\ExtraField\Models\ExtraFieldMorph.
@@ -44,14 +45,47 @@ class ExtraFieldMorph extends BaseMorphPivot {
      */
     protected $fillable = [
         'id',
-        'model_id', 'model_type',
+        'model_id',
+        'model_type',
         'user_id',
         'value',
         'value_class',
         'uuid',
+        'extra_field_id',
     ];
 
     public function extraFieldMorphUserValues(): HasMany {
         return $this->hasMany(ExtraFieldMorphUserValue::class);
+    }
+
+    public function extraFieldMorphUserValue(): HasOne {
+        return $this->hasOne(ExtraFieldMorphUserValue::class)
+            ->where('user_id', Auth::id())
+        ;
+    }
+
+    public function userValue(string $user_id) {
+        $res = ExtraFieldMorph::firstOrNew([
+            'user_id' => $user_id,
+            'model_type' => $this->model_type,
+            'model_id' => $this->model_id,
+            'extra_field_id' => $this->extra_field_id,
+            'uuid' => $this->uuid,
+        ]);
+
+        return $res->value;
+    }
+
+    public function updateUserValue(string $user_id, $value) {
+        $row = ExtraFieldMorph::firstOrCreate([
+            'user_id' => $user_id,
+            'model_type' => $this->model_type,
+            'model_id' => $this->model_id,
+            'extra_field_id' => $this->extra_field_id,
+            'uuid' => $this->uuid,
+        ]);
+        $res = tap($row)->update(['value' => $value]);
+
+        return $res;
     }
 }
