@@ -10,7 +10,7 @@ use Illuminate\Support\Facades\Auth;
 use Modules\UI\Datas\FieldData;
 use WireElements\Pro\Components\Modal\Modal;
 
-class EditData extends Modal {
+class DeleteData extends Modal {
     public string $title;
     public array $form_data = [];
     public string $user_id;
@@ -23,19 +23,8 @@ class EditData extends Modal {
         $this->model_type = $model_type;
         $this->model_id = $model_id;
         $this->model = config('morph_map')[$this->model_type]::findOrFail($this->model_id);
-
         $this->user_id = (string) Auth::id();
         $this->uuid = $uuid;
-
-        // $fields = FieldData::collection($rows);
-
-        // $data = $this->rows->map(function ($item) {
-        //     // dddx($item);
-
-        //     return [$item->name => $item->pivot->extraFieldMorphUserValues()->where('user_id', $this->user_id)->get()->last()->value ?? ''];
-        // });
-        // dddx($this->rows);
-        // $data = $this->rows->pluck('pivot.value', 'name')->all();
 
         $data = $this->rows->map(function ($item) {
             return [
@@ -67,7 +56,7 @@ class EditData extends Modal {
         /**
          * @phpstan-var view-string
          */
-        $view = 'extrafield::livewire.modal.extra_fields.edit_data';
+        $view = 'extrafield::livewire.modal.extra_fields.delete_data';
 
         $view_params = [
             'view' => $view,
@@ -85,13 +74,12 @@ class EditData extends Modal {
         ];
     }
 
-    public function save() {
+    public function delete() {
         $rows = $this->rows;
+        // dddx($rows);
         foreach ($rows as $row) {
             $value = collect($this->form_data)->get($row->name);
-            // $row->pivot->update(['value' => $value]);
-            // $row->pivot->extraFieldMorphUserValues()->create(['value' => $value, 'user_id' => $this->user_id]);
-            $row->pivot->updateUserValue($this->user_id, $value);
+            $row->pivot->delete();
         }
 
         $this->close();

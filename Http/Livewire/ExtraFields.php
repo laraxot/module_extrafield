@@ -43,10 +43,6 @@ class ExtraFields extends Component {
         $this->tpl = $tpl;
     }
 
-    // public function getProfileProperty() {
-    //     return ProfileModel::where('user_id', $this->user_id)->first();
-    // }
-
     public function render(): Renderable {
         /**
          * @phpstan-var view-string
@@ -102,5 +98,10 @@ class ExtraFields extends Component {
             });
 
         $this->groups = $res->all();
+    }
+
+    public function delete($id) {
+        dddx(config('morph_map')[$this->model_type]::findOrFail($this->model_id));
+        dddx([$id, $this->model]);
     }
 }
