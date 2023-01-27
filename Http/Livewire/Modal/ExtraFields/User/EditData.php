@@ -61,6 +61,8 @@ class EditData extends Modal {
         ->wherePivot('user_id', null)
         ->get();
 
+        // dddx($rows->first()->pivot->userValue($this->user_id));
+
         return $rows;
     }
 

@@ -98,7 +98,7 @@ class SecondStep extends StepComponent {
         /**
          * @phpstan-var view-string
          */
-        $view = 'extrafield::livewire.modal.profile.data_steps.second_step';
+        $view = 'extrafield::livewire.modal.model.data_steps.second_step';
 
         $view_params = [
             'view' => $view,

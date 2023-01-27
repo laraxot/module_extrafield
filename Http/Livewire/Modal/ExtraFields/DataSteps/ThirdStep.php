@@ -39,7 +39,7 @@ class ThirdStep extends StepComponent {
         /**
          * @phpstan-var view-string
          */
-        $view = 'extrafield::livewire.modal.profile.data_steps.third_step';
+        $view = 'extrafield::livewire.modal.model.data_steps.third_step';
 
         $view_params = [
             'view' => $view,
@@ -95,7 +95,6 @@ class ThirdStep extends StepComponent {
             $model->extraFields()->attach($row->id, ['value' => $value, 'uuid' => $uuid]);
         }
 
-        $this->close();
         $this->emit('refreshExtraFields');
         session()->flash('message', 'Post successfully updated.');
     }
