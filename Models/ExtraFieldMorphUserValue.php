@@ -4,20 +4,16 @@ declare(strict_types=1);
 
 namespace Modules\ExtraField\Models;
 
-use Illuminate\Database\Eloquent\Relations\HasMany;
-
 /**
- * Modules\ExtraField\Models\ExtraFieldMorph.
+ * Modules\ExtraField\Models\ExtraFieldMorphUserValue.
  *
  * @property int                             $id
- * @property string|null                     $model_type
- * @property int|null                        $model_id
  * @property int|null                        $user_id
  * @property string|null                     $created_by
  * @property string|null                     $updated_by
  * @property \Illuminate\Support\Carbon|null $created_at
  * @property \Illuminate\Support\Carbon|null $updated_at
- * @property int|null                        $extra_field_id
+ * @property int|null                        $extra_field_morph_id
  * @property string|null                     $value
  * @property string|null                     $value_class
  *
@@ -38,20 +34,15 @@ use Illuminate\Database\Eloquent\Relations\HasMany;
  *
  * @mixin \Eloquent
  */
-class ExtraFieldMorph extends BaseMorphPivot {
+class ExtraFieldMorphUserValue extends BaseModel {
     /**
      * @var string[]
      */
     protected $fillable = [
         'id',
-        'model_id', 'model_type',
         'user_id',
         'value',
         'value_class',
         'uuid',
     ];
-
-    public function extraFieldMorphUserValues(): HasMany {
-        return $this->hasMany(ExtraFieldMorphUserValue::class);
-    }
 }

@@ -29,7 +29,8 @@ class EditData extends Modal {
 
         // $fields = FieldData::collection($rows);
 
-        $data = $this->rows->pluck('pivot.value', 'name')->all();
+        $value = $this->rows->first()->pivot->extraFieldMorphUserValues()->where('user_id', Auth::id())->get()->last()->value ?? '';
+        $data = $this->rows->pluck($value, 'name')->all();
 
         $this->form_data = $data;
     }
@@ -73,7 +74,8 @@ class EditData extends Modal {
         $rows = $this->rows;
         foreach ($rows as $row) {
             $value = collect($this->form_data)->get($row->name);
-            $row->pivot->update(['value' => $value]);
+            // $row->pivot->update(['value' => $value]);
+            $row->pivot->extraFieldMorphUserValues()->create(['value' => $value, 'user_id' => Auth::id()]);
         }
 
         $this->close();

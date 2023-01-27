@@ -9,10 +9,10 @@ use Illuminate\Contracts\Support\Renderable;
 use Illuminate\Database\Eloquent\Model;
 use Modules\Cms\Models\Panels\Actions\XotBasePanelAction;
 
-class ExtraFieldsAction extends XotBasePanelAction {
+class UserExtraFieldsAction extends XotBasePanelAction {
     public bool $onItem = true;
 
-    public string $icon = '<i class="fas fa-plus-circle"></i>';
+    public string $icon = '<i class="fas fa-plus-circle">User</i>';
 
     public array $html = [];
 

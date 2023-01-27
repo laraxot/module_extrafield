@@ -5,7 +5,7 @@
                 <div class="card-body box-profile">
                     <div class="text-center">
                         <img class="profile-user-img img-fluid img-circle" src="{{ $model->avatar() }}"
-                            alt="User profile picture">
+                            alt="">
                     </div>
                     <h3 class="profile-username text-center">{{ $model->handle() }}</h3>
 
@@ -38,12 +38,12 @@
                             <h3>{{ $group['label'] }}</h3>
                             
                             @foreach($group['items_grouped'] as $uuid => $groups1)
-                                {{-- <h4>{{$uuid}}</h4> --}}
-                                @foreach($groups1 as $k1 => $group2)
+                               
+                                @foreach($groups1 as $k1 => $item)
 
-                                    {{$this->prova()}}
+                                   
 
-                                    <br/>{{ $group2->name }}: {{ $group2->pivot->value }}
+                                    <br/>{{ $item->name }}:  {{$this->getFromUserTable($item)}}
                                 @endforeach
                                 <button type="button" class="btn btn-primary" 
                                     wire:click="$emit('modal.open', 'modal.extra-fields.edit-data',{'uuid':'{{ $uuid }}','model_type': '{{ $model_type }}','model_id': {{$model_id}}})">Edit</button>Edit</button>

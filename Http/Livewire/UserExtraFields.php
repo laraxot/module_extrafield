@@ -83,11 +83,7 @@ class UserExtraFields extends Component {
         }
         $this->category_name = $category->name;
 
-        $res = $this->model->extraFields()
-
-            // ->wherePivot('user_id', $this->user_id)
-            ->withAnyCategories($id);
-        // dddx(rowsToSql($res));
+        $res = $this->model->extraFields()->withAnyCategories($id);
         $rows = $res->get();
 
         $res = $rows->groupBy('group_id')
@@ -97,14 +93,16 @@ class UserExtraFields extends Component {
                 return [
                     'id' => $group_id,
                     'label' => $first->group->name,
-                    'items_grouped' => $items->groupBy('pivot.uuid'),
+                    'items_grouped' => $items/*->map(function ($item) {
+                        $item->pivot->value = $item->pivot->extraFieldMorphUserValues()->where('user_id', Auth::id())->get()->last()->value;
+                    })*/ ->groupBy('pivot.uuid'),
                 ];
             });
 
         $this->groups = $res->all();
     }
 
-    public function prova() {
-        return 'preso';
+    public function getFromUserTable($item) {
+        return $item->pivot->extraFieldMorphUserValues()->where('user_id', Auth::id())->get()->last()?->value;
     }
 }
