@@ -12,7 +12,7 @@ use Modules\Cms\Models\Panels\Actions\XotBasePanelAction;
 class UserExtraFieldsAction extends XotBasePanelAction {
     public bool $onItem = true;
 
-    public string $icon = '<i class="fas fa-plus-circle">User</i>';
+    public string $icon = '<i class="fas fa-plus-circle">U</i>';
 
     public array $html = [];
 

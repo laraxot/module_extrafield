@@ -68,7 +68,7 @@ class EditData extends Modal {
          * @phpstan-var view-string
          */
         $view = 'extrafield::livewire.modal.extra_fields.edit_data';
-
+        // dddx(FieldData::collection($this->rows));
         $view_params = [
             'view' => $view,
             'fields' => FieldData::collection($this->rows),
