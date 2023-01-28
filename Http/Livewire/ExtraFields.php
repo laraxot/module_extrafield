@@ -13,7 +13,8 @@ use Modules\Blog\Models\Category;
 
 // use Modules\PFed\Models\Profile as ProfileModel;
 
-class ExtraFields extends Component {
+class ExtraFields extends Component
+{
     /**
      * Summary of user_id.
      *
@@ -35,7 +36,8 @@ class ExtraFields extends Component {
 
     protected $listeners = ['refreshExtraFields' => '$refresh'];
 
-    public function mount(Model $model, string $tpl = 'v1'): void {
+    public function mount(Model $model, string $tpl = 'v1'): void
+    {
         $this->model = $model;
         $this->model_id = $this->model->id;
         $this->model_type = Str::snake(class_basename($this->model));
@@ -43,7 +45,8 @@ class ExtraFields extends Component {
         $this->tpl = $tpl;
     }
 
-    public function render(): Renderable {
+    public function render(): Renderable
+    {
         /**
          * @phpstan-var view-string
          */
@@ -71,7 +74,8 @@ class ExtraFields extends Component {
         return view($view, $view_params);
     }
 
-    public function showCat(string $id): void {
+    public function showCat(string $id): void
+    {
         $this->cat_id = $id;
         $category = Category::find($id);
         if (null == $category) {
@@ -98,7 +102,8 @@ class ExtraFields extends Component {
         $this->groups = $res->all();
     }
 
-    public function delete($id) {
+    public function delete($id)
+    {
         dddx(config('morph_map')[$this->model_type]::findOrFail($this->model_id));
         dddx([$id, $this->model]);
     }

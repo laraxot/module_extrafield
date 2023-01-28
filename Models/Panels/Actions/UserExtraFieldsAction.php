@@ -9,7 +9,8 @@ use Illuminate\Contracts\Support\Renderable;
 use Illuminate\Database\Eloquent\Model;
 use Modules\Cms\Models\Panels\Actions\XotBasePanelAction;
 
-class UserExtraFieldsAction extends XotBasePanelAction {
+class UserExtraFieldsAction extends XotBasePanelAction
+{
     public bool $onItem = true;
 
     public string $icon = '<i class="fas fa-plus-circle">U</i>';
@@ -18,11 +19,13 @@ class UserExtraFieldsAction extends XotBasePanelAction {
 
     public Model $model;
 
-    public function __construct(Model $model) {
+    public function __construct(Model $model)
+    {
         $this->model = $model;
     }
 
-    public function handle(): Renderable {
+    public function handle(): Renderable
+    {
         /**
          *  @phpstan-var view-string
          */

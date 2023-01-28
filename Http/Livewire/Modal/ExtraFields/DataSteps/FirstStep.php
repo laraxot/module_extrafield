@@ -11,7 +11,8 @@ use Modules\ExtraField\Models\ExtraField;
 use Modules\ExtraField\Models\ExtraFieldGroup;
 use Spatie\LivewireWizard\Components\StepComponent;
 
-class FirstStep extends StepComponent {
+class FirstStep extends StepComponent
+{
     public string $cat_id;
     public array $form_data = [];
     public array $group_opts = [];
@@ -19,7 +20,8 @@ class FirstStep extends StepComponent {
     public bool $is_first = true;
     public bool $is_last = false;
 
-    public function mount(string $cat_id, string $model_type, string $model_id): void {
+    public function mount(string $cat_id, string $model_type, string $model_id): void
+    {
         $this->cat_id = $cat_id;
         $this->form_data['cat_id'] = $cat_id;
         $this->form_data['user_id'] = (string) Auth::id();
@@ -57,7 +59,8 @@ class FirstStep extends StepComponent {
         */
     }
 
-    public function render(): Renderable {
+    public function render(): Renderable
+    {
         /**
          * @phpstan-var view-string
          */
@@ -70,7 +73,8 @@ class FirstStep extends StepComponent {
         return view($view, $view_params);
     }
 
-    public function stepInfo(): array {
+    public function stepInfo(): array
+    {
         /*
         dddx([
             'state' => $this->state(),
@@ -85,7 +89,8 @@ class FirstStep extends StepComponent {
         ];
     }
 
-    public function goNextStep(): void {
+    public function goNextStep(): void
+    {
         // $this->emit('update_form_data', $this->form_data);
         $this->nextStep();
     }
