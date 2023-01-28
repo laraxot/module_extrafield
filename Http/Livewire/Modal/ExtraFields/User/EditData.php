@@ -41,7 +41,7 @@ class EditData extends Modal {
             return [
                 'name' => $item->name,
                 // 'value' => $item->pivot->userValue($this->user_id),
-                'value' => $item->pivot->value,
+                'value' => $item->pivot->userValue($this->user_id),
             ];
         })->pluck('value', 'name')
         ->all();
