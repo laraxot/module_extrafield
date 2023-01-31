@@ -1,58 +1,28 @@
 <div>
     <div class="row">
-        <div class="col-4">
-            <div class="card card-primary card-outline">
-                <div class="card-body box-profile">
-                    <div class="text-center">
-                        <img class="profile-user-img img-fluid img-circle" src="{{ $model->avatar() }}" alt="">
-                    </div>
-                    <h3 class="profile-username text-center">{{ $model->handle() }}</h3>
+        <div class="col-12">
+            <x-card>
+                <x-slot name="title">User Extra Fields</x-slot>
 
-                    <ul class="list-group list-group-unbordered mb-3">
-                        @foreach ($categories as $category)
-                            <li class="list-group-item">
-                                <a href="#" wire:click="showCat({{ $category->id }})">
-                                    <b>{{ $category->name }}</b>
-                                    <span class="float-right">{{-- $category->countMyUserDatas --}}</span>
-                                </a>
-                            </li>
-                        @endforeach
+                <x-slot name="txt">
+                    @foreach ($groups as $group)
+                        <h3>{{ $group['label'] }}</h3>
 
-                    </ul>
-
-                </div>
-
-            </div>
-
-        </div>
-
-
-        <div class="col-8">
-            @if (!empty($category_name))
-                <x-card>
-                    <x-slot name="title">{{ $category_name }}</x-slot>
-
-                    <x-slot name="txt">
-                        @foreach ($groups as $group)
-                            <h3>{{ $group['label'] }}</h3>
-
-                            @foreach ($group['items_grouped'] as $uuid => $groups1)
-                                @foreach ($groups1 as $k1 => $item)
-                                    <br />{{ $item->name }}: {{-- $this->getFromUserTable($item) --}}
-                                    {{ $item->pivot->userValue($this->user_id) }}
-                                @endforeach
-                                <button type="button" class="btn btn-primary"
-                                    wire:click="$emit('modal.open', 'modal.extra-fields.user.edit-data',{'uuid':'{{ $uuid }}','model_type': '{{ $model_type }}','model_id': {{ $model_id }}})">
-                                    Edit</button>
-                                <hr />
+                        @foreach ($group['items_grouped'] as $uuid => $groups1)
+                            @foreach ($groups1 as $k1 => $item)
+                                <br />{{ $item->name }}: {{-- $this->getFromUserTable($item) --}}
+                                {{ $item->pivot->userValue($this->user_id) }}
                             @endforeach
+                            <button type="button" class="btn btn-primary"
+                                wire:click="$emit('modal.open', 'modal.extra-fields.user.edit-data',{'uuid':'{{ $uuid }}','model_type': '{{ $model_type }}','model_id': {{ $model_id }}})">
+                                Edit</button>
+                            <hr />
                         @endforeach
+                    @endforeach
 
 
-                    </x-slot>
-                </x-card>
-            @endif
+                </x-slot>
+            </x-card>
         </div>
-
     </div>
 </div>
