@@ -13,6 +13,7 @@ use Livewire\Component;
 class ExtraFields extends Component {
     public string $tpl = 'v1';
     public string $name;
+    public array $groups;
     /**
      * @var mixed
      */
@@ -27,6 +28,12 @@ class ExtraFields extends Component {
         $this->name = $name;
         $this->model = $model;
         $this->value = $value;
+
+        $this->groups = $this->getGroups()->toArray();
+    }
+
+    public function getGroups() {
+        return $this->model->extraFields()->wherePivot('user_id', null)->get()->groupBy('group.name');
     }
 
     public function render(): Renderable {

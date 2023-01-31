@@ -1,0 +1,71 @@
+<?php
+
+declare(strict_types=1);
+
+namespace Modules\ExtraField\Http\Livewire\Modal\ExtraFields\DataSteps;
+
+use Illuminate\Contracts\Support\Renderable;
+use Illuminate\Database\Eloquent\Relations\Relation;
+use Modules\ExtraField\Models\ExtraField;
+// use Modules\PFed\Models\Data;
+use Modules\UI\Datas\FieldData;
+use Spatie\LaravelData\DataCollection;
+use Spatie\LivewireWizard\Components\StepComponent;
+
+class SecondStep extends StepComponent {
+    public string $group_id = '';
+    public array $form_data = [];
+
+    public bool $is_first = false;
+    public bool $is_last = false;
+
+    /*
+    public property [fields] must be of type: [numeric, string, array, null, or boolean]
+
+     * @var DataCollection<FieldData>
+
+    public DataCollection $fields;
+    */
+    public array $fields;
+
+    public function mount(): void {
+        $morph_map = [
+            'extra_field' => 'Modules\ExtraField\Models\ExtraField',
+        ];
+
+        Relation::morphMap($morph_map);
+
+        $this->group_id = (string) $this->state()->all()['modal.extra-fields.data-steps.first-step']['form_data']['group_id'];
+
+        $res = ExtraField::where('group_id', $this->group_id);
+
+        $rows = $res->get();
+
+        $fields = FieldData::collection($rows)->toArray();
+        $this->fields = $fields;
+    }
+
+    public function render(): Renderable {
+        /**
+         * @phpstan-var view-string
+         */
+        $view = 'extrafield::livewire.modal.model.data_steps.second_step';
+
+        $view_params = [
+            'view' => $view,
+        ];
+
+        return view($view, $view_params);
+    }
+
+    public function stepInfo(): array {
+        return [
+            'label' => 'Input Data',
+            'icon' => 'fa-shopping-cart',
+        ];
+    }
+
+    public function goNextStep(): void {
+        $this->nextStep();
+    }
+}
