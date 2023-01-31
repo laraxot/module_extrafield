@@ -57,10 +57,10 @@ class EditData extends Modal {
         $rows = $this->model
         ->extraFields()
         // ->wherePivot('user_id', $this->user_id)
-        ->wherePivot('uuid', $this->uuid)
+        // ->wherePivot('uuid', $this->uuid)
         ->wherePivot('user_id', null)
         ->get();
-
+        // dddx($rows);
         // dddx($rows->first()->pivot->userValue($this->user_id));
 
         return $rows;

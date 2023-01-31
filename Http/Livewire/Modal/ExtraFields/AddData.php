@@ -24,7 +24,7 @@ class AddData extends Modal {
     ];
 
     public function mount(string $model_type, int $model_id): void {
-        dddx([$model_type, $model_id]);
+        // dddx([$model_type, $model_id]);
         // $this->model = config('morph_map')[$model_type]::find($model_id);
         $this->model_type = $model_type;
         $this->model_id = $model_id;
