@@ -12,7 +12,8 @@ use Livewire\Component;
 
 // use Modules\PFed\Models\Profile as ProfileModel;
 
-class ExtraFields extends Component {
+class ExtraFields extends Component
+{
     /**
      * Summary of user_id.
      *
@@ -34,7 +35,8 @@ class ExtraFields extends Component {
 
     protected $listeners = ['refreshExtraFields' => '$refresh'];
 
-    public function mount(Model $model, string $tpl = 'v1'): void {
+    public function mount(Model $model, string $tpl = 'v1'): void
+    {
         $this->model = $model;
         $this->model_id = $this->model->id;
         $this->model_type = Str::snake(class_basename($this->model));
@@ -42,7 +44,8 @@ class ExtraFields extends Component {
         $this->tpl = $tpl;
     }
 
-    public function render(): Renderable {
+    public function render(): Renderable
+    {
         $this->showPage();
         /**
          * @phpstan-var view-string
@@ -56,7 +59,8 @@ class ExtraFields extends Component {
         return view($view, $view_params);
     }
 
-    public function showPage(): void {
+    public function showPage(): void
+    {
         $res = $this->model->extraFields()
             ->wherePivot('user_id', null);
 
@@ -76,7 +80,8 @@ class ExtraFields extends Component {
         $this->groups = $res->all();
     }
 
-    public function delete($id) {
+    public function delete($id)
+    {
         dddx(config('morph_map')[$this->model_type]::findOrFail($this->model_id));
         dddx([$id, $this->model]);
     }

@@ -12,7 +12,8 @@ use Livewire\Component;
 
 // use Modules\PFed\Models\Profile as ProfileModel;
 
-class UserExtraFields extends Component {
+class UserExtraFields extends Component
+{
     /**
      * Summary of user_id.
      *
@@ -34,7 +35,8 @@ class UserExtraFields extends Component {
 
     protected $listeners = ['refreshExtraFields' => '$refresh'];
 
-    public function mount(Model $model, string $tpl = 'v1'): void {
+    public function mount(Model $model, string $tpl = 'v1'): void
+    {
         $this->model = $model;
         $this->model_id = $this->model->id;
         $this->model_type = Str::snake(class_basename($this->model));
@@ -46,7 +48,8 @@ class UserExtraFields extends Component {
     //     return ProfileModel::where('user_id', $this->user_id)->first();
     // }
 
-    public function render(): Renderable {
+    public function render(): Renderable
+    {
         /**
          * @phpstan-var view-string
          */
@@ -61,7 +64,8 @@ class UserExtraFields extends Component {
         return view($view, $view_params);
     }
 
-    public function showPage(): void {
+    public function showPage(): void
+    {
         $res = $this->model->extraFields()
         ->wherePivot('user_id', null);
 
@@ -81,7 +85,8 @@ class UserExtraFields extends Component {
         $this->groups = $res->all();
     }
 
-    public function getFromUserTable($item) {
+    public function getFromUserTable($item)
+    {
         return $item->pivot->extraFieldMorphUserValues()->where('user_id', $this->user_id)->get()->last()?->value;
     }
 }

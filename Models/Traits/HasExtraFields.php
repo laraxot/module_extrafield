@@ -11,10 +11,12 @@ use Modules\ExtraField\Models\ExtraField;
 use Modules\ExtraField\Models\ExtraFieldGroup;
 use Modules\ExtraField\Models\ExtraFieldMorph;
 
-trait HasExtraFields {
+trait HasExtraFields
+{
     use \Staudenmeir\EloquentHasManyDeep\HasRelationships;
 
-    public function extraFields() {
+    public function extraFields()
+    {
         $pivot_class = ExtraFieldMorph::class;
         $pivot = app($pivot_class);
         $pivot_table = $pivot->getTable();
@@ -29,7 +31,8 @@ trait HasExtraFields {
         ;
     }
 
-    public function extraFieldGroups() {
+    public function extraFieldGroups()
+    {
         // return $this->hasManyDeep(ExtraFieldGroup::class, [ExtraField::class, PermUser::class]);
 
         return $this->hasManyDeepFromRelations($this->extraFields(), (new Extrafield())->group());
