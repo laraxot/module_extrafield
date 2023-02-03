@@ -47,7 +47,7 @@ class Groups extends Component {
     }
 
     public function getAvailableGroups() {
-        return ExtraFieldGroup::whereNotIn('id', $this->getAssignedGroupsKeys())->orderBy('name')->get();
+        return ExtraFieldGroup::whereNotIn('id', $this->getAssignedGroupsKeys())->whereHas('fields')->orderBy('name')->get();
     }
 
     public function getAssignedGroupsKeys() {
