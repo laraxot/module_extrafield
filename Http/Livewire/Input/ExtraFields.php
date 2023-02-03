@@ -10,8 +10,7 @@ use Livewire\Component;
 
 // use Modules\PFed\Models\Profile as ProfileModel;
 
-class ExtraFields extends Component
-{
+class ExtraFields extends Component {
     public string $tpl = 'v1';
     public string $name;
     public array $groups;
@@ -25,8 +24,7 @@ class ExtraFields extends Component
     /**
      * @param mixed $value
      */
-    public function mount(string $name, Model $model, $value): void
-    {
+    public function mount(string $name, Model $model, $value): void {
         $this->name = $name;
         $this->model = $model;
         $this->value = $value;
@@ -34,13 +32,11 @@ class ExtraFields extends Component
         $this->groups = $this->getGroups()->toArray();
     }
 
-    public function getGroups()
-    {
+    public function getGroups() {
         return $this->model->extraFields()->wherePivot('user_id', null)->get()->groupBy('group.name');
     }
 
-    public function render(): Renderable
-    {
+    public function render(): Renderable {
         /**
          * @phpstan-var view-string
          */

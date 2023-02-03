@@ -9,7 +9,7 @@
         <button type="button" class="btn btn-primary"
             wire:click="$emit('modal.open', 'modal.extra-fields.delete-data',{'model_type': '{{ str_replace('\\', '\\\\', $model::class) }}','model_id': {{ $model->id }}})">Delete</button>
     @endforeach
-    <br><br>
+
     {{-- dddx($model->pivot) --}}
     <button type="button" class="btn btn-primary"
         onclick="Livewire.emit('modal.open', 'modal.extra-fields.add-data', {'model_type': '{{ str_replace('\\', '\\\\', $model::class) }}', 'model_id': '{{ $model->id }}'})">
