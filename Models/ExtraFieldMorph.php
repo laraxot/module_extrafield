@@ -39,8 +39,7 @@ use Illuminate\Support\Facades\Auth;
  *
  * @mixin \Eloquent
  */
-class ExtraFieldMorph extends BaseMorphPivot
-{
+class ExtraFieldMorph extends BaseMorphPivot {
     /**
      * @var string[]
      */
@@ -55,20 +54,17 @@ class ExtraFieldMorph extends BaseMorphPivot
         'extra_field_id',
     ];
 
-    public function extraFieldMorphUserValues(): HasMany
-    {
+    public function extraFieldMorphUserValues(): HasMany {
         return $this->hasMany(ExtraFieldMorphUserValue::class);
     }
 
-    public function extraFieldMorphUserValue(): HasOne
-    {
+    public function extraFieldMorphUserValue(): HasOne {
         return $this->hasOne(ExtraFieldMorphUserValue::class)
             ->where('user_id', Auth::id())
         ;
     }
 
-    public function userValue(string $user_id)
-    {
+    public function userValue(string $user_id) {
         $res = ExtraFieldMorph::firstOrNew([
             'user_id' => $user_id,
             'model_type' => $this->model_type,
@@ -80,8 +76,7 @@ class ExtraFieldMorph extends BaseMorphPivot
         return $res->value;
     }
 
-    public function updateUserValue(string $user_id, $value)
-    {
+    public function updateUserValue(string $user_id, $value) {
         // si creano dei doppioni con update. perchè?
         $row = ExtraFieldMorph::firstOrCreate([
             'user_id' => $user_id,
