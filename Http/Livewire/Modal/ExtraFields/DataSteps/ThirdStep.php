@@ -10,8 +10,7 @@ use Illuminate\Support\Str;
 use Modules\ExtraField\Models\ExtraField;
 use Spatie\LivewireWizard\Components\StepComponent;
 
-class ThirdStep extends StepComponent
-{
+class ThirdStep extends StepComponent {
     public array $form_data = [];
     public array $form1_data = [];
     public array $form2_data = [];
@@ -19,8 +18,7 @@ class ThirdStep extends StepComponent
     public bool $is_first = false;
     public bool $is_last = true;
 
-    public function mount(): void
-    {
+    public function mount(): void {
         $this->form1_data = $this->state()->all()['modal.extra-fields.data-steps.first-step']['form_data'];
         $this->form2_data = $this->state()->all()['modal.extra-fields.data-steps.second-step']['form_data'];
         // $this->form_data = array_merge($data01, $data02);
@@ -37,8 +35,7 @@ class ThirdStep extends StepComponent
     */
     }
 
-    public function render(): Renderable
-    {
+    public function render(): Renderable {
         /**
          * @phpstan-var view-string
          */
@@ -51,16 +48,14 @@ class ThirdStep extends StepComponent
         return view($view, $view_params);
     }
 
-    public function stepInfo(): array
-    {
+    public function stepInfo(): array {
         return [
             'label' => 'Data Description',
             'icon' => 'fa-shopping-cart',
         ];
     }
 
-    public function goNextStep(): void
-    {
+    public function goNextStep(): void {
         // dddx($this->form_data);
 
         // $this->emit('update_form_data', $this->form_data);
@@ -68,8 +63,7 @@ class ThirdStep extends StepComponent
         // $this->nextStep();
     }
 
-    public function save(): void
-    {
+    public function save(): void {
         $morph_map = [
             'extra_field' => 'Modules\ExtraField\Models\ExtraField',
         ];
@@ -80,7 +74,12 @@ class ThirdStep extends StepComponent
         $cat_id = $this->form1_data['cat_id'];
         $model_type = $this->form1_data['model_type'];
         $model_id = $this->form1_data['model_id'];
-        $model = config('morph_map')[$model_type]::findOrFail($model_id);
+        // dddx(['model_type' => $model_type, 'model_id' => $model_id]);
+        $model_class = collect(config('morph_map'))->get($model_type);
+        // dddx($model_class);
+        // $model = config('morph_map')[$model_type]::findOrFail($model_id);
+        $model = app($model_class)->find($model_id);
+        // dddx(['model' => $model, 'model_class' => $model_class, 'model_id' => $model_id]);
 
         $res = ExtraField::where('group_id', $group_id)
             ->withAnyCategories($cat_id)

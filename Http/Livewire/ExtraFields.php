@@ -37,8 +37,10 @@ class ExtraFields extends Component {
 
     public function mount(Model $model, string $tpl = 'v1'): void {
         $this->model = $model;
-        $this->model_id = $this->model->id;
+        $this->model_id = $model->getKey();
         $this->model_type = Str::snake(class_basename($this->model));
+
+        // dddx(['model_id' => $this->model_id, 'model_type' => $this->model_type, 'model' => $model]);
         $this->user_id = Auth::id();
         $this->tpl = $tpl;
     }
