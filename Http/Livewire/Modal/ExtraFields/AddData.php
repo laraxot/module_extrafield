@@ -6,6 +6,7 @@ namespace Modules\ExtraField\Http\Livewire\Modal\ExtraFields;
 
 use Illuminate\Contracts\Support\Renderable;
 use Illuminate\Support\Facades\Auth;
+use Modules\UI\Actions\GetViewAction;
 use WireElements\Pro\Components\Modal\Modal;
 
 class AddData extends Modal {
