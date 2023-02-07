@@ -38,7 +38,8 @@ class AddData extends Modal {
         /**
          * @phpstan-var view-string
          */
-        $view = 'extrafield::livewire.modal.model.add_data';
+        $view = app(GetViewAction::class)->execute();
+        // $view = 'extrafield::livewire.modal.model.add_data';
 
         $view_params = [
             'view' => $view,
