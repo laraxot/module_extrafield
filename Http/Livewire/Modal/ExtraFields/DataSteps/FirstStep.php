@@ -36,7 +36,7 @@ class FirstStep extends StepComponent {
             $query->withAnyCategories($cat_id);
         });
 
-        dddx([$cat_id,ExtraFieldGroup::whereHas('fields')->get()]);
+        // dddx([$cat_id,ExtraFieldGroup::whereHas('fields')->get()]);
 
         $group_opts = $groups->pluck('name', 'id')->all();
 
