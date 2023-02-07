@@ -106,7 +106,6 @@ class EditData extends Modal {
         foreach ($rows as $row) {
             $value = collect($this->form_data)->get($row->name);
             $row->pivot->update(['value' => $value]);
-            // $row->pivot->extraFieldMorphUserValues()->create(['value' => $value, 'user_id' => $this->user_id]);
             // $row->pivot->updateUserValue($this->user_id, $value);
         }
 
