@@ -66,7 +66,7 @@ class ExtraFieldGroupPanel extends XotBasePanel {
                 'comment' => null,
             ],
             (object) [
-                'type' => 'CheckboxSiNo',
+                'type' => 'Integer',
                 'name' => 'cardinality',
                 'rules' => 'required',
                 'comment' => 'not in Doctrine',
