@@ -73,7 +73,12 @@ class ExtraFieldGroupMorph extends BaseMorphPivot {
             'uuid' => $this->uuid,
         ]);
 
-        return $res->value;
+        $value = $res->value;
+        if (isJson($value)) {
+            $value = json_decode($value);
+        }
+
+        return $value;
     }
 
     public function updateUserValue(string $user_id, $value) {
