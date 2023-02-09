@@ -54,20 +54,21 @@ class ExtraFieldGroupPanel extends XotBasePanel {
      */
     public function fields(): array {
         return [
-            0 => (object) [
-                'type' => 'Id',
-                'name' => 'id',
-                'comment' => null,
-            ],
-            1 => (object) [
+            // (object) [
+            //     'type' => 'Id',
+            //     'name' => 'id',
+            //     'comment' => null,
+            // ],
+            (object) [
                 'type' => 'String',
                 'name' => 'name',
                 'rules' => 'required',
                 'comment' => null,
             ],
-            2 => (object) [
-                'type' => 'Text',
+            (object) [
+                'type' => 'CheckboxSiNo',
                 'name' => 'cardinality',
+                'rules' => 'required',
                 'comment' => 'not in Doctrine',
             ],
         ];
