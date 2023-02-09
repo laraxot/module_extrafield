@@ -7,6 +7,7 @@ namespace Modules\ExtraField\Models\Panels;
 use Illuminate\Contracts\Support\Renderable;
 use Illuminate\Http\Request;
 use Modules\Cms\Models\Panels\XotBasePanel;
+use Modules\ExtraField\Models\ExtraField;
 use Modules\Xot\Contracts\RowsContract;
 
 class ExtraFieldGroupPanel extends XotBasePanel {
@@ -71,6 +72,13 @@ class ExtraFieldGroupPanel extends XotBasePanel {
                 'rules' => 'required',
                 'comment' => 'not in Doctrine',
             ],
+            (object) [
+                'type' => 'Select2Sides',
+                'name' => 'fields',
+                'comment' => 'not in Doctrine',
+                'col_size' => 4,
+                'options' => $this->optionsModelClass(ExtraField::class),
+            ],
         ];
     }
 
@@ -78,7 +86,7 @@ class ExtraFieldGroupPanel extends XotBasePanel {
      * Get the tabs available.
      */
     public function tabs(): array {
-        $tabs_name = ['fields'];
+        $tabs_name = [];
 
         return $tabs_name;
     }
