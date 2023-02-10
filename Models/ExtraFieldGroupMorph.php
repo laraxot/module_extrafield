@@ -83,6 +83,8 @@ class ExtraFieldGroupMorph extends BaseMorphPivot {
     }
 
     public function updateUserValue(string $user_id, $value) {
+
+        //dddx($this);
         // si creano dei doppioni con update. perchè?
         $row = ExtraFieldMorph::firstOrCreate([
             'user_id' => $user_id,

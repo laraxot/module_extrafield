@@ -15,7 +15,7 @@ class ExtraFieldGroup extends BaseModel {
         $pivot_table = $pivot->getTable();
         $pivot_fields = $pivot->getFillable();
 
-        return $this->belongsToMany(ExtraField::class, $pivot_table)
+        return $this->morphToMany(ExtraField::class, 'model',$pivot_table)
         ->using($pivot_class)
         ->withPivot($pivot_fields)
         ->withTimestamps();
