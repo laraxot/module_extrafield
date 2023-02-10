@@ -2,7 +2,7 @@
 
 declare(strict_types=1);
 
-namespace Modules\ExtraField\Database\Factories;
+namespace Modules\ExtraField\Database\Factories_;
 
 use Illuminate\Database\Eloquent\Factories\Factory;
 use Modules\ExtraField\Models\ExtraField;

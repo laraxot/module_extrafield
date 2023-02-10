@@ -2,7 +2,7 @@
 
 declare(strict_types=1);
 
-namespace Modules\ExtraField\Http\Livewire;
+namespace Modules\ExtraField\Http\Requests;
 
 use Illuminate\Contracts\Support\Renderable;
 use Illuminate\Database\Eloquent\Model;
