@@ -35,7 +35,7 @@ class ExtraFields extends Component {
 
     protected $listeners = ['refreshExtraFields' => '$refresh'];
 
-    public function mount(Model $model, string $tpl = 'v1'): void {
+    public function mount(Model $model, string $tpl = 'v2'): void {
         $this->model = $model;
         $this->model_id = $model->getKey();
         $this->model_type = Str::snake(class_basename($this->model));

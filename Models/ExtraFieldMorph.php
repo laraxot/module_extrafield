@@ -4,8 +4,9 @@ declare(strict_types=1);
 
 namespace Modules\ExtraField\Models;
 
-use Illuminate\Database\Eloquent\Relations\HasMany;
 use Illuminate\Support\Facades\Auth;
+use Illuminate\Database\Eloquent\Relations\HasOne;
+use Illuminate\Database\Eloquent\Relations\HasMany;
 
 /**
  * Modules\ExtraField\Models\ExtraFieldMorph.
@@ -54,7 +55,7 @@ class ExtraFieldMorph extends BaseMorphPivot {
         'extra_field_id',
     ];
 
-    public function extraFieldMorphUserValues(): HasMany {
+    /*public function extraFieldMorphUserValues(): HasMany {
         return $this->hasMany(ExtraFieldMorphUserValue::class);
     }
 
@@ -62,7 +63,7 @@ class ExtraFieldMorph extends BaseMorphPivot {
         return $this->hasOne(ExtraFieldMorphUserValue::class)
             ->where('user_id', Auth::id())
         ;
-    }
+    }*/
 
     public function userValue(string $user_id) {
         $res = ExtraFieldMorph::firstOrNew([
