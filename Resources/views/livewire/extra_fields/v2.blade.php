@@ -11,11 +11,11 @@
                                 class="avatar w-40 h-40 border border-body border-4 rounded-circle shadow"><img
                                     alt="Profile Picture" src="{{ $profile->avatar() }}" class="rounded-circle"></a>
                         </div>
-                        <div class="d-flex gap-3 justify-content-end mt-4">
+                        {{-- <div class="d-flex gap-3 justify-content-end mt-4">
                             <button type="button"
                                 class="btn btn-link p-0 link-primary text-center font-semibold">Upload
                                 Picture</button>
-                        </div>
+                        </div> --}}
                         <hr class="mt-4 mb-0">
                         <div class="list-group list-group-flush">
                             <div class="list-group-item">
@@ -76,7 +76,7 @@
                                             wire:click="$emit('modal.open', 'modal.extra-fields.edit-data',{'uuid':'{{ $uuid }}','model_type': '{{ $model_type }}','model_id': {{ $model_id }}})">Edit</button>
                                         <button type="button"
                                             class="btn btn-sm bg-primary bg-opacity-20 bg-opacity-100-hover text-primary text-white-hover"
-                                            wire:click="$emit('modal.open', 'modal.extra-fields.edit-data',{'uuid':'{{ $uuid }}','model_type': '{{ $model_type }}','model_id': {{ $model_id }}})">Delete</button>
+                                            wire:click="$emit('modal.open', 'modal.extra-fields.delete-data',{'uuid':'{{ $uuid }}','model_type': '{{ $model_type }}','model_id': {{ $model_id }}})">Delete</button>
                                     </div>
                                     <hr />
                                 </div>
