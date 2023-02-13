@@ -96,7 +96,8 @@
                         @if ($profile->hasRole('free') || $profile->hasRole('silver'))
                             <div class="row">
                                 <div class="col-md-12 mt-3 mb-2">
-                                    <a href="#">Fai l'upgrade del tuo abbonamento per ottenere vantaggi
+                                    <a href="#">Fai l'upgrade del tuo abbonamento per
+                                        ottenere vantaggi
                                         illimitati</a>
                                 </div>
                             </div>
