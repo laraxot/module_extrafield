@@ -42,7 +42,14 @@
                     </div>
                 </div>
             </div>
-
+            <a class="btn btn-sm bg-soft-success bg-opacity-20 bg-opacity-100-hover text-primary text-white-hover"
+                href="{{ url('admin/pfed/it?_act=email_verification') }}">
+                Verifica Email
+            </a>
+            <a class="btn btn-sm bg-soft-success bg-opacity-20 bg-opacity-100-hover text-primary text-white-hover"
+                href="{{ url('admin/pfed/it?_act=mobile_verification') }}">
+                Verifica Mobile
+            </a>
         </div>
 
 
