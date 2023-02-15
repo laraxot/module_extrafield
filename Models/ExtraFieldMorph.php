@@ -4,9 +4,11 @@ declare(strict_types=1);
 
 namespace Modules\ExtraField\Models;
 
-use Illuminate\Support\Facades\Auth;
-use Illuminate\Database\Eloquent\Relations\HasOne;
 use Illuminate\Database\Eloquent\Relations\HasMany;
+use Illuminate\Database\Eloquent\Relations\HasOne;
+use Illuminate\Support\Facades\Auth;
+use Spatie\Activitylog\LogOptions;
+use Spatie\Activitylog\Traits\LogsActivity;
 
 /**
  * Modules\ExtraField\Models\ExtraFieldMorph.
@@ -41,6 +43,7 @@ use Illuminate\Database\Eloquent\Relations\HasMany;
  * @mixin \Eloquent
  */
 class ExtraFieldMorph extends BaseMorphPivot {
+    use LogsActivity;
     /**
      * @var string[]
      */
@@ -94,5 +97,9 @@ class ExtraFieldMorph extends BaseMorphPivot {
         $res = tap($row)->update(['value' => $value]);
 
         return $res;
+    }
+
+    public function getActivitylogOptions(): LogOptions {
+        return LogOptions::defaults()->logOnly($this->getFillable());
     }
 }
