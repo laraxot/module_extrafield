@@ -32,7 +32,7 @@ class FirstStep extends StepComponent {
 
         Relation::morphMap($morph_map);
 
-        $groups = ExtraFieldGroup::whereHas('fields', function ($query) use ($cat_id) {
+        $groups = ExtraFieldGroup::whereHas('fieldsNew', function ($query) use ($cat_id) {
             $query->withAnyCategories($cat_id);
         });
 
