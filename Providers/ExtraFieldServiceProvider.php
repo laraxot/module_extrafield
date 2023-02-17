@@ -20,7 +20,7 @@ class ExtraFieldServiceProvider extends XotBaseServiceProvider
 
     public function bootCallback(): void
     {
-        BladeService::registerComponents($this->module_dir.'/../View/Components', 'Modules\\ExtraField');
+        //BladeService::registerComponents($this->module_dir.'/../View/Components', 'Modules\\ExtraField');
     }
 
     public function registerCallback(): void
