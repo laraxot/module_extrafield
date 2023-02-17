@@ -2,9 +2,9 @@
     <x-slot name="title">Data History</x-slot>
 
     @foreach ($history as $item)
-        Extra Field Id: {{ $item['extra_field_id'] }}
-        {{-- Updated at: {{ $item['updated_at'] }}<br> --}}
-        Value: {{ $item['value'] }}<br>
+        <h2>{{ $item['extra_field_name'] }}</h2>
+        Value: {{ $item['properties']['attributes']['value'] }}<br>
+        Updated at: {{ $item['update'] }}<br>
         <br>
     @endforeach
 
