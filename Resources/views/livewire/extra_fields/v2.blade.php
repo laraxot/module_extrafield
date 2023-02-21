@@ -42,6 +42,10 @@
                     </div>
                 </div>
             </div>
+            <a class="btn btn-sm bg-soft-success bg-opacity-20 bg-opacity-100-hover text-primary text-white-hover"
+                href="{{ url('admin/pfed/it?_act=upgrades') }}">
+                Effettua l'ugrade
+            </a>
             {{-- <a class="btn btn-sm bg-soft-success bg-opacity-20 bg-opacity-100-hover text-primary text-white-hover"
                 href="{{ url('admin/pfed/it?_act=email_verification') }}">
                 Verifica Email
