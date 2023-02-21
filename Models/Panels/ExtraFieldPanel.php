@@ -123,6 +123,12 @@ class ExtraFieldPanel extends XotBasePanel {
                 'col_size' => 6,
                 'options' => $this->optionsModelClass(Category::class),
             ],
+            (object) [
+                'type' => 'Json',
+                'name' => 'rules',
+                'comment' => null,
+                'col_size' => 6,
+            ],
         ];
     }
 

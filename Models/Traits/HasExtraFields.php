@@ -31,6 +31,11 @@ trait HasExtraFields {
         ;
     }
 
+    // c'è qualcosa di sbagliato. legge il gruppo da group_id di extrafield ma deve leggerlo da polimorfica
+    public function extraFieldsFromGroups() {
+        return $this->hasManyDeepFromRelations($this->extraFieldGroups(), (new ExtraFieldGroup())->fieldsNew()->wherePivot('user_id', null))->withIntermediate(ExtraFieldGroup::class);
+    }
+
     public function extraFieldGroups(): MorphToMany {
         // return $this->hasManyDeep(ExtraFieldGroup::class, [ExtraField::class, PermUser::class]);
 

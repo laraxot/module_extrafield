@@ -99,6 +99,20 @@ class ExtraFieldMorph extends BaseMorphPivot {
         return $res;
     }
 
+    public function createUserValue(string $user_id, $value) {
+        // si creano dei doppioni con update. perchè?
+        $row = ExtraFieldMorph::firstOrCreate([
+            'user_id' => $user_id,
+            'model_type' => $this->model_type,
+            'model_id' => $this->model_id,
+            'extra_field_id' => $this->extra_field_id,
+            'uuid' => $this->uuid,
+        ]);
+        $res = tap($row)->create(['value' => $value]);
+
+        return $res;
+    }
+
     public function getActivitylogOptions(): LogOptions {
         return LogOptions::defaults()->logOnly($this->getFillable());
     }

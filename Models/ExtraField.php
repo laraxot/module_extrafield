@@ -41,8 +41,7 @@ use Modules\Blog\Models\Traits\HasCategory;
  *
  * @mixin \Eloquent
  */
-class ExtraField extends BaseModel
-{
+class ExtraField extends BaseModel {
     use HasCategory;
 
     protected $fillable = ['id', 'name', 'type',
@@ -53,10 +52,11 @@ class ExtraField extends BaseModel
 
     protected $casts = [
         'options' => 'array',
+        'rules' => 'array',
     ];
 
-    public function group(): BelongsTo
-    {
+    // E' sbagliata. va fatta polimorfica
+    /*public function group(): BelongsTo {
         return $this->belongsTo(ExtraFieldGroup::class);
-    }
+    }*/
 }
