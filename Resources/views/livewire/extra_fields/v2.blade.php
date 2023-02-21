@@ -100,7 +100,7 @@
                             </div>
                         </div>
 
-                        @if ($profile->hasRole('free') || $profile->hasRole('silver'))
+                        {{-- @if ($profile->hasRole('free') || $profile->hasRole('silver'))
                             <div class="row">
                                 <div class="col-md-12 mt-3 mb-2">
                                     <a href="#">Fai l'upgrade del tuo abbonamento per
@@ -108,7 +108,7 @@
                                         illimitati</a>
                                 </div>
                             </div>
-                        @endif
+                        @endif --}}
                     </x-slot>
                 </x-card>
             @endif
