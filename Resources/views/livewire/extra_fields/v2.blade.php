@@ -42,10 +42,10 @@
                     </div>
                 </div>
             </div>
-            <a class="btn btn-sm bg-soft-success bg-opacity-20 bg-opacity-100-hover text-primary text-white-hover"
+            {{-- <a class="btn btn-sm bg-soft-success bg-opacity-20 bg-opacity-100-hover text-primary text-white-hover"
                 href="{{ url('admin/pfed/it?_act=upgrades') }}">
                 Effettua l'ugrade
-            </a>
+            </a> --}}
             {{-- <a class="btn btn-sm bg-soft-success bg-opacity-20 bg-opacity-100-hover text-primary text-white-hover"
                 href="{{ url('admin/pfed/it?_act=email_verification') }}">
                 Verifica Email
@@ -54,6 +54,8 @@
                 href="{{ url('admin/pfed/it?_act=mobile_verification') }}">
                 Verifica Mobile
             </a> --}}
+
+
         </div>
 
 
@@ -117,6 +119,31 @@
                 </x-card>
             @endif
             <hr />
+        </div>
+    </div>
+    <div class="row">
+        <div class="col-md-12 p-0">
+            <x-card type="subscription.v1">
+                <x-slot name="title">Light Plan</x-slot>
+                <x-slot name="subtitle">The perfect way to get started</x-slot>
+                <x-slot name="currency">€</x-slot>
+                <x-slot name="amount">6,00</x-slot>
+                <x-slot name="period">month</x-slot>
+                <x-slot name="payment_button">
+                    <x-nexi-payment type="simple" amount="6.00" currency="EUR" text="ACQUISTA ABBONAMENTO" />
+                </x-slot>
+            </x-card>
+
+            <x-card type="subscription.v1">
+                <x-slot name="title">Full Plan</x-slot>
+                <x-slot name="subtitle">Your full consents management</x-slot>
+                <x-slot name="currency">€</x-slot>
+                <x-slot name="amount">24,00</x-slot>
+                <x-slot name="period">year</x-slot>
+                <x-slot name="payment_button">
+                    <x-nexi-payment type="simple" amount="24.00" currency="EUR" text="ACQUISTA ABBONAMENTO" />
+                </x-slot>
+            </x-card>
         </div>
     </div>
 </div>
