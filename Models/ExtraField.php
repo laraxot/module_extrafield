@@ -56,7 +56,7 @@ class ExtraField extends BaseModel {
     ];
 
     // E' sbagliata. va fatta polimorfica
-    /*public function group(): BelongsTo {
+    public function group(): BelongsTo {
         return $this->belongsTo(ExtraFieldGroup::class);
-    }*/
+    }
 }
