@@ -131,7 +131,8 @@
                     <x-slot name="amount">6,00</x-slot>
                     <x-slot name="period">month</x-slot>
                     <x-slot name="payment_button">
-                        <x-nexi-payment type="simple" amount="6.00" currency="EUR" text="ACQUISTA ABBONAMENTO" />
+                        <x-nexi-payment type="simple" contract="NC_LIGHT_" amount="6.00" currency="EUR"
+                            text="ACQUISTA ABBONAMENTO" />
                     </x-slot>
                 </x-card>
             @endif
@@ -144,7 +145,8 @@
                     <x-slot name="amount">24,00</x-slot>
                     <x-slot name="period">year</x-slot>
                     <x-slot name="payment_button">
-                        <x-nexi-payment type="simple" amount="24.00" currency="EUR" text="ACQUISTA ABBONAMENTO" />
+                        <x-nexi-payment type="simple" contract="NC_FULL_" amount="24.00" currency="EUR"
+                            text="ACQUISTA ABBONAMENTO" />
                     </x-slot>
                 </x-card>
             @endif
