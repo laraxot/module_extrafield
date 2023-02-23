@@ -5,6 +5,7 @@ declare(strict_types=1);
 namespace Modules\ExtraField\Models;
 
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
+use Illuminate\Database\Eloquent\Relations\HasOne;
 use Modules\Blog\Models\Traits\HasCategory;
 
 /**
@@ -58,5 +59,9 @@ class ExtraField extends BaseModel {
     // E' sbagliata. va fatta polimorfica
     public function group(): BelongsTo {
         return $this->belongsTo(ExtraFieldGroup::class);
+    }
+
+    public function extraFieldMorph(): HasOne {
+        return $this->hasOne(ExtraFieldMorph::class);
     }
 }
