@@ -22,6 +22,7 @@ use Illuminate\Support\Facades\Auth;
  * @property int|null                        $extra_field_id
  * @property string|null                     $value
  * @property string|null                     $value_class
+ * @property string|null                     $uuid
  *
  * @method static \Illuminate\Database\Eloquent\Builder|ExtraFieldMorph newModelQuery()
  * @method static \Illuminate\Database\Eloquent\Builder|ExtraFieldMorph newQuery()
