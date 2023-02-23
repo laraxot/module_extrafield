@@ -19,6 +19,8 @@ class EditData extends Modal {
     public int $model_id;
     public Model $model;
 
+    protected $listeners = ['updateFormData' => 'updateFormData'];
+
     public function mount(string $uuid, string $model_type, int $model_id): void {
         $this->uuid = $uuid;
         $this->model_type = $model_type;
@@ -49,6 +51,10 @@ class EditData extends Modal {
         ->all();
 
         $this->form_data = $data;
+    }
+
+    public function updateFormData($data) {
+        $this->form_data = array_merge($this->form_data, $data);
     }
 
     public function getModelProperty() {
@@ -106,7 +112,6 @@ class EditData extends Modal {
         foreach ($rows as $row) {
             $value = collect($this->form_data)->get($row->name);
             $row->pivot->update(['value' => $value]);
-            // $row->pivot->updateUserValue($this->user_id, $value);
         }
 
         $this->close();

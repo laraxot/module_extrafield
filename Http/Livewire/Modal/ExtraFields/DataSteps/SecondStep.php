@@ -12,8 +12,7 @@ use Modules\UI\Datas\FieldData;
 use Spatie\LaravelData\DataCollection;
 use Spatie\LivewireWizard\Components\StepComponent;
 
-class SecondStep extends StepComponent
-{
+class SecondStep extends StepComponent {
     public string $group_id = '';
     public string $cat_id = '';
     public array $form_data = [];
@@ -30,8 +29,7 @@ class SecondStep extends StepComponent
     */
     public array $fields;
 
-    public function mount(): void
-    {
+    public function mount(): void {
         $morph_map = [
             'extra_field' => 'Modules\ExtraField\Models\ExtraField',
         ];
@@ -96,8 +94,7 @@ class SecondStep extends StepComponent
     }
     */
 
-    public function render(): Renderable
-    {
+    public function render(): Renderable {
         /**
          * @phpstan-var view-string
          */
@@ -111,16 +108,14 @@ class SecondStep extends StepComponent
         return view($view, $view_params);
     }
 
-    public function stepInfo(): array
-    {
+    public function stepInfo(): array {
         return [
             'label' => 'Input Data',
             'icon' => 'fa-shopping-cart',
         ];
     }
 
-    public function goNextStep(): void
-    {
+    public function goNextStep(): void {
         // $this->form_data['value'] = $this->form_data;
         // $this->emit('update_form_data', $this->form_data);
         $this->nextStep();
