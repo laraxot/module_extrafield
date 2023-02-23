@@ -20,6 +20,8 @@ class SecondStep extends StepComponent {
     public bool $is_first = false;
     public bool $is_last = false;
 
+    protected $listeners = ['updateFormData' => 'updateFormData'];
+
     /*
     public property [fields] must be of type: [numeric, string, array, null, or boolean]
 
@@ -60,6 +62,10 @@ class SecondStep extends StepComponent {
             'rows' => $res->get(),
         ]);
         */
+    }
+
+    public function updateFormData($data) {
+        $this->form_data = array_merge($this->form_data, $data);
     }
 
     /*

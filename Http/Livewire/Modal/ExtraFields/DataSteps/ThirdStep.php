@@ -17,16 +17,13 @@ class ThirdStep extends StepComponent {
 
     public bool $is_first = false;
     public bool $is_last = true;
-    protected $listeners = ['updateFormData' => 'updateFormData'];
+
 
     public function mount(): void {
         $this->form1_data = $this->state()->all()['modal.extra-fields.data-steps.first-step']['form_data'];
         $this->form2_data = $this->state()->all()['modal.extra-fields.data-steps.second-step']['form_data'];
     }
 
-    public function updateFormData($data) {
-        $this->form_data = array_merge($this->form_data, $data);
-    }
 
     public function render(): Renderable {
         /**
