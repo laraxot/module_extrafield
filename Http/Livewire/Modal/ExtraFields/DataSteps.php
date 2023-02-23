@@ -4,6 +4,7 @@ declare(strict_types=1);
 
 namespace Modules\ExtraField\Http\Livewire\Modal\ExtraFields;
 
+use Illuminate\Database\Eloquent\Model;
 use Illuminate\Support\Facades\Auth;
 use Modules\ExtraField\Http\Livewire\Modal\ExtraFields\DataSteps\FirstStep;
 use Modules\ExtraField\Http\Livewire\Modal\ExtraFields\DataSteps\SecondStep;
@@ -14,6 +15,8 @@ class DataSteps extends WizardComponent {
     public int $cat_id;
     public string $user_id;
     public Model $model;
+    public string $model_type;
+    public int $model_id;
 
     public function mount(int $cat_id, string $model_type, int $model_id): void {
         // dddx(['model_type' => $model_type, 'model_id' => $model_id]);
