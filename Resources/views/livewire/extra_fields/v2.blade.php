@@ -124,7 +124,7 @@
     <div class="row">
         <div class="col-md-12 p-0">
             @if (!$profile->hasRole('light'))
-                <x-card type="subscription.v1">
+                <x-card tpl="subscription.v1">
                     <x-slot name="title">Light Plan</x-slot>
                     <x-slot name="subtitle">The perfect way to get started</x-slot>
                     <x-slot name="currency">€</x-slot>
@@ -138,7 +138,7 @@
             @endif
 
             @if (!$profile->hasRole('full'))
-                <x-card type="subscription.v1">
+                <x-card tpl="subscription.v1">
                     <x-slot name="title">Full Plan</x-slot>
                     <x-slot name="subtitle">Your full consents management</x-slot>
                     <x-slot name="currency">€</x-slot>
