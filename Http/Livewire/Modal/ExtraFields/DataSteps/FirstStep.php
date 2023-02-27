@@ -7,8 +7,10 @@ namespace Modules\ExtraField\Http\Livewire\Modal\ExtraFields\DataSteps;
 use Illuminate\Contracts\Support\Renderable;
 use Illuminate\Database\Eloquent\Relations\Relation;
 use Illuminate\Support\Facades\Auth;
+use Illuminate\Support\Facades\Validator;
 use Modules\ExtraField\Models\ExtraField;
 use Modules\ExtraField\Models\ExtraFieldGroup;
+use Modules\PFed\Rules\CardinalityRule;
 use Spatie\LivewireWizard\Components\StepComponent;
 
 class FirstStep extends StepComponent {
@@ -38,7 +40,15 @@ class FirstStep extends StepComponent {
 
         // dddx([$cat_id,ExtraFieldGroup::whereHas('fields')->get()]);
 
-        $group_opts = $groups->pluck('name', 'id')->all();
+        // bisogna passare per un map mi sa e validare campo per campo attraverso le Rule
+        $group_opts = $groups->pluck('name', 'id')->filter(function ($val, $id) {
+            $validator = Validator::make(['id' => $id], ['id' => new CardinalityRule()]);
+            if ($validator->passes()) {
+                return $val;
+            } else {
+                session()->flash('status_error', 'Avviso: Non puoi più aggiungere campi di questo tipo: '.$val);
+            }
+        })->all();
 
         $this->group_opts = $group_opts;
         /*
