@@ -51,6 +51,9 @@ class EditData extends Modal {
         ->all();
 
         $this->form_data = $data;
+        session()->flash('form_data', $this->form_data);
+
+        // dddx($this->form_data);
     }
 
     public function updateFormData($data) {
@@ -73,9 +76,10 @@ class EditData extends Modal {
     }
 
     public function render(): Renderable {
-        /**
+        /*
          * @phpstan-var view-string
          */
+
         $view = 'extrafield::livewire.modal.extra_fields.edit_data';
         // dddx(FieldData::collection($this->rows));
         $view_params = [
