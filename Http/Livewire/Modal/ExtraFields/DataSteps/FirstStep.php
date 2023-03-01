@@ -4,14 +4,15 @@ declare(strict_types=1);
 
 namespace Modules\ExtraField\Http\Livewire\Modal\ExtraFields\DataSteps;
 
-use Illuminate\Contracts\Support\Renderable;
-use Illuminate\Database\Eloquent\Relations\Relation;
 use Illuminate\Support\Facades\Auth;
+use Modules\Cms\Actions\GetViewAction;
+use Modules\PFed\Rules\CardinalityRule;
 use Illuminate\Support\Facades\Validator;
 use Modules\ExtraField\Models\ExtraField;
+use Illuminate\Contracts\Support\Renderable;
 use Modules\ExtraField\Models\ExtraFieldGroup;
-use Modules\PFed\Rules\CardinalityRule;
 use Spatie\LivewireWizard\Components\StepComponent;
+use Illuminate\Database\Eloquent\Relations\Relation;
 
 class FirstStep extends StepComponent {
     public string $cat_id;
@@ -73,7 +74,8 @@ class FirstStep extends StepComponent {
         /**
          * @phpstan-var view-string
          */
-        $view = 'extrafield::livewire.modal.model.data_steps.first_step';
+
+        $view = app(GetViewAction::class)->execute();
 
         $view_params = [
             'view' => $view,

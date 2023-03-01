@@ -4,13 +4,14 @@ declare(strict_types=1);
 
 namespace Modules\ExtraField\Http\Livewire\Modal\ExtraFields\User\DataSteps;
 
-use Illuminate\Contracts\Support\Renderable;
-use Illuminate\Database\Eloquent\Relations\Relation;
-use Modules\ExtraField\Models\ExtraField;
-// use Modules\PFed\Models\Data;
 use Modules\UI\Datas\FieldData;
+use Modules\Cms\Actions\GetViewAction;
 use Spatie\LaravelData\DataCollection;
+// use Modules\PFed\Models\Data;
+use Modules\ExtraField\Models\ExtraField;
+use Illuminate\Contracts\Support\Renderable;
 use Spatie\LivewireWizard\Components\StepComponent;
+use Illuminate\Database\Eloquent\Relations\Relation;
 
 class SecondStep extends StepComponent
 {
