@@ -61,7 +61,8 @@ class DeleteData extends Modal
         /**
          * @phpstan-var view-string
          */
-        $view = 'extrafield::livewire.modal.extra_fields.user.delete_data';
+
+        $view = app(GetViewAction::class)->execute();
 
         $view_params = [
             'view' => $view,

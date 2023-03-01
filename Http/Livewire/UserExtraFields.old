@@ -54,7 +54,7 @@ class UserExtraFields extends Component
         /**
          * @phpstan-var view-string
          */
-        $view = 'extrafield::livewire.user_extra_fields.'.$this->tpl;
+        $view = app(GetViewAction::class)->execute($this->tpl);
 
         $categories = Category::ofType($this->model_type)->get();
 

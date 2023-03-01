@@ -4,10 +4,11 @@ declare(strict_types=1);
 
 namespace Modules\ExtraField\Http\Livewire\Modal\ExtraFields;
 
-use Illuminate\Contracts\Support\Renderable;
-use Illuminate\Database\Eloquent\Model;
-use Illuminate\Support\Facades\Auth;
 use Modules\UI\Datas\FieldData;
+use Illuminate\Support\Facades\Auth;
+use Modules\Cms\Actions\GetViewAction;
+use Illuminate\Database\Eloquent\Model;
+use Illuminate\Contracts\Support\Renderable;
 use WireElements\Pro\Components\Modal\Modal;
 
 class DeleteData extends Modal
@@ -61,7 +62,7 @@ class DeleteData extends Modal
         /**
          * @phpstan-var view-string
          */
-        $view = 'extrafield::livewire.modal.extra_fields.delete_data';
+        $view = app(GetViewAction::class)->execute();
 
         $view_params = [
             'view' => $view,

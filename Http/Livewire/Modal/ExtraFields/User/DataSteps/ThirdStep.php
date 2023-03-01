@@ -4,11 +4,12 @@ declare(strict_types=1);
 
 namespace Modules\ExtraField\Http\Livewire\Modal\ExtraFields\User\DataSteps;
 
-use Illuminate\Contracts\Support\Renderable;
-use Illuminate\Database\Eloquent\Relations\Relation;
 use Illuminate\Support\Str;
+use Modules\Cms\Actions\GetViewAction;
 use Modules\ExtraField\Models\ExtraField;
+use Illuminate\Contracts\Support\Renderable;
 use Spatie\LivewireWizard\Components\StepComponent;
+use Illuminate\Database\Eloquent\Relations\Relation;
 
 class ThirdStep extends StepComponent
 {
@@ -42,7 +43,7 @@ class ThirdStep extends StepComponent
         /**
          * @phpstan-var view-string
          */
-        $view = 'extrafield::livewire.modal.profile.data_steps.third_step';
+        $view = app(GetViewAction::class)->execute($this->tpl);
 
         $view_params = [
             'view' => $view,

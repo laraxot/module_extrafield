@@ -4,11 +4,12 @@ declare(strict_types=1);
 
 namespace Modules\ExtraField\Http\Livewire\Input\ExtraFields;
 
-use Illuminate\Contracts\Support\Renderable;
-use Illuminate\Database\Eloquent\Model;
-use Illuminate\Support\Str;
 use Livewire\Component;
+use Illuminate\Support\Str;
+use Modules\Cms\Actions\GetViewAction;
+use Illuminate\Database\Eloquent\Model;
 use Modules\ExtraField\Models\ExtraField;
+use Illuminate\Contracts\Support\Renderable;
 use Modules\ExtraField\Models\ExtraFieldGroup;
 use Modules\ExtraField\Models\ExtraFieldMorph;
 
@@ -106,7 +107,8 @@ class Groups extends Component
         /**
          * @phpstan-var view-string
          */
-        $view = 'extrafield::livewire.input.extra_fields.groups.'.$this->tpl;
+
+        $view = app(GetViewAction::class)->execute($this->tpl);
 
         $view_params = [
             'view' => $view,

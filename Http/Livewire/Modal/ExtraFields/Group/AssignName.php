@@ -4,9 +4,10 @@ declare(strict_types=1);
 
 namespace Modules\ExtraField\Http\Livewire\Modal\ExtraFields\Group;
 
+use Modules\Cms\Actions\GetViewAction;
 use Illuminate\Contracts\Support\Renderable;
-use Modules\ExtraField\Models\ExtraFieldGroup;
 use WireElements\Pro\Components\Modal\Modal;
+use Modules\ExtraField\Models\ExtraFieldGroup;
 
 class AssignName extends Modal
 {
@@ -39,7 +40,8 @@ class AssignName extends Modal
         /**
          * @phpstan-var view-string
          */
-        $view = 'extrafield::livewire.modal.group.assign_name';
+
+        $view = app(GetViewAction::class)->execute();
 
         $view_params = [
             'view' => $view,

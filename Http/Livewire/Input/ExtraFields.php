@@ -4,9 +4,10 @@ declare(strict_types=1);
 
 namespace Modules\ExtraField\Http\Livewire\Input;
 
-use Illuminate\Contracts\Support\Renderable;
-use Illuminate\Database\Eloquent\Model;
 use Livewire\Component;
+use Modules\Cms\Actions\GetViewAction;
+use Illuminate\Database\Eloquent\Model;
+use Illuminate\Contracts\Support\Renderable;
 
 // use Modules\PFed\Models\Profile as ProfileModel;
 
@@ -40,7 +41,7 @@ class ExtraFields extends Component {
         /**
          * @phpstan-var view-string
          */
-        $view = 'extrafield::livewire.input.extra_fields.'.$this->tpl;
+        $view = app(GetViewAction::class)->execute($this->tpl);
         $view_params = [];
 
         return view($view, $view_params);

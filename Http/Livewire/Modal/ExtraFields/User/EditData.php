@@ -4,10 +4,11 @@ declare(strict_types=1);
 
 namespace Modules\ExtraField\Http\Livewire\Modal\ExtraFields\User;
 
-use Illuminate\Contracts\Support\Renderable;
-use Illuminate\Database\Eloquent\Model;
-use Illuminate\Support\Facades\Auth;
 use Modules\UI\Datas\FieldData;
+use Illuminate\Support\Facades\Auth;
+use Modules\Cms\Actions\GetViewAction;
+use Illuminate\Database\Eloquent\Model;
+use Illuminate\Contracts\Support\Renderable;
 use WireElements\Pro\Components\Modal\Modal;
 
 class EditData extends Modal
@@ -75,7 +76,8 @@ class EditData extends Modal
         /**
          * @phpstan-var view-string
          */
-        $view = 'extrafield::livewire.modal.extra_fields.user.edit_data';
+
+        $view = app(GetViewAction::class)->execute();
         // dddx(FieldData::collection($this->rows));
         $view_params = [
             'view' => $view,

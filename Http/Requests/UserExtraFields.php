@@ -4,12 +4,13 @@ declare(strict_types=1);
 
 namespace Modules\ExtraField\Http\Requests;
 
-use Illuminate\Contracts\Support\Renderable;
-use Illuminate\Database\Eloquent\Model;
-use Illuminate\Support\Facades\Auth;
-use Illuminate\Support\Str;
 use Livewire\Component;
+use Illuminate\Support\Str;
 use Modules\Blog\Models\Category;
+use Illuminate\Support\Facades\Auth;
+use Modules\Cms\Actions\GetViewAction;
+use Illuminate\Database\Eloquent\Model;
+use Illuminate\Contracts\Support\Renderable;
 
 // use Modules\PFed\Models\Profile as ProfileModel;
 
@@ -54,7 +55,8 @@ class UserExtraFields extends Component
         /**
          * @phpstan-var view-string
          */
-        $view = 'extrafield::livewire.user_extra_fields.'.$this->tpl;
+
+        $view = app(GetViewAction::class)->execute($this->tpl);
 
         $categories = Category::ofType($this->model_type)->get();
 
