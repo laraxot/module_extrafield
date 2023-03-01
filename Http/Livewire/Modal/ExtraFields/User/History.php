@@ -24,11 +24,14 @@ class History extends Modal {
     public function render(): Renderable {
         $history_collection = HistoryModel::where('causer_id', Auth::id())->where('subject_type', 'extra_field_morph')->get();
 
-        $history = $history_collection->map(function ($item) {
-            $item->extra_field_name = ExtraField::find($item->properties['attributes']['extra_field_id'])->name;
-            $item->update = $item['updated_at']->format('d F Y H:i:s');
+        $history = $history_collection->filter(function ($item) {
+            if (isset($item->properties['attributes'])) {
+                // dddx($item->properties['attributes']['extra_field_id']);
+                $item->extra_field_name = ExtraField::find($item->properties['attributes']['extra_field_id'])->name;
+                $item->update = $item['updated_at']->format('d F Y H:i:s');
 
-            return $item;
+                return $item;
+            }
         })->toArray();
 
         // $history = $history_collection->pluck('properties.attributes');

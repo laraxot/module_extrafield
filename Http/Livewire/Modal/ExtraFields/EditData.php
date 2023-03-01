@@ -51,6 +51,8 @@ class EditData extends Modal {
         ->all();
 
         $this->form_data = $data;
+
+        // SE QUALCUNO LO CANCELLASSE, SPIEGHI ANCHE COME FARLO MEGLIO, PER FAVORE
         session()->flash('form_data', $this->form_data);
 
         // dddx($this->form_data);
