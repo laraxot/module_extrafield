@@ -7,6 +7,7 @@ namespace Modules\ExtraField\Http\Livewire\Modal\ExtraFields;
 use Illuminate\Contracts\Support\Renderable;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Support\Facades\Auth;
+use Modules\Cms\Actions\GetViewAction;
 use Modules\UI\Datas\FieldData;
 use WireElements\Pro\Components\Modal\Modal;
 
