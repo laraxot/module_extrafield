@@ -4,18 +4,17 @@ declare(strict_types=1);
 
 namespace Modules\ExtraField\Http\Requests;
 
-use Livewire\Component;
-use Illuminate\Support\Str;
-use Modules\Blog\Models\Category;
-use Illuminate\Support\Facades\Auth;
-use Modules\Cms\Actions\GetViewAction;
-use Illuminate\Database\Eloquent\Model;
 use Illuminate\Contracts\Support\Renderable;
+use Illuminate\Database\Eloquent\Model;
+use Illuminate\Support\Facades\Auth;
+use Illuminate\Support\Str;
+use Livewire\Component;
+use Modules\Blog\Models\Category;
+use Modules\Cms\Actions\GetViewAction;
 
 // use Modules\PFed\Models\Profile as ProfileModel;
 
-class UserExtraFields extends Component
-{
+class UserExtraFields extends Component {
     /**
      * Summary of user_id.
      *
@@ -37,8 +36,7 @@ class UserExtraFields extends Component
 
     protected $listeners = ['refreshExtraFields' => '$refresh'];
 
-    public function mount(Model $model, string $tpl = 'v1'): void
-    {
+    public function mount(Model $model, string $tpl = 'v1'): void {
         $this->model = $model;
         $this->model_id = $this->model->id;
         $this->model_type = Str::snake(class_basename($this->model));
@@ -50,21 +48,25 @@ class UserExtraFields extends Component
     //     return ProfileModel::where('user_id', $this->user_id)->first();
     // }
 
-    public function render(): Renderable
-    {
+    public function render(): Renderable {
         /**
          * @phpstan-var view-string
          */
-
         $view = app(GetViewAction::class)->execute($this->tpl);
 
         $categories = Category::ofType($this->model_type)->get();
 
         if (0 == $categories->count()) {
-            $all = config($this->model_.'.categories');
+            // credo che vada cambiato così (oggi 2023-03-02):
+            $all = config($this->model_type.'.categories');
+            if (! is_array($all)) {
+                dddx($this->model_type.'.categories');
+            }
+
+            /*$all = config($this->model_.'.categories');
             if (! is_array($all)) {
                 dddx($this->model_.'.categories');
-            }
+            }*/
             // $profile = $this->profile;
             $res = $this->model->attachCategories($all);
             // dddx($res);
@@ -80,8 +82,7 @@ class UserExtraFields extends Component
         return view($view, $view_params);
     }
 
-    public function showCat(string $id): void
-    {
+    public function showCat(string $id): void {
         $this->cat_id = $id;
         $category = Category::find($id);
         if (null == $category) {
@@ -112,8 +113,7 @@ class UserExtraFields extends Component
         $this->groups = $res->all();
     }
 
-    public function getFromUserTable($item)
-    {
+    public function getFromUserTable($item) {
         return $item->pivot->extraFieldMorphUserValues()->where('user_id', $this->user_id)->get()->last()?->value;
     }
 }

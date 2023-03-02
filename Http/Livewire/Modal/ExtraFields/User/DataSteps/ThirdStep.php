@@ -4,15 +4,14 @@ declare(strict_types=1);
 
 namespace Modules\ExtraField\Http\Livewire\Modal\ExtraFields\User\DataSteps;
 
+use Illuminate\Contracts\Support\Renderable;
+use Illuminate\Database\Eloquent\Relations\Relation;
 use Illuminate\Support\Str;
 use Modules\Cms\Actions\GetViewAction;
 use Modules\ExtraField\Models\ExtraField;
-use Illuminate\Contracts\Support\Renderable;
 use Spatie\LivewireWizard\Components\StepComponent;
-use Illuminate\Database\Eloquent\Relations\Relation;
 
-class ThirdStep extends StepComponent
-{
+class ThirdStep extends StepComponent {
     public array $form_data = [];
     public array $form1_data = [];
     public array $form2_data = [];
@@ -20,8 +19,7 @@ class ThirdStep extends StepComponent
     public bool $is_first = false;
     public bool $is_last = true;
 
-    public function mount(): void
-    {
+    public function mount(): void {
         $this->form1_data = $this->state()->all()['modal.extra-fields.data-steps.first-step']['form_data'];
         $this->form2_data = $this->state()->all()['modal.extra-fields.data-steps.second-step']['form_data'];
         // $this->form_data = array_merge($data01, $data02);
@@ -38,12 +36,13 @@ class ThirdStep extends StepComponent
     */
     }
 
-    public function render(): Renderable
-    {
+    public function render(): Renderable {
         /**
          * @phpstan-var view-string
+         *
+         * bisogna provarlo. non so se ora gli venga passato TPL
          */
-        $view = app(GetViewAction::class)->execute($this->tpl);
+        $view = app(GetViewAction::class)->execute(/* $this->tpl */);
 
         $view_params = [
             'view' => $view,
@@ -52,16 +51,14 @@ class ThirdStep extends StepComponent
         return view($view, $view_params);
     }
 
-    public function stepInfo(): array
-    {
+    public function stepInfo(): array {
         return [
             'label' => 'Data Description',
             'icon' => 'fa-shopping-cart',
         ];
     }
 
-    public function goNextStep(): void
-    {
+    public function goNextStep(): void {
         // dddx($this->form_data);
 
         // $this->emit('update_form_data', $this->form_data);
@@ -69,8 +66,7 @@ class ThirdStep extends StepComponent
         // $this->nextStep();
     }
 
-    public function save(): void
-    {
+    public function save(): void {
         $morph_map = [
             'extra_field' => 'Modules\ExtraField\Models\ExtraField',
         ];
@@ -102,7 +98,7 @@ class ThirdStep extends StepComponent
             $model->extraFields()->attach($row->id, ['value' => $value, 'uuid' => $uuid]);
         }
 
-        $this->close();
+        $this->emit('modal.close');
         $this->emit('refreshExtraFields');
         session()->flash('message', 'Post successfully updated.');
     }

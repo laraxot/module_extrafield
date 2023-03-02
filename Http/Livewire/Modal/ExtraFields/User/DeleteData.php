@@ -21,6 +21,9 @@ class DeleteData extends Modal
     public int $model_id;
     public Model $model;
 
+    //verificare o cambiare
+    public Collection $rows;
+
     public function mount(string $uuid, string $model_type, int $model_id): void
     {
         $this->model_type = $model_type;

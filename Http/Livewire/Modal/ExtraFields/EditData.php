@@ -6,6 +6,7 @@ namespace Modules\ExtraField\Http\Livewire\Modal\ExtraFields;
 
 use Illuminate\Contracts\Support\Renderable;
 use Illuminate\Database\Eloquent\Model;
+use Illuminate\Support\Collection;
 use Illuminate\Support\Facades\Auth;
 use Modules\Cms\Actions\GetViewAction;
 use Modules\UI\Datas\FieldData;
@@ -19,7 +20,8 @@ class EditData extends Modal {
     public string $model_type;
     public int $model_id;
     public Model $model;
-
+    // collection letta dal mutator in teoria
+    public Collection $rows;
     protected $listeners = ['updateFormData' => 'updateFormData'];
 
     public function mount(string $uuid, string $model_type, int $model_id): void {

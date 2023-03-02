@@ -6,10 +6,10 @@ namespace Modules\ExtraField\Http\Livewire\Modal\ExtraFields\User;
 
 use Illuminate\Contracts\Support\Renderable;
 use Illuminate\Support\Facades\Auth;
+use Modules\Cms\Actions\GetViewAction;
 use WireElements\Pro\Components\Modal\Modal;
 
-class AddData extends Modal
-{
+class AddData extends Modal {
     public string $title;
     public array $form_data = [];
     public string $cat_id;
@@ -25,8 +25,7 @@ class AddData extends Modal
         'save' => 'save',
     ];
 
-    public function mount(string $cat_id, string $model_type, int $model_id): void
-    {
+    public function mount(string $cat_id, string $model_type, int $model_id): void {
         // $this->model = config('morph_map')[$model_type]::find($model_id);
         $this->model_type = $model_type;
         $this->model_id = $model_id;
@@ -34,12 +33,10 @@ class AddData extends Modal
         $this->cat_id = $cat_id;
     }
 
-    public function render(): Renderable
-    {
+    public function render(): Renderable {
         /**
          * @phpstan-var view-string
          */
-
         $view = app(GetViewAction::class)->execute();
 
         $view_params = [
@@ -49,8 +46,7 @@ class AddData extends Modal
         return view($view, $view_params);
     }
 
-    public static function attributes(): array
-    {
+    public static function attributes(): array {
         return [
             // Set the modal size to 2xl, you can choose between:
             // xs, sm, md, lg, xl, 2xl, 3xl, 4xl, 5xl, 6xl, 7xl
