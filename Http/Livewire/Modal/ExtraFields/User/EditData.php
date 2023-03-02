@@ -12,6 +12,9 @@ use Modules\Cms\Actions\GetViewAction;
 use Modules\UI\Datas\FieldData;
 use WireElements\Pro\Components\Modal\Modal;
 
+/**
+ * @property $rows
+ */
 class EditData extends Modal {
     public string $title;
     public array $form_data = [];
@@ -22,7 +25,6 @@ class EditData extends Modal {
     public Model $model;
 
     // verificare o cambiare
-    public Collection $rows;
 
     public function mount(string $uuid, string $model_type, int $model_id): void {
         $this->model_type = $model_type;

@@ -5,14 +5,20 @@ declare(strict_types=1);
 namespace Modules\ExtraField\Http\Livewire\Modal\ExtraFields;
 
 use Illuminate\Contracts\Support\Renderable;
+use Illuminate\Database\Eloquent\Collection;
 use Illuminate\Database\Eloquent\Model;
-use Illuminate\Support\Collection;
 use Illuminate\Support\Facades\Auth;
 use Modules\Cms\Actions\GetViewAction;
 use Modules\UI\Datas\FieldData;
 use WireElements\Pro\Components\Modal\Modal;
 
 class EditData extends Modal {
+    /**
+     * @property $rows
+     *
+     * @method Model      getModelProperty()
+     * @method Collection getRowsProperty()
+     */
     public string $title;
     public array $form_data = [];
     public string $user_id;
@@ -20,8 +26,6 @@ class EditData extends Modal {
     public string $model_type;
     public int $model_id;
     public Model $model;
-    // collection letta dal mutator in teoria
-    public Collection $rows;
     protected $listeners = ['updateFormData' => 'updateFormData'];
 
     public function mount(string $uuid, string $model_type, int $model_id): void {
@@ -43,7 +47,7 @@ class EditData extends Modal {
         // });
         // dddx($this->rows);
         // $data = $this->rows->pluck('pivot.value', 'name')->all();
-
+        // dddx($this->rows);
         $data = $this->rows->map(function ($item) {
             return [
                 'name' => $item->name,
