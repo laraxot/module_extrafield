@@ -16,6 +16,21 @@ use Modules\ExtraField\Models\ExtraFieldMorph;
 
 // use Modules\PFed\Models\Profile as ProfileModel;
 
+/**
+ * Class Groups.
+ *
+ * @property string     $tpl
+ * @property string     $name
+ * @property array      $groups
+ * @property array      $form_data
+ * @property mixed      $value
+ * @property Model      $model
+ * @property Collection $rows
+ * @property Collection $availableGroups
+ * @property Collection $assignedGroups
+ * @property Collection $availableFields
+ * @property Collection $assignedFields
+ */
 class Groups extends Component {
     public string $tpl = 'v1';
     public string $name;
@@ -120,8 +135,10 @@ class Groups extends Component {
     }
 
     public function save(): void {
+        // NON SI USA PIU USER DATUM A QUANTO PARE (oggi 2023-03-02)
+
         // dddx($this->form_data);
-        $user_datum = new UserDatum();
+        /*$user_datum = new UserDatum();
         $user_datum->user_id = $this->user_id;
         $user_datum->label = $this->form_data['label'];
         $user_datum->data_id = $this->form_data['data_id'];
@@ -130,6 +147,6 @@ class Groups extends Component {
         // dddx($user_datum);
 
         $this->emit('refresh', $user_datum->data->category->id);
-        $this->close();
+        $this->close();*/
     }
 }
