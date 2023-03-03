@@ -4,12 +4,12 @@ declare(strict_types=1);
 
 namespace Modules\ExtraField\Http\Livewire\Modal\ExtraFields\DataSteps;
 
+use Illuminate\Contracts\Support\Renderable;
+use Illuminate\Database\Eloquent\Relations\Relation;
 use Illuminate\Support\Str;
 use Modules\Cms\Actions\GetViewAction;
 use Modules\ExtraField\Models\ExtraField;
-use Illuminate\Contracts\Support\Renderable;
 use Spatie\LivewireWizard\Components\StepComponent;
-use Illuminate\Database\Eloquent\Relations\Relation;
 
 class ThirdStep extends StepComponent {
     public array $form_data = [];
@@ -19,18 +19,15 @@ class ThirdStep extends StepComponent {
     public bool $is_first = false;
     public bool $is_last = true;
 
-
     public function mount(): void {
         $this->form1_data = $this->state()->all()['modal.extra-fields.data-steps.first-step']['form_data'];
         $this->form2_data = $this->state()->all()['modal.extra-fields.data-steps.second-step']['form_data'];
     }
 
-
     public function render(): Renderable {
         /**
          * @phpstan-var view-string
          */
-
         $view = app(GetViewAction::class)->execute();
 
         $view_params = [
@@ -89,6 +86,11 @@ class ThirdStep extends StepComponent {
         $uuid = Str::uuid();
         foreach ($rows as $row) {
             $value = collect($this->form2_data)->get($row->name);
+
+            if (is_array($value)) {
+                $value = json_encode($value);
+            }
+
             $model->extraFields()->attach($row->id, ['value' => $value, 'uuid' => $uuid]);
         }
 
