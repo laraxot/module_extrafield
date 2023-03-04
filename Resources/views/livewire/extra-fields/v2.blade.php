@@ -24,6 +24,13 @@
 
                                 </div>
                                 <div class="vstack gap-3 mt-3">
+                                    @if ($profile->isSuperAdmin() === true)
+                                        <button
+                                            class="btn btn-sm bg-soft-success bg-opacity-20 bg-opacity-100-hover text-primary text-white-hover"
+                                            onclick="Livewire.emit('modal.open', 'modal.profile.add-categories')">
+                                            Add Category
+                                        </button>
+                                    @endif
                                     @foreach ($categories as $category)
                                         <div class="d-flex align-items-center">
                                             <div class="flex-none"><img alt="..."
