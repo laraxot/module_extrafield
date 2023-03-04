@@ -4,15 +4,14 @@ declare(strict_types=1);
 
 namespace Modules\ExtraField\Http\Livewire\Modal\ExtraFields\DataSteps;
 
-use Illuminate\Support\Facades\Auth;
-use Modules\Cms\Actions\GetViewAction;
-use Modules\PFed\Rules\CardinalityRule;
-use Illuminate\Support\Facades\Validator;
-use Modules\ExtraField\Models\ExtraField;
 use Illuminate\Contracts\Support\Renderable;
-use Modules\ExtraField\Models\ExtraFieldGroup;
-use Spatie\LivewireWizard\Components\StepComponent;
 use Illuminate\Database\Eloquent\Relations\Relation;
+use Illuminate\Support\Facades\Auth;
+use Illuminate\Support\Facades\Validator;
+use Modules\Cms\Actions\GetViewAction;
+use Modules\ExtraField\Models\ExtraFieldGroup;
+use Modules\PFed\Rules\CardinalityRule;
+use Spatie\LivewireWizard\Components\StepComponent;
 
 class FirstStep extends StepComponent {
     public string $cat_id;
@@ -35,11 +34,10 @@ class FirstStep extends StepComponent {
 
         Relation::morphMap($morph_map);
 
-        $groups = ExtraFieldGroup::whereHas('fieldsNew', function ($query) use ($cat_id) {
+        // prima era fieldsnew. controllare
+        $groups = ExtraFieldGroup::whereHas('fields', function ($query) use ($cat_id) {
             $query->withAnyCategories($cat_id);
-        });
-
-        // dddx([$cat_id,ExtraFieldGroup::whereHas('fields')->get()]);
+        })->get();
 
         // bisogna passare per un map mi sa e validare campo per campo attraverso le Rule
         $group_opts = $groups->pluck('name', 'id')->filter(function ($val, $id) {
@@ -52,31 +50,13 @@ class FirstStep extends StepComponent {
         })->all();
 
         $this->group_opts = $group_opts;
-        /*
-        dddx([
-            'rows' => $res->get(),
-            'c' => $res->count(),
-            'sql' => rowsToSql($res),
-            '$group_ops' => $group_ops,
-        ]);
-        */
-        // $res = ExtraField::withAnyCategories($cat_id);
-        /*
-        dddx([
-            'rows' => $res->get(),
-            'c' => $res->count(),
-            'sql' => rowsToSql($res),
-        ]);
-        */
     }
 
     public function render(): Renderable {
         /**
          * @phpstan-var view-string
          */
-
         $view = app(GetViewAction::class)->execute();
-
         $view_params = [
             'view' => $view,
         ];
@@ -85,14 +65,6 @@ class FirstStep extends StepComponent {
     }
 
     public function stepInfo(): array {
-        /*
-        dddx([
-            'state' => $this->state(),
-            'state_all' => $this->state()->all(),
-            'state_methods' => get_class_methods($this->state()),
-            'methods' => get_class_methods($this),
-        ]);
-        */
         return [
             'label' => 'Select Data',
             'icon' => 'fa-shopping-cart',
