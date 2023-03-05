@@ -57,7 +57,6 @@ class ExtraField extends BaseModel {
         'rules' => 'array',
     ];
 
-    // E' sbagliata. va fatta polimorfica
     public function group(): BelongsTo {
         return $this->belongsTo(ExtraFieldGroup::class);
     }
@@ -66,17 +65,18 @@ class ExtraField extends BaseModel {
         return $this->hasOne(ExtraFieldMorph::class);
     }
 
-    public function groups(): MorphToMany {
-        // return $this->hasMany(ExtraField::class, 'group_id');
+    // un campo corrisponde solo ad un gruppo, come da specifiche
+    // public function groups(): MorphToMany {
+    //     // return $this->hasMany(ExtraField::class, 'group_id');
 
-        $pivot_class = ExtraFieldGroupMorph::class;
-        $pivot = app($pivot_class);
-        $pivot_table = $pivot->getTable();
-        $pivot_fields = $pivot->getFillable();
+    //     $pivot_class = ExtraFieldGroupMorph::class;
+    //     $pivot = app($pivot_class);
+    //     $pivot_table = $pivot->getTable();
+    //     $pivot_fields = $pivot->getFillable();
 
-        return $this->morphToMany(ExtraFieldGroup::class, 'model', $pivot_table)
-        ->using($pivot_class)
-        ->withPivot($pivot_fields)
-        ->withTimestamps();
-    }
+    //     return $this->morphToMany(ExtraFieldGroup::class, 'model', $pivot_table)
+    //     ->using($pivot_class)
+    //     ->withPivot($pivot_fields)
+    //     ->withTimestamps();
+    // }
 }

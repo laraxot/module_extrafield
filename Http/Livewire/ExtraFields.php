@@ -92,7 +92,7 @@ class ExtraFields extends Component {
 
         $res = $this->model->extraFields()
             ->wherePivot('user_id', null)
-            ->whereHas('groups', function ($query) use ($cat_id) {
+            ->whereHas('group', function ($query) use ($cat_id) {
                 $query->withAnyCategories($cat_id);
             })
             // ->withAnyCategories($id)
@@ -101,7 +101,7 @@ class ExtraFields extends Component {
         // $groups = ExtraFieldGroup::whereHas('fields', function ($query) use ($cat_id) {
         //     $query->withAnyCategories($cat_id);
         // })->get();
-        dddx(rowsToSql($res));
+        // dddx(rowsToSql($res));
         $rows = $res->get();
         // dddx($rows);
         $res = $rows->groupBy('group_id')
