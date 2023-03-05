@@ -6,8 +6,10 @@ namespace Modules\ExtraField\Models;
 
 use Illuminate\Database\Eloquent\Relations\MorphToMany;
 use Illuminate\Support\Facades\Auth;
+use Modules\Blog\Models\Traits\HasCategory;
 
 class ExtraFieldGroup extends BaseModel {
+    use HasCategory;
     protected $fillable = ['id', 'name', 'cardinality'];
 
     // non so se sia giusta con sta polimorfica. dovrebbe essere ExtraFieldMorph secondo me

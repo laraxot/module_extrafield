@@ -6,6 +6,7 @@ namespace Modules\ExtraField\Models;
 
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
 use Illuminate\Database\Eloquent\Relations\HasOne;
+use Illuminate\Database\Eloquent\Relations\MorphToMany;
 use Modules\Blog\Models\Traits\HasCategory;
 
 /**
@@ -63,5 +64,19 @@ class ExtraField extends BaseModel {
 
     public function extraFieldMorph(): HasOne {
         return $this->hasOne(ExtraFieldMorph::class);
+    }
+
+    public function groups(): MorphToMany {
+        // return $this->hasMany(ExtraField::class, 'group_id');
+
+        $pivot_class = ExtraFieldGroupMorph::class;
+        $pivot = app($pivot_class);
+        $pivot_table = $pivot->getTable();
+        $pivot_fields = $pivot->getFillable();
+
+        return $this->morphToMany(ExtraFieldGroup::class, 'model', $pivot_table)
+        ->using($pivot_class)
+        ->withPivot($pivot_fields)
+        ->withTimestamps();
     }
 }

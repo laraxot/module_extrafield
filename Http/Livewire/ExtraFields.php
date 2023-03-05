@@ -82,9 +82,9 @@ class ExtraFields extends Component {
         $this->groups = $res->all();
     }
 
-    public function showCat(string $id): void {
-        $this->cat_id = $id;
-        $category = Category::find($id);
+    public function showCat(string $cat_id): void {
+        $this->cat_id = $cat_id;
+        $category = Category::find($cat_id);
         if (null == $category) {
             return;
         }
@@ -92,9 +92,18 @@ class ExtraFields extends Component {
 
         $res = $this->model->extraFields()
             ->wherePivot('user_id', null)
-            ->withAnyCategories($id);
-        $rows = $res->get();
+            ->whereHas('groups', function ($query) use ($cat_id) {
+                $query->withAnyCategories($cat_id);
+            })
+            // ->withAnyCategories($id)
+        ;
 
+        // $groups = ExtraFieldGroup::whereHas('fields', function ($query) use ($cat_id) {
+        //     $query->withAnyCategories($cat_id);
+        // })->get();
+        dddx(rowsToSql($res));
+        $rows = $res->get();
+        // dddx($rows);
         $res = $rows->groupBy('group_id')
             ->map(function ($items, $group_id) {
                 $first = $items->first();

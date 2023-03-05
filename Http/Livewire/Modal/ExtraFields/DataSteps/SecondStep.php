@@ -9,6 +9,7 @@ use Illuminate\Database\Eloquent\Relations\Relation;
 use Modules\Cms\Actions\GetViewAction;
 // use Modules\PFed\Models\Data;
 use Modules\ExtraField\Models\ExtraField;
+use Modules\ExtraField\Models\ExtraFieldGroup;
 use Modules\UI\Datas\FieldData;
 use Spatie\LaravelData\DataCollection;
 use Spatie\LivewireWizard\Components\StepComponent;
@@ -43,10 +44,12 @@ class SecondStep extends StepComponent {
         $this->cat_id = (string) $this->state()->all()['modal.extra-fields.data-steps.first-step']['form_data']['cat_id'];
         // dddx($this->cat_id);
         // $this->attrs = $this->getAttrs($this->data_id);
-        $res = ExtraField::where('group_id', $this->group_id)
-            ->withAnyCategories($this->cat_id)
-        ;
-        $rows = $res->get();
+        // $res = ExtraField::where('group_id', $this->group_id)
+        //     ->withAnyCategories($this->cat_id)
+        // ;
+        // $rows = $res->get();
+
+        $rows = ExtraFieldGroup::find($this->group_id)->fields;
 
         $fields = FieldData::collection($rows)->toArray();
         $this->fields = $fields;

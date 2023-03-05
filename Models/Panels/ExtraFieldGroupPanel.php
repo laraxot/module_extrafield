@@ -79,6 +79,28 @@ class ExtraFieldGroupPanel extends XotBasePanel {
                 'col_size' => 4,
                 'options' => $this->optionsModelClass(ExtraField::class),
             ],
+            (object) [
+                'type' => 'Cell',
+                'name' => 'categories',
+                'fields' => $this->infoCategories(),
+            ],
+            // (object) [
+            //     'type' => 'SelectCategories',
+            //     'name' => 'categories',
+            //     'comment' => 'not in Doctrine',
+            //     'col_size' => 4,
+            // ],
+        ];
+    }
+
+    public function infoCategories() {
+        return [
+            (object) [
+                'type' => 'SelectCategories',
+                'name' => 'categories',
+                'comment' => 'not in Doctrine',
+                'col_size' => 4,
+            ],
         ];
     }
 

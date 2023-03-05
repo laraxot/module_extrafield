@@ -35,9 +35,10 @@ class FirstStep extends StepComponent {
         Relation::morphMap($morph_map);
 
         // prima era fieldsnew. controllare
-        $groups = ExtraFieldGroup::whereHas('fields', function ($query) use ($cat_id) {
-            $query->withAnyCategories($cat_id);
-        })->get();
+        // $groups = ExtraFieldGroup::whereHas('fields', function ($query) use ($cat_id) {
+        //     $query->withAnyCategories($cat_id);
+        // })->get();
+        $groups = ExtraFieldGroup::withAnyCategories($cat_id);
 
         // bisogna passare per un map mi sa e validare campo per campo attraverso le Rule
         $group_opts = $groups->pluck('name', 'id')->filter(function ($val, $id) {
