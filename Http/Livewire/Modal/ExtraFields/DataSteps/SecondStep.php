@@ -34,6 +34,8 @@ class SecondStep extends StepComponent {
     public array $fields;
 
     public function mount(): void {
+        // dddx($this->state()->all());
+
         $morph_map = [
             'extra_field' => 'Modules\ExtraField\Models\ExtraField',
         ];
@@ -42,6 +44,10 @@ class SecondStep extends StepComponent {
 
         $this->group_id = (string) $this->state()->all()['modal.extra-fields.data-steps.first-step']['form_data']['group_id'];
         $this->cat_id = (string) $this->state()->all()['modal.extra-fields.data-steps.first-step']['form_data']['cat_id'];
+        // $this->cat_id = (string) $this->state()->all()['modal.extra-fields.data-steps.first-step']['cat_id'];
+        // $this->form_data['model_type'] = (string) $this->state()->all()['modal.extra-fields.data-steps.first-step']['allStepsState']['modal.extra-fields.data-steps.first-step']['model_type'];
+        // $this->form_data['model_id'] = (string) $this->state()->all()['modal.extra-fields.data-steps.first-step']['allStepsState']['modal.extra-fields.data-steps.first-step']['model_id'];
+
         // dddx($this->cat_id);
         // $this->attrs = $this->getAttrs($this->data_id);
         // $res = ExtraField::where('group_id', $this->group_id)

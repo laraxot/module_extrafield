@@ -43,6 +43,9 @@ class DataSteps extends WizardComponent {
             ],
             'modal.extra-fields.data-steps.second-step' => [
                 // 'data_id' => $this->data_id,
+                'cat_id' => $this->cat_id,
+                'model_type' => $this->model_type,
+                'model_id' => $this->model_id,
             ],
         ];
     }
