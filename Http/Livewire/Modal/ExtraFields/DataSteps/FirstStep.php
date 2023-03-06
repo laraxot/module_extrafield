@@ -45,9 +45,9 @@ class FirstStep extends StepComponent {
             $validator = Validator::make(['id' => $id], ['id' => new CardinalityRule()]);
             if ($validator->passes()) {
                 return $val;
-            } else {
+            }/* else {
                 session()->flash('status_error', 'Avviso: Non puoi più aggiungere campi di questo tipo: '.$val);
-            }
+            }*/
         })->all();
 
         $this->group_opts = $group_opts;
