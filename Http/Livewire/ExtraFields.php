@@ -26,29 +26,18 @@ class ExtraFields extends Component {
      * @var int|string|null
      */
     public $user_id;
-
     public string $cat_id = '';
     public string $tpl;
-
     public Model $model;
-
     public string $model_type;
     public int $model_id;
-
     public ?string $category_name;
-
-    // public array $groups;
-
     protected $listeners = ['refreshExtraFields' => '$refresh'];
-
-
 
     public function mount(Model $model, string $tpl = 'v4'): void {
         $this->model = $model;
         $this->model_id = $model->getKey();
         $this->model_type = Str::snake(class_basename($this->model));
-
-        // dddx(['model_id' => $this->model_id, 'model_type' => $this->model_type, 'model' => $model]);
         $this->user_id = Auth::id();
         $this->tpl = $tpl;
     }
@@ -60,9 +49,7 @@ class ExtraFields extends Component {
     public function render(): Renderable {
         // $this->showPage();
         if ('' != $this->cat_id) {
-            $groups = $this->model->extraFieldGroups()
-                ->withAnyCategories($this->cat_id)->get()
-            ;
+            $groups = $this->model->extraFieldGroups()->withAnyCategories($this->cat_id)->get();
         } else {
             $groups = collect([]);
         }
@@ -71,6 +58,8 @@ class ExtraFields extends Component {
          * @phpstan-var view-string
          */
         $view = app(GetViewAction::class)->execute($this->tpl);
+
+
         $categories = Category::ofType($this->model_type)->get();
         $this->showCat($this->cat_id);
         $view_params = [
@@ -81,24 +70,6 @@ class ExtraFields extends Component {
 
         return view($view, $view_params);
     }
-
-    // public function showPage(): void {
-    //     $res = $this->model->extraFieldGroups;
-    //     dddx($res);
-
-    //     $res = $rows->groupBy('group_id')
-    //         ->map(function ($items, $group_id) {
-    //             $first = $items->first();
-
-    //             return [
-    //                 'id' => $group_id,
-    //                 'label' => $first->group->name,
-    //                 'items_grouped' => $items->groupBy('pivot.uuid'),
-    //             ];
-    //         });
-
-    //     $this->groups = $res->all();
-    // }
 
     public function showCat(string $cat_id): void {
         $this->cat_id = $cat_id;

@@ -23,8 +23,8 @@
 
                                     @foreach ($categories as $category)
                                         <div class="d-flex align-items-center">
-                                            <div class="flex-none"><img alt="..."
-                                                    class="avatar w-5 h-5 rounded-circle" src="/img/people/img-2.jpg">
+                                            <div class="flex-none">
+                                                <i class="bi bi-person-lines-fill"></i>
                                             </div>
                                             <div class="flex-fill ms-3"><a href="#"
                                                     wire:click="showCat({{ $category->id }})"

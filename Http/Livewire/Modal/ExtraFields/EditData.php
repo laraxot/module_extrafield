@@ -12,7 +12,8 @@ use Modules\Cms\Actions\GetViewAction;
 use Modules\UI\Datas\FieldData;
 use WireElements\Pro\Components\Modal\Modal;
 
-class EditData extends Modal {
+class EditData extends Modal
+{
     /**
      * @property $rows
      *
@@ -28,7 +29,8 @@ class EditData extends Modal {
     public Model $model;
     protected $listeners = ['updateFormData' => 'updateFormData'];
 
-    public function mount(string $uuid, string $model_type, int $model_id): void {
+    public function mount(string $uuid, string $model_type, int $model_id): void
+    {
         $this->uuid = $uuid;
         $this->model_type = $model_type;
         $this->model_id = $model_id;
@@ -38,9 +40,9 @@ class EditData extends Modal {
 
         $data = $this->model->getExtraFieldValue($this->user_id, $this->uuid);
 
-        
+
         $data = collect($data)->first();
-       
+
         $data = collect($data['fields'])->pluck('value', 'name')->all();
 
         $this->form_data = $data;
@@ -51,15 +53,18 @@ class EditData extends Modal {
         // dddx($this->form_data);
     }
 
-    public function updateFormData($data) {
+    public function updateFormData($data)
+    {
         $this->form_data = array_merge($this->form_data, $data);
     }
 
-    public function getModelProperty() {
+    public function getModelProperty()
+    {
         return $this->model::where('user_id', $this->user_id)->first();
     }
 
-    public function render(): Renderable {
+    public function render(): Renderable
+    {
         $groups = $this->model->getExtraFieldValue($this->user_id, $this->uuid);
         $group = collect($groups)->first();
         $fields = $group['fields'];
@@ -67,6 +72,7 @@ class EditData extends Modal {
          * @phpstan-var view-string
          */
         $view = app(GetViewAction::class)->execute();
+
         $view_params = [
             'view' => $view,
             'fields' => FieldData::collection($fields),
@@ -75,7 +81,8 @@ class EditData extends Modal {
         return view($view, $view_params);
     }
 
-    public static function behavior(): array {
+    public static function behavior(): array
+    {
         return [
             // Close the modal if the escape key is pressed
             'close-on-escape' => true,
@@ -88,7 +95,8 @@ class EditData extends Modal {
         ];
     }
 
-    public static function attributes(): array {
+    public static function attributes(): array
+    {
         return [
             // Set the modal size to 2xl, you can choose between:
             // xs, sm, md, lg, xl, 2xl, 3xl, 4xl, 5xl, 6xl, 7xl
@@ -96,12 +104,15 @@ class EditData extends Modal {
         ];
     }
 
-    public function save() {
+    public function save()
+    {
 
         $this->model->updateExtraFieldByGroupTest($this->form_data, $this->user_id, $this->uuid);
 
         $this->close();
+
         $this->emit('refreshExtraFields');
+
         session()->flash('message', 'Post successfully updated.');
     }
 }
