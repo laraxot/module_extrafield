@@ -6,9 +6,7 @@ namespace Modules\ExtraField\Http\Livewire\Modal\ExtraFields\DataSteps;
 
 use Illuminate\Contracts\Support\Renderable;
 use Illuminate\Database\Eloquent\Relations\Relation;
-use Illuminate\Support\Str;
 use Modules\Cms\Actions\GetViewAction;
-use Modules\ExtraField\Models\ExtraField;
 use Spatie\LivewireWizard\Components\StepComponent;
 
 class ThirdStep extends StepComponent {
@@ -63,36 +61,11 @@ class ThirdStep extends StepComponent {
         $cat_id = $this->form1_data['cat_id'];
         $model_type = $this->form1_data['model_type'];
         $model_id = $this->form1_data['model_id'];
-        // dddx(['model_type' => $model_type, 'model_id' => $model_id]);
+
         $model_class = collect(config('morph_map'))->get($model_type);
-        // dddx($model_class);
-        // $model = config('morph_map')[$model_type]::findOrFail($model_id);
         $model = app($model_class)->find($model_id);
-        // dddx(['model' => $model, 'model_class' => $model_class, 'model_id' => $model_id]);
 
-        $res = ExtraField::where('group_id', $group_id)
-            ->withAnyCategories($cat_id)
-        ;
-        $rows = $res->get();
-
-        /*
-        dddx([
-            'group_id' => $group_id,
-            'cat_id' => $cat_id,
-            'rows' => $rows,
-        ]
-        );
-        */
-        $uuid = Str::uuid();
-        foreach ($rows as $row) {
-            $value = collect($this->form2_data)->get($row->name);
-
-            if (is_array($value)) {
-                $value = json_encode($value);
-            }
-
-            $model->extraFields()->attach($row->id, ['value' => $value, 'uuid' => $uuid]);
-        }
+        $model->addExtraField($this->form2_data, $user_id, $group_id);
 
         $this->emit('refreshExtraFields');
         session()->flash('message', 'Post successfully updated.');

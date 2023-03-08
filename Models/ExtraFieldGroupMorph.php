@@ -54,6 +54,11 @@ class ExtraFieldGroupMorph extends BaseMorphPivot {
         'value_class',
         'uuid',
         'extra_field_id',
+        'extra_field_group_id',
+    ];
+
+    protected $casts = [
+        'value' => 'array',
     ];
 
     /*public function extraFieldMorphUserValues(): HasMany {

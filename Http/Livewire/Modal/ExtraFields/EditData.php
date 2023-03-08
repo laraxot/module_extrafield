@@ -33,29 +33,12 @@ class EditData extends Modal {
         $this->model_type = $model_type;
         $this->model_id = $model_id;
         $model_class = collect(config('morph_map'))->get($this->model_type);
-        // $this->model = [$this->model_type]::findOrFail($this->model_id);
         $this->model = app($model_class)->find($this->model_id);
-
         $this->user_id = (string) Auth::id();
+        $data = $this->model->getExtraFieldValue($this->user_id, $this->uuid);
+        $data = collect($data)->first();
 
-        // $fields = FieldData::collection($rows);
-
-        // $data = $this->rows->map(function ($item) {
-        //     // dddx($item);
-
-        //     return [$item->name => $item->pivot->extraFieldMorphUserValues()->where('user_id', $this->user_id)->get()->last()->value ?? ''];
-        // });
-        // dddx($this->rows);
-        // $data = $this->rows->pluck('pivot.value', 'name')->all();
-        // dddx($this->rows);
-        $data = $this->rows->map(function ($item) {
-            return [
-                'name' => $item->name,
-                // 'value' => $item->pivot->userValue($this->user_id),
-                'value' => $item->pivot->value,
-            ];
-        })->pluck('value', 'name')
-        ->all();
+        $data = collect($data['fields'])->pluck('value', 'name')->all();
 
         $this->form_data = $data;
 
@@ -73,25 +56,17 @@ class EditData extends Modal {
         return $this->model::where('user_id', $this->user_id)->first();
     }
 
-    public function getRowsProperty() {
-        $rows = $this->model
-        ->extraFields()
-        // ->wherePivot('user_id', $this->user_id)
-        ->wherePivot('uuid', $this->uuid)
-        ->wherePivot('user_id', null)
-        ->get();
-
-        return $rows;
-    }
-
     public function render(): Renderable {
+        $groups = $this->model->getExtraFieldValue($this->user_id, $this->uuid);
+        $group = collect($groups)->first();
+        $fields = $group['fields'];
         /*
          * @phpstan-var view-string
          */
         $view = app(GetViewAction::class)->execute();
         $view_params = [
             'view' => $view,
-            'fields' => FieldData::collection($this->rows),
+            'fields' => FieldData::collection($fields),
         ];
 
         return view($view, $view_params);
@@ -119,11 +94,8 @@ class EditData extends Modal {
     }
 
     public function save() {
-        $rows = $this->rows;
-        foreach ($rows as $row) {
-            $value = collect($this->form_data)->get($row->name);
-            $row->pivot->update(['value' => $value]);
-        }
+
+        $this->model->updateExtraField($this->form_data, $this->user_id, $this->uuid);
 
         $this->close();
         $this->emit('refreshExtraFields');

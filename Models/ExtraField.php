@@ -4,10 +4,11 @@ declare(strict_types=1);
 
 namespace Modules\ExtraField\Models;
 
-use Illuminate\Database\Eloquent\Relations\BelongsTo;
-use Illuminate\Database\Eloquent\Relations\HasOne;
-use Illuminate\Database\Eloquent\Relations\MorphToMany;
+use Modules\UI\Datas\FieldData;
 use Modules\Blog\Models\Traits\HasCategory;
+use Illuminate\Database\Eloquent\Relations\HasOne;
+use Illuminate\Database\Eloquent\Relations\BelongsTo;
+use Illuminate\Database\Eloquent\Relations\MorphToMany;
 
 /**
  * Modules\ExtraField\Models\ExtraField.
@@ -49,7 +50,7 @@ class ExtraField extends BaseModel {
     protected $fillable = ['id', 'name', 'type',
         'rules', 'options', 'attributes',
         // 'collection_name',
-        'group_id',
+        // 'group_id',
     ];
 
     protected $casts = [
@@ -57,26 +58,30 @@ class ExtraField extends BaseModel {
         'rules' => 'array',
     ];
 
-    public function group(): BelongsTo {
-        return $this->belongsTo(ExtraFieldGroup::class);
-    }
+    // public function group(): BelongsTo {
+    //     return $this->belongsTo(ExtraFieldGroup::class);
+    // }
 
     public function extraFieldMorph(): HasOne {
         return $this->hasOne(ExtraFieldMorph::class);
     }
 
     // un campo corrisponde solo ad un gruppo, come da specifiche
-    // public function groups(): MorphToMany {
-    //     // return $this->hasMany(ExtraField::class, 'group_id');
+    public function groups(): MorphToMany {
+        // return $this->hasMany(ExtraField::class, 'group_id');
 
-    //     $pivot_class = ExtraFieldGroupMorph::class;
-    //     $pivot = app($pivot_class);
-    //     $pivot_table = $pivot->getTable();
-    //     $pivot_fields = $pivot->getFillable();
+        $pivot_class = ExtraFieldGroupMorph::class;
+        $pivot = app($pivot_class);
+        $pivot_table = $pivot->getTable();
+        $pivot_fields = $pivot->getFillable();
 
-    //     return $this->morphToMany(ExtraFieldGroup::class, 'model', $pivot_table)
-    //     ->using($pivot_class)
-    //     ->withPivot($pivot_fields)
-    //     ->withTimestamps();
-    // }
+        return $this->morphToMany(ExtraFieldGroup::class, 'model', $pivot_table)
+        ->using($pivot_class)
+        ->withPivot($pivot_fields)
+        ->withTimestamps();
+    }
+
+    public function toData(){
+        return FieldData::from($this);
+    }
 }

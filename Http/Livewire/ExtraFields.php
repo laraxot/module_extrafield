@@ -4,17 +4,22 @@ declare(strict_types=1);
 
 namespace Modules\ExtraField\Http\Livewire;
 
-use Illuminate\Contracts\Support\Renderable;
-use Illuminate\Database\Eloquent\Model;
-use Illuminate\Support\Facades\Auth;
-use Illuminate\Support\Str;
 use Livewire\Component;
+use Illuminate\Support\Str;
 use Modules\Blog\Models\Category;
+use Illuminate\Support\Facades\Auth;
 use Modules\Cms\Actions\GetViewAction;
+use Illuminate\Database\Eloquent\Model;
+use Illuminate\Contracts\Support\Renderable;
+use Modules\ExtraField\Models\ExtraFieldMorph;
+use Modules\ExtraField\Models\ExtraFieldGroupMorph;
+use WireElements\Pro\Concerns\InteractsWithConfirmationModal;
 
 // use Modules\PFed\Models\Profile as ProfileModel;
 
 class ExtraFields extends Component {
+    use InteractsWithConfirmationModal;
+
     /**
      * Summary of user_id.
      *
@@ -32,11 +37,13 @@ class ExtraFields extends Component {
 
     public ?string $category_name;
 
-    public array $groups = [];
+    // public array $groups;
 
     protected $listeners = ['refreshExtraFields' => '$refresh'];
 
-    public function mount(Model $model, string $tpl = 'v2'): void {
+
+
+    public function mount(Model $model, string $tpl = 'v4'): void {
         $this->model = $model;
         $this->model_id = $model->getKey();
         $this->model_type = Str::snake(class_basename($this->model));
@@ -46,8 +53,20 @@ class ExtraFields extends Component {
         $this->tpl = $tpl;
     }
 
+    public static function getName(): string{
+        return 'extra-fields';
+    }
+
     public function render(): Renderable {
         // $this->showPage();
+        if ('' != $this->cat_id) {
+            $groups = $this->model->extraFieldGroups()
+                ->withAnyCategories($this->cat_id)->get()
+            ;
+        } else {
+            $groups = collect([]);
+        }
+
         /**
          * @phpstan-var view-string
          */
@@ -57,30 +76,29 @@ class ExtraFields extends Component {
         $view_params = [
             'view' => $view,
             'categories' => $categories,
+            'groups' => $groups,
         ];
 
         return view($view, $view_params);
     }
 
-    public function showPage(): void {
-        $res = $this->model->extraFields()
-            ->wherePivot('user_id', null);
+    // public function showPage(): void {
+    //     $res = $this->model->extraFieldGroups;
+    //     dddx($res);
 
-        $rows = $res->get();
+    //     $res = $rows->groupBy('group_id')
+    //         ->map(function ($items, $group_id) {
+    //             $first = $items->first();
 
-        $res = $rows->groupBy('group_id')
-            ->map(function ($items, $group_id) {
-                $first = $items->first();
+    //             return [
+    //                 'id' => $group_id,
+    //                 'label' => $first->group->name,
+    //                 'items_grouped' => $items->groupBy('pivot.uuid'),
+    //             ];
+    //         });
 
-                return [
-                    'id' => $group_id,
-                    'label' => $first->group->name,
-                    'items_grouped' => $items->groupBy('pivot.uuid'),
-                ];
-            });
-
-        $this->groups = $res->all();
-    }
+    //     $this->groups = $res->all();
+    // }
 
     public function showCat(string $cat_id): void {
         $this->cat_id = $cat_id;
@@ -89,37 +107,21 @@ class ExtraFields extends Component {
             return;
         }
         $this->category_name = $category->name;
-
-        $res = $this->model->extraFields()
-            ->wherePivot('user_id', null)
-            ->whereHas('group', function ($query) use ($cat_id) {
-                $query->withAnyCategories($cat_id);
-            })
-            // ->withAnyCategories($id)
-        ;
-
-        // $groups = ExtraFieldGroup::whereHas('fields', function ($query) use ($cat_id) {
-        //     $query->withAnyCategories($cat_id);
-        // })->get();
-        // dddx(rowsToSql($res));
-        $rows = $res->get();
-        // dddx($rows);
-        $res = $rows->groupBy('group_id')
-            ->map(function ($items, $group_id) {
-                $first = $items->first();
-
-                return [
-                    'id' => $group_id,
-                    'label' => $first->group->name,
-                    'items_grouped' => $items->groupBy('pivot.uuid'),
-                ];
-            });
-
-        $this->groups = $res->all();
     }
 
-    public function delete($id) {
-        dddx(config('morph_map')[$this->model_type]::findOrFail($this->model_id));
-        dddx([$id, $this->model]);
+    public function delete(string $uuid){
+        $this->askForConfirmation(
+            callback: function() use ($uuid) {
+                $data = [
+                    'uuid' => $uuid,
+                    'user_id' => $this->user_id,
+                ];
+                ExtraFieldMorph::where($data)?->delete();
+                ExtraFieldGroupMorph::where($data)?->delete();
+
+                session()->flash('message', 'Post successfully updated.');
+                $this->emit('refreshExtraFields');
+            },
+        );
     }
 }

@@ -8,15 +8,13 @@ use Modules\Xot\Database\Migrations\XotBaseMigration;
 /**
  * Undocumented class.
  */
-class CreateExtraFieldsTable extends XotBaseMigration
-{
+class CreateExtraFieldsTable extends XotBaseMigration {
     /**
      * db up.
      *
      * @return void
      */
-    public function up()
-    {
+    public function up() {
         // -- CREATE --
         $this->tableCreate(
             function (Blueprint $table) {
@@ -50,8 +48,8 @@ class CreateExtraFieldsTable extends XotBaseMigration
                     $table->json('options')->nullable();
                     $table->json('attributes')->nullable();
                 }
-                if (! $this->hasColumn('group_id')) {
-                    $table->integer('group_id')->nullable();
+                if ($this->hasColumn('group_id')) {
+                    $table->dropColumn('group_id');
                 }
             }
         );

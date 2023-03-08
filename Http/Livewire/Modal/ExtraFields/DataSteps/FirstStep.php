@@ -50,7 +50,7 @@ class FirstStep extends StepComponent {
 
         // bisogna passare per un map mi sa e validare campo per campo attraverso le Rule
         $group_opts = $groups->pluck('name', 'id')->filter(function ($val, $id) {
-            $validator = Validator::make(['id' => $id], ['id' => new CardinalityRule()]);
+            $validator = Validator::make(['id' => [$id]], ['id' => new CardinalityRule()]);
             if ($validator->passes()) {
                 return $val;
             }/* else {

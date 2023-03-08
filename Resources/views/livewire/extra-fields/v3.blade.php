@@ -11,11 +11,7 @@
                                 class="avatar w-40 h-40 border border-body border-4 rounded-circle shadow"><img
                                     alt="Profile Picture" src="{{ $profile->avatar() }}" class="rounded-circle"></a>
                         </div>
-                        {{-- <div class="d-flex gap-3 justify-content-end mt-4">
-                            <button type="button"
-                                class="btn btn-link p-0 link-primary text-center font-semibold">Upload
-                                Picture</button>
-                        </div> --}}
+
                         <hr class="mt-4 mb-0">
                         <div class="list-group list-group-flush">
                             <div class="list-group-item">
@@ -24,13 +20,7 @@
 
                                 </div>
                                 <div class="vstack gap-3 mt-3">
-                                    {{-- @if ($profile->isSuperAdmin() === true)
-                                        <button
-                                            class="btn btn-sm bg-soft-success bg-opacity-20 bg-opacity-100-hover text-primary text-white-hover"
-                                            onclick="Livewire.emit('modal.open', 'modal.profile.add-categories')">
-                                            Add Category
-                                        </button>
-                                    @endif --}}
+
                                     @foreach ($categories as $category)
                                         <div class="d-flex align-items-center">
                                             <div class="flex-none"><img alt="..."
@@ -49,18 +39,7 @@
                     </div>
                 </div>
             </div>
-            {{-- <a class="btn btn-sm bg-soft-success bg-opacity-20 bg-opacity-100-hover text-primary text-white-hover"
-                href="{{ url('admin/pfed/it?_act=upgrades') }}">
-                Effettua l'ugrade
-            </a> --}}
-            {{-- <a class="btn btn-sm bg-soft-success bg-opacity-20 bg-opacity-100-hover text-primary text-white-hover"
-                href="{{ url('admin/pfed/it?_act=email_verification') }}">
-                Verifica Email
-            </a>
-            <a class="btn btn-sm bg-soft-success bg-opacity-20 bg-opacity-100-hover text-primary text-white-hover"
-                href="{{ url('admin/pfed/it?_act=mobile_verification') }}">
-                Verifica Mobile
-            </a> --}}
+
 
 
         </div>
@@ -72,23 +51,17 @@
                     <x-slot name="title">{{ $category_name }}</x-slot>
 
                     <x-slot name="txt">
+
                         @foreach ($groups as $group)
-                            @if ($group['label'] == 'no_group')
-                                <h5>No Group Name
-                                    <button type="button"
-                                        class="btn btn-sm bg-primary bg-opacity-20 bg-opacity-100-hover text-primary text-white-hover"
-                                        wire:click="$emit('modal.open', 'modal.extra-fields.group.assign-name',{'group_id':'{{ $group['id'] }}'})">Assign
-                                        Group Name</button>
-                                </h5>
-                            @else
-                                <h5>{{ Str::ucfirst($group['label']) }}</h5>
-                            @endif
-                            @foreach ($group['items_grouped'] as $uuid => $groups1)
+                            <h5>{{ Str::ucfirst($group->name) }}</h5>
+
+
+
+                            @foreach ($group->fields as $field)
+                                {{-- {{ dddx($field) }} --}}
                                 <div class="row">
                                     <div class="col-md-9 mb-2">
-                                        @foreach ($groups1 as $k1 => $group2)
-                                            {{ $group2->name }} : {{ $group2->pivot->value }}<br>
-                                        @endforeach
+                                        <p>{{ $field->name }} : {{ $field->pivot->value }}</p>
                                     </div>
                                     <div class="col-md-3  mb-2 text-right">
                                         <button type="button"
@@ -112,16 +85,6 @@
                                 </button>
                             </div>
                         </div>
-
-                        {{-- @if ($profile->hasRole('free') || $profile->hasRole('silver'))
-                            <div class="row">
-                                <div class="col-md-12 mt-3 mb-2">
-                                    <a href="#">Fai l'upgrade del tuo abbonamento per
-                                        ottenere vantaggi
-                                        illimitati</a>
-                                </div>
-                            </div>
-                        @endif --}}
                     </x-slot>
                 </x-card>
             @endif

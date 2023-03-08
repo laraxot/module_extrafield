@@ -7,13 +7,16 @@ declare(strict_types=1);
 
 namespace Modules\ExtraField\Models\Traits;
 
-use Illuminate\Database\Eloquent\Relations\MorphToMany;
 use Illuminate\Support\Str;
+use Illuminate\Support\Facades\Auth;
+use Illuminate\Database\Eloquent\Model;
+use Modules\LU\Services\ProfileService;
 use Modules\ExtraField\Models\ExtraField;
 use Modules\ExtraField\Models\ExtraFieldGroup;
-use Modules\ExtraField\Models\ExtraFieldGroupMorph;
 use Modules\ExtraField\Models\ExtraFieldMorph;
-use Modules\LU\Services\ProfileService;
+use Modules\ExtraField\Models\ExtraFieldGroupMorph;
+use Illuminate\Database\Eloquent\Relations\MorphToMany;
+use Symfony\Component\Serializer\Encoder\JsonDecode;
 
 trait HasExtraFields {
     use \Staudenmeir\EloquentHasManyDeep\HasRelationships;
@@ -33,9 +36,14 @@ trait HasExtraFields {
         ;
     }
 
+    public function userExtraFields(): MorphToMany {
+        return $this->extraFields()
+            ->wherePivot('user_id', Auth::id());
+    }
+
     // c'è qualcosa di sbagliato. legge il gruppo da group_id di extrafield ma deve leggerlo da polimorfica
     public function extraFieldsFromGroups() {
-        return $this->hasManyDeepFromRelations($this->extraFieldGroups(), (new ExtraFieldGroup())->fieldsNew()->wherePivot('user_id', null))->withIntermediate(ExtraFieldGroup::class);
+        return $this->hasManyDeepFromRelations($this->extraFieldGroups(), (new ExtraFieldGroup())->fields()->wherePivot('user_id', Auth::id()))->withIntermediate(ExtraFieldGroup::class);
     }
 
     public function extraFieldGroups(): MorphToMany {
@@ -57,63 +65,174 @@ trait HasExtraFields {
         ;
     }
 
-    public function updateExtraField(array $data, string $user_id) {
+    public function updateExtraField(array $data, string $user_id, ?string $uuid=null) {
+        //dddx([$data, $user_id,  $uuid]);
         $model_type = Str::snake(class_basename($this));
         $model_id = (string) $this->getKey();
 
-        $groups = $this->extraFieldGroups;
-        foreach ($groups as $group) {
-            foreach ($group->fields as $field) {
-                $value = collect($data)->get($field->name);
-                $find = [
-                    'model_id' => $model_id,
-                    'model_type' => $model_type,
-                    'user_id' => $user_id,
-                    'extra_field_id' => $field->id,
-                ];
-                $up = [
-                    'value' => $value,
-                ];
-                $extrafieldmorph = ExtrafieldMorph::firstOrCreate($find, $up);
-                $extrafieldmorph->update($up);
+        //$fields = $this->extraFields->where('pivot.user_id', $user_id)->where('pivot.uuid', $uuid);
+        $fields = $this->extraFields->where('pivot.user_id', '');
 
-                // dddx([
-                //     'extrafieldmorph' => $extrafieldmorph,
-                //     'value' => $value,
-                //     'field' => $field,
-                //     'data' => $data,
-                //     'find' => $find,
-                //     'up' => $up,
-                // ]);
-                // $field->pivot->updateUserValue($this->user_id, $value);
-                // dddx($value);
-                // dddx($this->extraFields);
-                // $field_obj = $this->extraFields()->wherePivot('user_id', $user_id)->firstOrCreate(['name' => $field->name]);
-                // // dddx($field_obj);
-                // $this->extraFields()->syncWithoutDetaching($field_obj->id, ['value' => $value, 'user_id' => $user_id]);
+        if($uuid==null){
+            $uuid = Str::uuid();
+        }
+
+        foreach ($fields as $field) {
+            $value = collect($data)->get($field->name);
+        
+            $res=ExtraFieldMorph::firstOrCreate([
+                'model_id' => $model_id,
+                'model_type' => $model_type,
+                'user_id' => $user_id,
+                'extra_field_id' => $field->id,
+                'uuid' => $uuid,
+            ]);
+            
+            $res= tap($res)->update([
+                'value' => $value
+            ]);
+
+        }
+
+        $group = ExtraFieldGroupMorph::firstOrCreate([
+            'uuid' => $uuid,
+            'user_id' => $user_id,
+        ]);
+
+        ExtraFieldGroupMorph::firstOrCreate([
+            'model_id' => $model_id,
+            'model_type' => $model_type,
+            'user_id' => $user_id,
+            'extra_field_group_id' => $group->extra_field_group_id,
+            // 'value' => $data,
+            'uuid' => $uuid,
+        ])->update([
+            'value' => $data,
+        ]);
+    }
+
+    public function addExtraField(array $data, string $user_id, string $group_id) {
+        $uuid = Str::uuid();
+        $rows = ExtraFieldGroup::find($group_id)->fields;
+        foreach ($rows as $row) {
+            $value = collect($data)->get($row->name);
+
+            if (is_array($value)) {
+                $value = json_encode($value);
             }
+
+            $this->extraFields()->attach($row->id, ['value' => $value, 'uuid' => $uuid, 'user_id' => $user_id]);
+        }
+
+        $model_type = Str::snake(class_basename($this));
+
+        ExtraFieldGroupMorph::firstOrCreate([
+            'model_id' => $this->getKey(),
+            'model_type' => $model_type,
+            'user_id' => $user_id,
+            'extra_field_group_id' => $group_id,
+            'uuid' => $uuid,
+        ])->update([
+            'value' => $data,
+        ]);
+    }
+
+    public function getExtraFieldValue(string $user_id, ?string $uuid = null) {
+        $model_fields = $this->extraFields
+                ->where('pivot.user_id', $user_id); 
+                //->where('pivot.uuid', $uuid);
+
+        $field_groups = $this->extraFieldGroups
+                // ->where('pivot.user_id', '')
+                ->unique()
+                ;
+        $profile_fields = ProfileService::make()->getProfile()->extraFields;
+        if($uuid != null){
+            $model_fields = $model_fields->where('pivot.uuid', $uuid);
+            $field_groups = $field_groups->where('pivot.uuid', $uuid);
+        }
+        // dddx($profile_fields);
+        // dddx($field_groups);
+        $data = $field_groups
+                ->map(
+                    function ($group) use ($model_fields, $profile_fields) {
+                        $group->fields
+                        ->map(
+                            function ($field) use ($model_fields, $profile_fields) {
+                                $model_fields_value = $model_fields->firstWhere('id', $field->id)?->pivot?->value;
+                                $profile_fields_value = $profile_fields->firstWhere('id', $field->id)?->pivot?->value;
+                                $field->value = $model_fields_value ?? $profile_fields_value;
+                                // dddx([
+                                //     'profile_fields'=>$profile_fields,
+                                //     'field' => $field,
+                                //     'test' => $profile_fields->firstWhere('id', $field->id),
+                                // ]);
+                                return $field;
+                            });
+
+                        return $group;
+                    })->toArray();
+
+        return $data;
+    }
+
+    public function getExtraFieldFormData(string $user_id, ?string $uuid = null): array{
+        $tmp = $this->getExtraFieldValue($user_id, $uuid);
+        $data = [];
+
+        foreach($tmp as $item){
+            foreach($item['fields'] as $field){
+                $k = $field['name'];
+                $v = $field['value'];
+                if(isJson($v)){
+                    $v = json_decode($v);
+                }
+                $data[$k] = $v;
+            }
+        }
+        return $data;
+    }
+
+    public function addExtraFieldByGroup(array $data, string $user_id, ?string $uuid = null){
+        $extra_field_groups = $this->extraFieldGroups
+                    ->where('pivot.user_id', '');
+
+        foreach($extra_field_groups as $group){
+            $fields = $group->fields->where('pivot.user_id', '');
+            $up = $fields->map(function($item) use ($data){
+                $item->value = collect($data)->get($item->name);
+                return $item;
+                
+            })->pluck('value', 'name')->all();
+            $this->addExtraField($up, $user_id, (string) $group->id);
         }
     }
 
-    public function getExtraFieldValue(string $user_id) {
-        $model_fields = $this->extraFields->where('pivot.user_id', $user_id);
-        $profile_fields = ProfileService::make()->getProfile()->extraFields;
-        $data = $this->extraFieldGroups
-        ->map(
-            function ($group) use ($model_fields, $profile_fields) {
-                $group->fields
-                ->map(
-                    function ($field) use ($model_fields, $profile_fields) {
-                        $model_fields_value = $model_fields->firstWhere('id', $field->id)?->pivot?->value;
-                        $profile_fields_value = $profile_fields->firstWhere('id', $field->id)?->pivot?->value;
-                        $field->value = $model_fields_value ?? $profile_fields_value;
+    public function updateExtraFieldByGroup(array $data, string $user_id, ?string $uuid = null){
+        $extra_field_groups = $this->extraFieldGroups->where('pivot.user_id', '');
 
-                        return $field;
-                    });
+        foreach($extra_field_groups as $group){
+            $fields = $group->fields->where('pivot.user_id', '');
+            $up = $fields->map(function($item) use ($data,$user_id,$uuid){
+                $item->value = collect($data)->get($item->name);
 
-                return $group;
-            })->toArray();
+                $res=ExtraFieldMorph::firstOrCreate([
+                    'model_id' => $this->getKey(),
+                    'model_type' => Str::snake(class_basename($this)),
+                    'user_id' => $user_id,
+                    'extra_field_id' => $item->id,
+                    // 'uuid' => $uuid,
+                ]);
+                
+                $res=tap($res)->update([
+                    'value' => $item->value
+                ]);
 
-        return $data;
+                return $item;
+                
+            })->pluck('value', 'name')->all();
+
+            $this->updateExtraField($up, $user_id, $uuid);
+        }
     }
 }
