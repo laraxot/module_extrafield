@@ -9,14 +9,15 @@ namespace Modules\ExtraField\Models\Traits;
 
 use Illuminate\Support\Str;
 use Illuminate\Support\Facades\Auth;
+use Barryvdh\Debugbar\Facades\Debugbar;
 use Illuminate\Database\Eloquent\Model;
 use Modules\LU\Services\ProfileService;
 use Modules\ExtraField\Models\ExtraField;
 use Modules\ExtraField\Models\ExtraFieldGroup;
 use Modules\ExtraField\Models\ExtraFieldMorph;
 use Modules\ExtraField\Models\ExtraFieldGroupMorph;
-use Illuminate\Database\Eloquent\Relations\MorphToMany;
 use Symfony\Component\Serializer\Encoder\JsonDecode;
+use Illuminate\Database\Eloquent\Relations\MorphToMany;
 
 trait HasExtraFields {
     use \Staudenmeir\EloquentHasManyDeep\HasRelationships;
@@ -140,12 +141,13 @@ trait HasExtraFields {
     public function getExtraFieldValue(string $user_id, ?string $uuid = null) {
         $model_fields = $this->extraFields
                 ->where('pivot.user_id', $user_id); 
-                //->where('pivot.uuid', $uuid);
+              
 
         $field_groups = $this->extraFieldGroups
-                // ->where('pivot.user_id', '')
-                ->unique()
-                ;
+                ->where('pivot.user_id', $user_id);
+
+        //dddx($field_groups);
+        
         $profile_fields = ProfileService::make()->getProfile()->extraFields;
         if($uuid != null){
             $model_fields = $model_fields->where('pivot.uuid', $uuid);
@@ -233,6 +235,42 @@ trait HasExtraFields {
             })->pluck('value', 'name')->all();
 
             $this->updateExtraField($up, $user_id, $uuid);
+        }
+    }
+
+    public function updateExtraFieldByGroupTest(array $data, string $user_id, ?string $uuid = null){
+        
+        $extra_field_groups = $this->extraFieldGroups->where('pivot.uuid', $uuid);
+
+        //dd($extra_field_groups);
+        foreach($extra_field_groups as $group){
+            $fields = $group->fields->where('pivot.user_id', '');
+
+          // dd($fields);
+            
+            $up = $fields->map(function($item) use ($data,$user_id,$uuid){
+
+                Debugbar::info($item->name);
+                
+                $item->value = collect($data)->get($item->name);
+
+                $res=ExtraFieldMorph::firstOrCreate([
+                    'model_id' => $this->getKey(),
+                    'model_type' => Str::snake(class_basename($this)),
+                    'user_id' => $user_id,
+                    'extra_field_id' => $item->id,
+                    'uuid' => $uuid,
+                ]);
+                
+                $res=tap($res)->update([
+                    'value' => $item->value
+                ]);
+
+                return $item;
+                
+            })->pluck('value', 'name')->all();
+
+           // $this->updateExtraField($up, $user_id, $uuid);
         }
     }
 }

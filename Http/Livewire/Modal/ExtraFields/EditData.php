@@ -35,9 +35,12 @@ class EditData extends Modal {
         $model_class = collect(config('morph_map'))->get($this->model_type);
         $this->model = app($model_class)->find($this->model_id);
         $this->user_id = (string) Auth::id();
-        $data = $this->model->getExtraFieldValue($this->user_id, $this->uuid);
-        $data = collect($data)->first();
 
+        $data = $this->model->getExtraFieldValue($this->user_id, $this->uuid);
+
+        
+        $data = collect($data)->first();
+       
         $data = collect($data['fields'])->pluck('value', 'name')->all();
 
         $this->form_data = $data;
@@ -95,7 +98,7 @@ class EditData extends Modal {
 
     public function save() {
 
-        $this->model->updateExtraField($this->form_data, $this->user_id, $this->uuid);
+        $this->model->updateExtraFieldByGroupTest($this->form_data, $this->user_id, $this->uuid);
 
         $this->close();
         $this->emit('refreshExtraFields');
