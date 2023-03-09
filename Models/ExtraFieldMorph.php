@@ -114,9 +114,7 @@ class ExtraFieldMorph extends BaseMorphPivot
             'uuid' => $uuid ?? $this->uuid,
             'value' => $value,
         ]);
-        /*if ($value != '') {
-            dd($row);
-        }*/
+
         return $row;
     }
 
