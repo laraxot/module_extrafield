@@ -38,14 +38,11 @@ class EditData extends Modal
         $this->model = app($model_class)->find($this->model_id);
         $this->user_id = (string) Auth::id();
 
-        $data = $this->model->getExtraFieldValue($this->user_id, $this->uuid);
-
-
+        /*$data = $this->model->getExtraFieldValue($this->user_id, $this->uuid);
         $data = collect($data)->first();
+        $data = collect($data['fields'])->pluck('value', 'name')->all();*/
 
-        $data = collect($data['fields'])->pluck('value', 'name')->all();
-
-        $this->form_data = $data;
+        $this->form_data = $this->model->getExtraFieldFormData($this->user_id, $this->uuid);
 
         // SE QUALCUNO LO CANCELLASSE, SPIEGHI ANCHE COME FARLO MEGLIO, PER FAVORE
         session()->flash('form_data', $this->form_data);

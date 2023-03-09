@@ -200,6 +200,7 @@ trait HasExtraFields
 
     public function getExtraFieldFormData(string $user_id, ?string $uuid = null): array
     {
+
         $tmp = $this->getExtraFieldValue($user_id, $uuid);
         $data = [];
 
@@ -207,6 +208,7 @@ trait HasExtraFields
             foreach ($item['fields'] as $field) {
                 $k = $field['name'];
                 $v = $field['value'];
+
                 if (isJson($v)) {
                     $v = json_decode($v);
                 }
