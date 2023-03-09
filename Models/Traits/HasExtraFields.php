@@ -49,12 +49,12 @@ trait HasExtraFields
     // c'è qualcosa di sbagliato. legge il gruppo da group_id di extrafield ma deve leggerlo da polimorfica
     public function extraFieldsFromGroups()
     {
-        //dddx($this->hasManyDeepFromRelations($this->extraFieldGroupsNoUserId(), (new ExtraFieldGroup())->noUserFields())->withIntermediate(ExtraFieldGroup::class)->toSql());
+        //dddx($this->hasManyDeepFromRelations($this->noUserExtraFieldGroups(), (new ExtraFieldGroup())->noUserFields())->withIntermediate(ExtraFieldGroup::class)->toSql());
         //non vanno i wherepivot qua. bisogna passare per relazioni già con il wherepivot
-        return $this->hasManyDeepFromRelations($this->extraFieldGroupsNoUserId(), (new ExtraFieldGroup())->noUserFields())->withIntermediate(ExtraFieldGroup::class);
+        return $this->hasManyDeepFromRelations($this->noUserExtraFieldGroups(), (new ExtraFieldGroup())->noUserFields())->withIntermediate(ExtraFieldGroup::class);
     }
 
-    public function extraFieldGroupsNoUserId()
+    public function noUserExtraFieldGroups()
     {
         //dd($this->extraFieldGroups()->wherePivot('user_id', null)->toSql());
         //non vanno i wherepivot qua. bisogna passare per relazioni già con il wherepivot
