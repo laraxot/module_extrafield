@@ -49,7 +49,18 @@ trait HasExtraFields
     // c'è qualcosa di sbagliato. legge il gruppo da group_id di extrafield ma deve leggerlo da polimorfica
     public function extraFieldsFromGroups()
     {
-        return $this->hasManyDeepFromRelations($this->extraFieldGroups(), (new ExtraFieldGroup())->fields()->wherePivot('user_id', Auth::id()))->withIntermediate(ExtraFieldGroup::class);
+        //dddx($this->hasManyDeepFromRelations($this->extraFieldGroupsNoUserId(), (new ExtraFieldGroup())->noUserFields())->withIntermediate(ExtraFieldGroup::class)->toSql());
+        //non vanno i wherepivot qua. bisogna passare per relazioni già con il wherepivot
+        return $this->hasManyDeepFromRelations($this->extraFieldGroupsNoUserId(), (new ExtraFieldGroup())->noUserFields())->withIntermediate(ExtraFieldGroup::class);
+    }
+
+    public function extraFieldGroupsNoUserId()
+    {
+        //dd($this->extraFieldGroups()->wherePivot('user_id', null)->toSql());
+        //non vanno i wherepivot qua. bisogna passare per relazioni già con il wherepivot
+
+        //non si usa '' ma null. Con '' non funziona allo stesso modo e non vedi nessun gruppo
+        return $this->extraFieldGroups()->wherePivot('user_id', null);
     }
 
     public function extraFieldGroups(): MorphToMany
@@ -79,7 +90,7 @@ trait HasExtraFields
         $model_id = (string) $this->getKey();
 
         //$fields = $this->extraFields->where('pivot.user_id', $user_id)->where('pivot.uuid', $uuid);
-        $fields = $this->extraFields->where('pivot.user_id', '');
+        $fields = $this->extraFields->where('pivot.user_id', null);
 
         if ($uuid == null) {
             $uuid = Str::uuid();
@@ -147,19 +158,14 @@ trait HasExtraFields
 
     public function getExtraFieldValue(string $user_id, ?string $uuid = null)
     {
-        $model_fields = $this->extraFields
-            ->where('pivot.user_id', $user_id);
+        $model_fields = $this->extraFields->where('pivot.user_id', $user_id);
 
+        $field_groups = $this->extraFieldGroups->where('pivot.user_id', $user_id);
 
-        //$field_groups = $this->extraFieldGroups->where('pivot.user_id', $user_id);
-
-        //se esiste user_id nella pivot di quell'extra field prende quello, altrimenti quello con user_id null
-        //il numero di campi dev'essere identico che ci sia o no lo user_id
-        $field_groups = $this->extraFieldGroups()
-            ->where(function ($query) use ($user_id) {
-                $query->where('extra_field_group_morph.user_id', '=', $user_id, 'and')
-                    ->where('extra_field_group_morph.user_id', '=', '', 'xor');
-            })->get();
+        //serve per mostrare i dati del profilo sul campo se sei su addService ad esempio
+        if ($field_groups->count() === 0) {
+            $field_groups = $this->extraFieldGroups->where('pivot.user_id', null);
+        }
 
         $profile_fields = ProfileService::make()->getProfile()->extraFields;
 
@@ -168,8 +174,9 @@ trait HasExtraFields
             $field_groups = $field_groups->where('pivot.uuid', $uuid);
         }
 
+        //dd([$field_groups, $model_fields]);
         $data = $field_groups
-            ->map(
+            ->filter(
                 function ($group) use ($model_fields, $profile_fields) {
                     $group->fields
                         ->map(
@@ -212,10 +219,10 @@ trait HasExtraFields
     public function addExtraFieldByGroup(array $data, string $user_id, ?string $uuid = null)
     {
         $extra_field_groups = $this->extraFieldGroups
-            ->where('pivot.user_id', '');
+            ->where('pivot.user_id', null);
 
         foreach ($extra_field_groups as $group) {
-            $fields = $group->fields->where('pivot.user_id', '');
+            $fields = $group->fields->where('pivot.user_id', null);
             $up = $fields->map(function ($item) use ($data) {
                 $item->value = collect($data)->get($item->name);
                 return $item;
@@ -226,10 +233,10 @@ trait HasExtraFields
 
     public function updateExtraFieldByGroup(array $data, string $user_id, ?string $uuid = null)
     {
-        $extra_field_groups = $this->extraFieldGroups->where('pivot.user_id', '');
+        $extra_field_groups = $this->extraFieldGroups->where('pivot.user_id', null);
 
         foreach ($extra_field_groups as $group) {
-            $fields = $group->fields->where('pivot.user_id', '');
+            $fields = $group->fields->where('pivot.user_id', null);
             $up = $fields->map(function ($item) use ($data, $user_id, $uuid) {
                 $item->value = collect($data)->get($item->name);
 
@@ -259,7 +266,7 @@ trait HasExtraFields
 
         //dd($extra_field_groups);
         foreach ($extra_field_groups as $group) {
-            $fields = $group->fields->where('pivot.user_id', '');
+            $fields = $group->fields->where('pivot.user_id', null);
 
             // dd($fields);
 
