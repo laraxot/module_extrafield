@@ -12,8 +12,8 @@ use Illuminate\Foundation\Testing\DatabaseTransactions;
 
 class ExtraFieldTest extends TestCase
 {
-    // use RefreshDatabase;
-    // use DatabaseMigrations;
+    use RefreshDatabase;
+    use DatabaseMigrations;
     // use DatabaseTransactions;
     /**
      * A basic unit test example.
