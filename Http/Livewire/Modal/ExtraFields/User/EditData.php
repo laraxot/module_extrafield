@@ -38,20 +38,9 @@ class EditData extends Modal
         $this->user_id = (string) Auth::id();
         $this->uuid = $uuid;
 
-        // $fields = FieldData::collection($rows);
-
-        // $data = $this->rows->map(function ($item) {
-        //     // dddx($item);
-
-        //     return [$item->name => $item->pivot->extraFieldMorphUserValues()->where('user_id', $this->user_id)->get()->last()->value ?? ''];
-        // });
-        // dddx($this->rows);
-        // $data = $this->rows->pluck('pivot.value', 'name')->all();
-
         $data = $this->rows->map(function ($item) {
             return [
                 'name' => $item->name,
-                // 'value' => $item->pivot->userValue($this->user_id),
                 'value' => $item->pivot->userValue($this->user_id),
             ];
         })->pluck('value', 'name')
