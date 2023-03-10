@@ -4,12 +4,13 @@ declare(strict_types=1);
 
 namespace Modules\ExtraField\Models\Panels;
 
-use Illuminate\Contracts\Support\Renderable;
 use Illuminate\Http\Request;
 use Modules\Blog\Models\Category;
-use Modules\Cms\Models\Panels\XotBasePanel;
-use Modules\ExtraField\Models\ExtraFieldGroup;
 use Modules\Xot\Contracts\RowsContract;
+use Modules\Cms\Models\Panels\XotBasePanel;
+use Illuminate\Contracts\Support\Renderable;
+use Modules\ExtraField\Models\ExtraFieldGroup;
+use Modules\UI\Actions\GetRulesWithParamsAction;
 
 class ExtraFieldPanel extends XotBasePanel
 {
@@ -131,10 +132,11 @@ class ExtraFieldPanel extends XotBasePanel
             //     'options' => $this->optionsModelClass(Category::class),
             // ],
             (object) [
-                'type' => 'Json',
+                'type' => 'Rule',
                 'name' => 'rules',
-                'comment' => null,
-                'col_size' => 6,
+                'comment' => 'not in Doctrine',
+                'col_size' => 4,
+                'options' => app(GetRulesWithParamsAction::class)->execute(),
             ],
         ];
     }
