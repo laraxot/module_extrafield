@@ -239,7 +239,7 @@ trait HasExtraFields
 
         foreach ($extra_field_groups as $group) {
             $fields = $group->fields->where('pivot.user_id', null);
-            $up = $fields->map(function ($item) use ($data, $user_id, $uuid) {
+            $up = $fields->map(function ($item) use ($data, $user_id) {
                 $item->value = collect($data)->get($item->name);
 
                 $res = ExtraFieldMorph::firstOrCreate([
