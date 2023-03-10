@@ -2,7 +2,8 @@
 
 namespace Modules\ExtraField\Tests\Unit;
 
-use Tests\TestCase;
+
+use Modules\ExtraField\Tests\TestCase;
 use Illuminate\Support\Facades\Artisan;
 use Illuminate\Foundation\Testing\WithFaker;
 use Illuminate\Foundation\Testing\RefreshDatabase;
@@ -11,8 +12,8 @@ use Illuminate\Foundation\Testing\DatabaseTransactions;
 
 class ExtraFieldTest extends TestCase
 {
-    use RefreshDatabase;
-    use DatabaseMigrations;
+    // use RefreshDatabase;
+    // use DatabaseMigrations;
     // use DatabaseTransactions;
     /**
      * A basic unit test example.
