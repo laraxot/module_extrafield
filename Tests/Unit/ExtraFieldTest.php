@@ -3,6 +3,7 @@
 namespace Modules\ExtraField\Tests\Unit;
 
 use Tests\TestCase;
+use Illuminate\Support\Facades\Artisan;
 use Illuminate\Foundation\Testing\WithFaker;
 use Illuminate\Foundation\Testing\RefreshDatabase;
 use Illuminate\Foundation\Testing\DatabaseMigrations;
@@ -20,6 +21,7 @@ class ExtraFieldTest extends TestCase
      */
     public function testExample()
     {
+        //Artisan::call('migrate');
         $this->assertTrue(true);
     }
 }
