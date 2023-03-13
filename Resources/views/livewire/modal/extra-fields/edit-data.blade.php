@@ -5,6 +5,8 @@
         <x-input.field :field="$field" />
     @endforeach
 
+    <x-flash-message />
+
     <x-slot name="buttons">
 
         <button type="submit" class="btn btn-primary">

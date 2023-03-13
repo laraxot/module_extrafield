@@ -38,11 +38,7 @@ class EditData extends Modal
         $this->model = app($model_class)->find($this->model_id);
         $this->user_id = (string) Auth::id();
 
-        /*$data = $this->model->getExtraFieldValue($this->user_id, $this->uuid);
-        $data = collect($data)->first();
-        $data = collect($data['fields'])->pluck('value', 'name')->all();*/
-
-        $this->form_data = $this->model->getExtraFieldFormData($this->user_id, $this->uuid);
+        $this->form_data = $this->model->getUserExtraFieldFormData($this->user_id, $this->uuid);
 
         // SE QUALCUNO LO CANCELLASSE, SPIEGHI ANCHE COME FARLO MEGLIO, PER FAVORE
         session()->flash('form_data', $this->form_data);
@@ -62,14 +58,13 @@ class EditData extends Modal
 
     public function render(): Renderable
     {
-        $groups = $this->model->getExtraFieldValue($this->user_id, $this->uuid);
+        $groups = $this->model->getUserExtraFieldValue($this->user_id, $this->uuid);
         $group = collect($groups)->first();
         $fields = $group['fields'];
         /*
          * @phpstan-var view-string
          */
         $view = app(GetViewAction::class)->execute();
-
         $view_params = [
             'view' => $view,
             'fields' => FieldData::collection($fields),
@@ -103,6 +98,10 @@ class EditData extends Modal
 
     public function save()
     {
+
+        $efr = $this->model->getExtraFieldRules($this->form_data);
+
+        $this->validate($efr);
 
         $this->model->updateExtraFieldByGroupTest($this->form_data, $this->user_id, $this->uuid);
 

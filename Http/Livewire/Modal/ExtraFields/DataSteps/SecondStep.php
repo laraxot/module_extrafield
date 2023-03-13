@@ -14,10 +14,12 @@ use Modules\UI\Datas\FieldData;
 use Spatie\LaravelData\DataCollection;
 use Spatie\LivewireWizard\Components\StepComponent;
 
-class SecondStep extends StepComponent {
+class SecondStep extends StepComponent
+{
     public string $group_id = '';
     public string $cat_id = '';
     public array $form_data = [];
+    public array $form1_data = [];
 
     public bool $is_first = false;
     public bool $is_last = false;
@@ -33,8 +35,10 @@ class SecondStep extends StepComponent {
     */
     public array $fields;
 
-    public function mount(): void {
-        // dddx($this->state()->all());
+    public function mount(): void
+    {
+
+        $this->form1_data = $this->state()->all()['modal.extra-fields.data-steps.first-step']['form_data'];
 
         $morph_map = [
             'extra_field' => 'Modules\ExtraField\Models\ExtraField',
@@ -44,73 +48,33 @@ class SecondStep extends StepComponent {
 
         $this->group_id = (string) $this->state()->all()['modal.extra-fields.data-steps.first-step']['form_data']['group_id'];
         $this->cat_id = (string) $this->state()->all()['modal.extra-fields.data-steps.first-step']['form_data']['cat_id'];
-        // $this->cat_id = (string) $this->state()->all()['modal.extra-fields.data-steps.first-step']['cat_id'];
-        // $this->form_data['model_type'] = (string) $this->state()->all()['modal.extra-fields.data-steps.first-step']['allStepsState']['modal.extra-fields.data-steps.first-step']['model_type'];
-        // $this->form_data['model_id'] = (string) $this->state()->all()['modal.extra-fields.data-steps.first-step']['allStepsState']['modal.extra-fields.data-steps.first-step']['model_id'];
 
-        // dddx($this->cat_id);
-        // $this->attrs = $this->getAttrs($this->data_id);
-        // $res = ExtraField::where('group_id', $this->group_id)
-        //     ->withAnyCategories($this->cat_id)
-        // ;
-        // $rows = $res->get();
 
         $rows = ExtraFieldGroup::find($this->group_id)->fields;
 
         $fields = FieldData::collection($rows)->toArray();
         $this->fields = $fields;
-        /*
-        dddx([
-            'rows' => $rows,
-            'data' => $data,
-        ]);
-        */
-        /*
-        dddx([
-            'sql' => rowsToSql($res),
-            'count' => $res->count(),
-            'rows' => $res->get(),
-        ]);
-        */
+
+        $this->initFormData();
     }
 
-    public function updateFormData($data) {
+    public function initFormData()
+    {
+        foreach ($this->fields as $field) {
+            $this->form_data[$field['name']] = $field['value'] ?? '';
+        };
+
+        //dddx($this->form_data);
+    }
+
+    public function updateFormData($data)
+    {
         $this->form_data = array_merge($this->form_data, $data);
     }
 
-    /*
-    public function getAttrs(int $data_id): array {
-        $attrs = [];
-        $data = Data::find($data_id);
-        if (! is_null($data)) {
-            $base_datums = $data->baseDatums;
 
-            $attrs = $base_datums->map(function ($item) {
-                // dddx($item);
-                $tmp = [];
-                $tmp['name'] = $item->name;
-                $tmp['label'] = $item->name;
-                $tmp['id'] = $item->name;
-                $tmp['type'] = $item->type;
-                if ('input' == $tmp) {
-                    $tmp['type'] = 'text';
-                }
-                $tmp['options'] = $item->defaultValues;
-
-                if ('text' != $tmp['type']) {
-                    $tmp['type'] = $tmp['type'].'.arr';
-                }
-
-                return $tmp;
-            })->all();
-            // dddx($attrs);
-        }
-
-        return $attrs;
-    }
-    */
-
-    public function render(): Renderable {
+    public function render(): Renderable
+    {
         /**
          * @phpstan-var view-string
          */
@@ -124,16 +88,35 @@ class SecondStep extends StepComponent {
         return view($view, $view_params);
     }
 
-    public function stepInfo(): array {
+    public function stepInfo(): array
+    {
         return [
             'label' => 'Input Data',
             'icon' => 'fa-shopping-cart',
         ];
     }
 
-    public function goNextStep(): void {
-        // $this->form_data['value'] = $this->form_data;
-        // $this->emit('update_form_data', $this->form_data);
+    public function goNextStep(): void
+    {
+
+        $morph_map = [
+            'extra_field' => 'Modules\ExtraField\Models\ExtraField',
+        ];
+
+        Relation::morphMap($morph_map);
+
+        $model_type = $this->form1_data['model_type'];
+        $model_id = $this->form1_data['model_id'];
+
+        $model_class = collect(config('morph_map'))->get($model_type);
+        $model = app($model_class)->find($model_id);
+
+        //dd($model->getExtraFieldRules($this->form_data));
+
+        $efr = $model->getExtraFieldRules($this->form_data);
+
+        $this->validate($efr);
+
         $this->nextStep();
     }
 }

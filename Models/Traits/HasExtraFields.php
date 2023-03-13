@@ -9,6 +9,7 @@ declare(strict_types=1);
 namespace Modules\ExtraField\Models\Traits;
 
 use Illuminate\Support\Str;
+use Modules\UI\Datas\FieldData;
 use Illuminate\Support\Facades\Auth;
 use Barryvdh\Debugbar\Facades\Debugbar;
 use Illuminate\Database\Eloquent\Model;
@@ -156,7 +157,8 @@ trait HasExtraFields
         ]);
     }
 
-    public function getExtraFieldValue(string $user_id, ?string $uuid = null)
+
+    public function getUserExtraFieldValue(string $user_id, ?string $uuid = null)
     {
         $model_fields = $this->extraFields->where('pivot.user_id', $user_id);
 
@@ -198,10 +200,58 @@ trait HasExtraFields
         return $data;
     }
 
-    public function getExtraFieldFormData(string $user_id, ?string $uuid = null): array
+    public function getExtraFieldValue()
     {
 
-        $tmp = $this->getExtraFieldValue($user_id, $uuid);
+        $field_groups = ExtraFieldGroup::get();
+
+        return $field_groups;
+    }
+
+
+    public function getExtraFieldRules($form_data): array
+    {
+        $extra_fields_groups = $this->getExtraFieldValue();
+
+        $rules = [];
+        foreach ($extra_fields_groups as $group) {
+
+            foreach ($group['fields'] as $field) {
+                if ($field['rules'] != null && isset($form_data[$field['name']])) {
+
+                    $field_name = 'form_data.' . $field['name'];
+                    foreach ($field['rules'] as $rule_name => $rule) {
+                        if (isset($rule['checked'])) {
+                            $rule_string = $rule_name;
+
+                            foreach ($rule as $param => $value) {
+                                if ($param !== 'checked' && !empty($value)) {
+                                    $rule_string .= ':' . $value;
+                                }
+                            }
+
+                            if (isset($rules[$field_name])) {
+                                $rules[$field_name] .= '|' . $rule_string;
+                            } else {
+                                $rules[$field_name] = $rule_string;
+                            }
+                        }
+                    }
+                }
+            }
+        }
+
+        //dddx([$form_data, $rules]);
+
+        return $rules;
+    }
+
+
+
+    public function getUserExtraFieldFormData(string $user_id, ?string $uuid = null): array
+    {
+
+        $tmp = $this->getUserExtraFieldValue($user_id, $uuid);
         $data = [];
 
         foreach ($tmp as $item) {
