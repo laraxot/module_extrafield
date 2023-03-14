@@ -12,7 +12,7 @@ use Illuminate\Foundation\Testing\DatabaseTransactions;
 
 class ExtraFieldTest extends TestCase
 {
-    use RefreshDatabase;
+    //use RefreshDatabase;
     use DatabaseMigrations;
     // use DatabaseTransactions;
     /**
