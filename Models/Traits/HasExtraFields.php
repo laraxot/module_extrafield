@@ -84,7 +84,7 @@ trait HasExtraFields
         ;
     }
 
-    public function updateExtraField(array $data, string $user_id, ?string $uuid = null)
+    public function updateUserExtraField(array $data, string $user_id, ?string $uuid = null)
     {
         //dddx([$data, $user_id,  $uuid]);
         $model_type = Str::snake(class_basename($this));
@@ -283,7 +283,7 @@ trait HasExtraFields
         }
     }
 
-    public function updateExtraFieldByGroup(array $data, string $user_id, ?string $uuid = null)
+    public function updateUserExtraFieldByGroup(array $data, string $user_id, ?string $uuid = null)
     {
         $extra_field_groups = $this->extraFieldGroups->where('pivot.user_id', null);
 
@@ -307,11 +307,11 @@ trait HasExtraFields
                 return $item;
             })->pluck('value', 'name')->all();
 
-            $this->updateExtraField($up, $user_id, $uuid);
+            $this->updateUserExtraField($up, $user_id, $uuid);
         }
     }
 
-    public function updateExtraFieldByGroupTest(array $data, string $user_id, ?string $uuid = null)
+    public function updateUserExtraFieldByGroupTest(array $data, string $user_id, ?string $uuid = null)
     {
 
         $extra_field_groups = $this->extraFieldGroups->where('pivot.uuid', $uuid);

@@ -101,9 +101,11 @@ class EditData extends Modal
 
         $efr = $this->model->getExtraFieldRules($this->form_data);
 
-        $this->validate($efr);
+        if (!empty($efr)) {
+            $this->validate($efr);
+        }
 
-        $this->model->updateExtraFieldByGroupTest($this->form_data, $this->user_id, $this->uuid);
+        $this->model->updateUserExtraFieldByGroupTest($this->form_data, $this->user_id, $this->uuid);
 
         $this->close();
 
