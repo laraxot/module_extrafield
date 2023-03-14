@@ -114,8 +114,8 @@ class SecondStep extends StepComponent
         //dd($model->getExtraFieldRules($this->form_data));
 
         $efr = $model->getExtraFieldRules($this->form_data);
-
-        if (empty($efr)) {
+        // dddx($efr);
+        if (!empty($efr)) {
             $this->validate($efr);
         }
 
