@@ -44,10 +44,12 @@ use Illuminate\Database\Eloquent\Relations\MorphToMany;
  *
  * @mixin \Eloquent
  */
-class ExtraField extends BaseModel {
+class ExtraField extends BaseModel
+{
     use HasCategory;
 
-    protected $fillable = ['id', 'name', 'type',
+    protected $fillable = [
+        'id', 'name', 'type',
         'rules', 'options', 'attributes',
         // 'collection_name',
         // 'group_id',
@@ -62,26 +64,32 @@ class ExtraField extends BaseModel {
     //     return $this->belongsTo(ExtraFieldGroup::class);
     // }
 
-    public function extraFieldMorph(): HasOne {
+    public function extraFieldMorph(): HasOne
+    {
         return $this->hasOne(ExtraFieldMorph::class);
     }
-
-    // un campo corrisponde solo ad un gruppo, come da specifiche
-    public function groups(): MorphToMany {
-        // return $this->hasMany(ExtraField::class, 'group_id');
-
+    public function extraFieldGroups()
+    {
         $pivot_class = ExtraFieldGroupMorph::class;
         $pivot = app($pivot_class);
         $pivot_table = $pivot->getTable();
         $pivot_fields = $pivot->getFillable();
 
         return $this->morphToMany(ExtraFieldGroup::class, 'model', $pivot_table)
-        ->using($pivot_class)
-        ->withPivot($pivot_fields)
-        ->withTimestamps();
+            ->using($pivot_class)
+            ->withPivot($pivot_fields)
+            ->withTimestamps();
     }
 
-    public function toData(){
+    // un campo corrisponde solo ad un gruppo, come da specifiche
+    public function groups(): MorphToMany
+    {
+        // return $this->hasMany(ExtraField::class, 'group_id');
+        return $this->extraFieldGroups();
+    }
+
+    public function toData()
+    {
         return FieldData::from($this);
     }
 }
