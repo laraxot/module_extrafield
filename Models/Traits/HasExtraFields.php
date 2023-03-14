@@ -55,6 +55,11 @@ trait HasExtraFields
         return $this->hasManyDeepFromRelations($this->noUserExtraFieldGroups(), (new ExtraFieldGroup())->noUserFields())->withIntermediate(ExtraFieldGroup::class);
     }
 
+    public function noUserExtraFields()
+    {
+        return $this->extraFields()->wherePivot('user_id', null);
+    }
+
     public function noUserExtraFieldGroups()
     {
         //dd($this->extraFieldGroups()->wherePivot('user_id', null)->toSql());
