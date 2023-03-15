@@ -9,6 +9,7 @@ declare(strict_types=1);
 namespace Modules\ExtraField\Models\Traits;
 
 use Illuminate\Support\Str;
+use Modules\LU\Models\User;
 use Modules\UI\Datas\FieldData;
 use Illuminate\Support\Facades\Auth;
 use Barryvdh\Debugbar\Facades\Debugbar;
@@ -162,6 +163,45 @@ trait HasExtraFields
         ]);
     }
 
+    public function getProfileExtraFieldOptions(string $user_id, ?string $uuid = null)
+    {
+        $model_fields = $this->extraFields->where('pivot.user_id', $user_id);
+
+        $field_groups = $this->extraFieldGroups->where('pivot.user_id', $user_id);
+
+        //serve per mostrare i dati del profilo sul campo se sei su addService ad esempio
+        if ($field_groups->count() === 0) {
+            $field_groups = $this->extraFieldGroups->where('pivot.user_id', null);
+        }
+
+        $profile_fields = ProfileService::make()->get(User::find($user_id))->getProfile()->extraFields;
+
+        if ($uuid != null) {
+            $model_fields = $model_fields->where('pivot.uuid', $uuid);
+            $field_groups = $field_groups->where('pivot.uuid', $uuid);
+        }
+
+        $data = $field_groups
+            ->filter(
+                function ($group) use ($profile_fields) {
+                    $group->fields
+                        ->map(
+                            function ($field) use ($profile_fields) {
+
+                                $profile_fields_options = $profile_fields->where('id', $field->id);
+
+                                $field->options =  $profile_fields_options;
+
+                                return $field;
+                            }
+                        );
+
+                    return $group;
+                }
+            )->toArray();
+
+        return $data;
+    }
 
     public function getUserExtraFieldValue(string $user_id, ?string $uuid = null)
     {
@@ -174,7 +214,10 @@ trait HasExtraFields
             $field_groups = $this->extraFieldGroups->where('pivot.user_id', null);
         }
 
-        $profile_fields = ProfileService::make()->getProfile()->extraFields;
+        //così è sbagliato per i test e hanno ragione
+        //$profile_fields = ProfileService::make()->getProfile()->extraFields;
+
+        $profile_fields = ProfileService::make()->get(User::find($user_id))->getProfile()->extraFields;
 
         if ($uuid != null) {
             $model_fields = $model_fields->where('pivot.uuid', $uuid);
