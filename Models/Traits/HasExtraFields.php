@@ -42,10 +42,14 @@ trait HasExtraFields
         ;
     }
 
-    public function userExtraFields(): MorphToMany
+    public function userExtraFields(?string $user_id = ''): MorphToMany
     {
+        if ($user_id == '') {
+            $user_id = (string) Auth::id();
+        }
+
         return $this->extraFields()
-            ->wherePivot('user_id', Auth::id());
+            ->wherePivot('user_id', $user_id);
     }
 
     // c'è qualcosa di sbagliato. legge il gruppo da group_id di extrafield ma deve leggerlo da polimorfica
@@ -59,6 +63,11 @@ trait HasExtraFields
     public function noUserExtraFields()
     {
         return $this->extraFields()->wherePivot('user_id', null);
+    }
+
+    public function userExtraFieldGroups(string $user_id)
+    {
+        return $this->extraFieldGroups()->wherePivot('user_id', $user_id);
     }
 
     public function noUserExtraFieldGroups()
@@ -165,8 +174,6 @@ trait HasExtraFields
 
     public function getProfileExtraFieldOptions(string $user_id, ?string $uuid = null)
     {
-        $model_fields = $this->extraFields->where('pivot.user_id', $user_id);
-
         $field_groups = $this->extraFieldGroups->where('pivot.user_id', $user_id);
 
         //serve per mostrare i dati del profilo sul campo se sei su addService ad esempio
@@ -177,7 +184,6 @@ trait HasExtraFields
         $profile_fields = ProfileService::make()->get(User::find($user_id))->getProfile()->extraFields;
 
         if ($uuid != null) {
-            $model_fields = $model_fields->where('pivot.uuid', $uuid);
             $field_groups = $field_groups->where('pivot.uuid', $uuid);
         }
 

@@ -58,7 +58,7 @@
                             {{-- {{ dddx(rowsToSql($model->userExtraFields())) }} --}}
                             @php
                                 $fields = $model
-                                    ->userExtraFields()
+                                    ->userExtraFields(auth()->id())
                                     // ->whereHas('groups', function ($query) use ($group) {
                                     //     $query->where('extra_field_groups.id', $group->id);
                                     // })
@@ -116,7 +116,7 @@
     </div>
     <div class="row">
         <div class="col-md-12 p-0">
-            @if (!$profile->hasRole('light'))
+            @if (!$profile->hasRole('light') && !$profile->hasRole('full'))
                 <x-card tpl="subscription.v1">
                     <x-slot name="title">Light Plan</x-slot>
                     <x-slot name="subtitle">The perfect way to get started</x-slot>
