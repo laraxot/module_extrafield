@@ -209,6 +209,24 @@ trait HasExtraFields
         return $data;
     }
 
+    public function getProfileExtraFieldGroupsOptions(string $user_id, ?string $uuid = null)
+    {
+        $model_groups = $this->getProfileExtraFieldOptions($user_id);
+        foreach ($model_groups as &$group) {
+            $group['name'] = str()->slug($group['name']);
+            foreach ($group['fields'] as $field) {
+                foreach ($field['options'] as $option) {
+                    if (isset($group['options'][$option['pivot']['uuid']])) {
+                        $group['options'][$option['pivot']['uuid']] .= ' ' . $option['pivot']['value'];
+                    } else {
+                        $group['options'][$option['pivot']['uuid']] = $option['pivot']['value'];
+                    }
+                }
+            }
+        }
+        return $model_groups;
+    }
+
     public function getUserExtraFieldValue(string $user_id, ?string $uuid = null)
     {
         $model_fields = $this->extraFields->where('pivot.user_id', $user_id);
@@ -234,6 +252,7 @@ trait HasExtraFields
         $data = $field_groups
             ->filter(
                 function ($group) use ($model_fields, $profile_fields) {
+
                     $group->fields
                         ->map(
                             function ($field) use ($model_fields, $profile_fields) {
@@ -243,6 +262,9 @@ trait HasExtraFields
 
                                 $field->value = $model_fields_value ?? $profile_fields_value;
 
+                                //uuid può essere null su service per ora ma probabilmente andrà cambiato
+                                $field->uuid = $model_fields->firstWhere('id', $field->id)?->pivot?->uuid ?? $profile_fields->firstWhere('id', $field->id)?->pivot?->uuid;
+
                                 return $field;
                             }
                         );
@@ -250,7 +272,7 @@ trait HasExtraFields
                     return $group;
                 }
             )->toArray();
-
+        //dd($data);
         return $data;
     }
 
@@ -302,6 +324,25 @@ trait HasExtraFields
 
 
 
+    public function getUserExtraFieldGroupsFormData(string $user_id, ?string $uuid = null): array
+    {
+        //ora di defaut sceglie il primo. poi diventerà il preferito
+        $tmp = $this->getUserExtraFieldValue($user_id, $uuid);
+        $data = [];
+        foreach ($tmp as $item) {
+            $k = str()->slug($item['name']) ?? '';
+            //è qui che sceglie il primo
+
+
+            $v = $item['fields'][0]['uuid'] ?? '';
+            $data[$k] = $v;
+        }
+
+        //dd($data);
+        return $data;
+    }
+
+
     public function getUserExtraFieldFormData(string $user_id, ?string $uuid = null): array
     {
 
@@ -319,6 +360,8 @@ trait HasExtraFields
                 $data[$k] = $v;
             }
         }
+
+        //dd($data);
         return $data;
     }
 
@@ -334,6 +377,29 @@ trait HasExtraFields
                 return $item;
             })->pluck('value', 'name')->all();
             $this->addExtraField($up, $user_id, (string) $group->id);
+        }
+    }
+
+    public function updateUserExtraFieldByGroupAndProfileFieldUuid(array $uuid_data, string $user_id)
+    {
+        $profile = ProfileService::make()->get(User::find($user_id))->getProfile();
+        foreach ($uuid_data as $uuid) {
+            //$new_uuid = Str::uuid()->toString();
+            $profile_fields = $profile->extraFields->where('pivot.uuid', $uuid);
+            foreach ($profile_fields as $profile_field) {
+                $res = ExtraFieldMorph::firstOrCreate([
+                    'model_id' => $this->getKey(),
+                    'model_type' => Str::snake(class_basename($this)),
+                    'user_id' => $user_id,
+                    'extra_field_id' => $profile_field->id,
+                    //'uuid' => $new_uuid,
+                ]);
+
+                $res = tap($res)->update([
+                    'value' => $profile_field->pivot->value,
+                    'uuid' => $uuid
+                ]);
+            }
         }
     }
 
