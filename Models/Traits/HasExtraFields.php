@@ -313,8 +313,8 @@ trait HasExtraFields
                                 $field->value = $model_fields_value ?? $profile_fields_value;
 
                                 //uuid può essere null su service per ora ma probabilmente andrà cambiato
-
-                                $favourite_group_uuid = $profile->getFavouriteGroups()->where('id', $group->id)->where('pivot.favourite', 1)->pluck('pivot.uuid')->first();
+                                //dddx($profile->getFavouriteGroups()->where('is_favourite', 1)->pluck('name', 'pivot.uuid'));
+                                $favourite_group_uuid = $profile->getFavouriteGroups()->where('id', $group->id)->where('is_favourite', 1)->pluck('pivot.uuid')->first();
                                 //$field->uuid = $model_fields->firstWhere('id', $field->id)?->pivot?->uuid ?? $profile_fields->firstWhere('uuid', $field->uuid)?->pivot?->uuid;
                                 $field->uuid = $model_fields->firstWhere('id', $field->id)?->pivot?->uuid ?? $favourite_group_uuid;
 
