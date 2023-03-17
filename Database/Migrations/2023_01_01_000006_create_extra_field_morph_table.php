@@ -29,17 +29,20 @@ class CreateExtraFieldMorphTable extends XotBaseMigration
         // -- UPDATE --
         $this->tableUpdate(
             function (Blueprint $table) {
-                if (! $this->hasColumn('extra_field_id')) {
+                if (!$this->hasColumn('extra_field_id')) {
                     $table->integer('extra_field_id')->nullable()->index();
                 }
-                if (! $this->hasColumn('value')) {
+                if (!$this->hasColumn('value')) {
                     $table->text('value')->nullable();
                 }
-                if (! $this->hasColumn('value_class')) {
+                if (!$this->hasColumn('value_class')) {
                     $table->string('value_class')->nullable();
                 }
-                if (! $this->hasColumn('uuid')) {
+                if (!$this->hasColumn('uuid')) {
                     $table->string('uuid')->nullable();
+                }
+                if (!$this->hasColumn('favourite')) {
+                    $table->boolean('favourite')->default(false);
                 }
             }
         );

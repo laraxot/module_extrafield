@@ -53,7 +53,17 @@
                     <x-slot name="txt">
 
                         @foreach ($groups as $group)
-                            <h5>{{ Str::ucfirst($group->name) }} {{-- $group->pivot->uuid --}}</h5>
+                            <h5>
+                                <a href="#"
+                                    wire:click="setFavouriteGroup('{{ $group->id }}','{{ $group->pivot->uuid }}')">
+                                    @if ($group->is_favourite == true)
+                                        <i class="bi bi-star-fill"></i>
+                                    @else
+                                        <i class="bi bi-star"></i>
+                                    @endif
+                                </a>
+                                {{ Str::ucfirst($group->name) }} {{-- $group->pivot->uuid --}}
+                            </h5>
                             {{-- {{ dddx($model->userFields) }} --}}
                             {{-- {{ dddx(rowsToSql($model->userExtraFields())) }} --}}
                             @php

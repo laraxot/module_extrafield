@@ -99,6 +99,54 @@ trait HasExtraFields
         ;
     }
 
+    public function getFavouriteGroups(?string $cat_id = null)
+    {
+        $tmp_groups = $this->extraFieldGroups();
+        if ($cat_id != null) {
+            $tmp_groups = $tmp_groups->withAnyCategories($cat_id);
+        }
+        $groups = $tmp_groups->get();
+
+        $iterated_groups = [];
+
+        $groups = $groups->map(function ($group) use (&$iterated_groups, $tmp_groups, $cat_id) {
+            if ($group->cardinality == 1) {
+                $group->is_favourite = true;
+            } else {
+                $tmp_groups = $this->extraFieldGroups();
+                if ($cat_id != null) {
+                    $tmp_groups = $tmp_groups->withAnyCategories($cat_id);
+                }
+                $favourite_group = $tmp_groups->where('extra_field_groups.id', $group->id)->wherePivot('favourite', 1)->first();
+
+                if (null != $favourite_group && $favourite_group->pivot->uuid == $group->pivot->uuid) {
+                    $group->is_favourite = true;
+                } else if (null == $favourite_group && !isset($iterated_groups[$group->id])) {
+                    $group->is_favourite = true;
+                }
+            }
+            $iterated_groups[$group->id] = true;
+            return $group;
+        })->sortBy('name');
+
+        return $groups;
+    }
+
+    public function setFavouriteGroup($group_id, $uuid)
+    {
+        $this->extraFieldGroups()->where('extra_field_groups.id', $group_id)->get()->map(function ($group) use ($uuid) {
+            $favourite = 0;
+            //dd([$group->pivot, $uuid]);
+            if ($group->pivot->uuid == $uuid) {
+
+                $favourite = 1;
+            }
+            $group->pivot->update(['favourite' => $favourite]);
+        });
+
+        // dd($this->extraFieldGroups()->where('extra_field_groups.id', $group_id)->get()->pluck('pivot.uuid', 'pivot.favourite'));
+    }
+
     public function updateUserExtraField(array $data, string $user_id, ?string $uuid = null)
     {
         //dddx([$data, $user_id,  $uuid]);
@@ -231,7 +279,7 @@ trait HasExtraFields
     {
         $model_fields = $this->extraFields->where('pivot.user_id', $user_id);
 
-        $field_groups = $this->extraFieldGroups->where('pivot.user_id', $user_id);
+        $field_groups = $this->getFavouriteGroups()->where('pivot.user_id', $user_id);
 
         //serve per mostrare i dati del profilo sul campo se sei su addService ad esempio
         if ($field_groups->count() === 0) {
@@ -241,7 +289,8 @@ trait HasExtraFields
         //così è sbagliato per i test e hanno ragione
         //$profile_fields = ProfileService::make()->getProfile()->extraFields;
 
-        $profile_fields = ProfileService::make()->get(User::find($user_id))->getProfile()->extraFields;
+        $profile = ProfileService::make()->get(User::find($user_id))->getProfile();
+        $profile_fields = $profile->extraFields;
 
         if ($uuid != null) {
             $model_fields = $model_fields->where('pivot.uuid', $uuid);
@@ -251,11 +300,12 @@ trait HasExtraFields
         //dd([$field_groups, $model_fields]);
         $data = $field_groups
             ->filter(
-                function ($group) use ($model_fields, $profile_fields) {
+                function ($group) use ($model_fields, $profile_fields, $profile) {
+
 
                     $group->fields
                         ->map(
-                            function ($field) use ($model_fields, $profile_fields) {
+                            function ($field) use ($model_fields, $profile_fields, $profile, $group) {
                                 $model_fields_value = $model_fields->firstWhere('id', $field->id)?->pivot?->value;
 
                                 $profile_fields_value = $profile_fields->firstWhere('id', $field->id)?->pivot?->value;
@@ -263,7 +313,10 @@ trait HasExtraFields
                                 $field->value = $model_fields_value ?? $profile_fields_value;
 
                                 //uuid può essere null su service per ora ma probabilmente andrà cambiato
-                                $field->uuid = $model_fields->firstWhere('id', $field->id)?->pivot?->uuid ?? $profile_fields->firstWhere('id', $field->id)?->pivot?->uuid;
+
+                                $favourite_group_uuid = $profile->getFavouriteGroups()->where('id', $group->id)->where('pivot.favourite', 1)->pluck('pivot.uuid')->first();
+                                //$field->uuid = $model_fields->firstWhere('id', $field->id)?->pivot?->uuid ?? $profile_fields->firstWhere('uuid', $field->uuid)?->pivot?->uuid;
+                                $field->uuid = $model_fields->firstWhere('id', $field->id)?->pivot?->uuid ?? $favourite_group_uuid;
 
                                 return $field;
                             }

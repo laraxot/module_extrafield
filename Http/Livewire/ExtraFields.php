@@ -13,11 +13,13 @@ use Illuminate\Database\Eloquent\Model;
 use Illuminate\Contracts\Support\Renderable;
 use Modules\ExtraField\Models\ExtraFieldMorph;
 use Modules\ExtraField\Models\ExtraFieldGroupMorph;
+use Termwind\Components\Dd;
 use WireElements\Pro\Concerns\InteractsWithConfirmationModal;
 
 // use Modules\PFed\Models\Profile as ProfileModel;
 
-class ExtraFields extends Component {
+class ExtraFields extends Component
+{
     use InteractsWithConfirmationModal;
 
     /**
@@ -34,7 +36,8 @@ class ExtraFields extends Component {
     public ?string $category_name;
     protected $listeners = ['refreshExtraFields' => '$refresh'];
 
-    public function mount(Model $model, string $tpl = 'v4'): void {
+    public function mount(Model $model, string $tpl = 'v4'): void
+    {
         $this->model = $model;
         $this->model_id = $model->getKey();
         $this->model_type = Str::snake(class_basename($this->model));
@@ -42,14 +45,16 @@ class ExtraFields extends Component {
         $this->tpl = $tpl;
     }
 
-    public static function getName(): string{
+    public static function getName(): string
+    {
         return 'extra-fields';
     }
 
-    public function render(): Renderable {
+    public function render(): Renderable
+    {
         // $this->showPage();
         if ('' != $this->cat_id) {
-            $groups = $this->model->extraFieldGroups()->withAnyCategories($this->cat_id)->get();
+            $groups = $this->model->getFavouriteGroups($this->cat_id);
         } else {
             $groups = collect([]);
         }
@@ -71,7 +76,8 @@ class ExtraFields extends Component {
         return view($view, $view_params);
     }
 
-    public function showCat(string $cat_id): void {
+    public function showCat(string $cat_id): void
+    {
         $this->cat_id = $cat_id;
         $category = Category::find($cat_id);
         if (null == $category) {
@@ -80,9 +86,16 @@ class ExtraFields extends Component {
         $this->category_name = $category->name;
     }
 
-    public function delete(string $uuid){
+    public function setFavouriteGroup($group_id, $uuid)
+    {
+        $this->model->setFavouriteGroup($group_id, $uuid);
+        //dd([$group_id, $uuid]);
+    }
+
+    public function delete(string $uuid)
+    {
         $this->askForConfirmation(
-            callback: function() use ($uuid) {
+            callback: function () use ($uuid) {
                 $data = [
                     'uuid' => $uuid,
                     'user_id' => $this->user_id,
