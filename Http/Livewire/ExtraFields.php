@@ -65,6 +65,7 @@ class ExtraFields extends Component
          * @phpstan-var view-string
          */
         $view = app(GetViewAction::class)->execute($this->tpl);
+
         $categories = app(GetExtraFieldGroupCategoriesByModelTypeAction::class)->execute($this->model_type);
 
         $this->showCat($this->cat_id);
