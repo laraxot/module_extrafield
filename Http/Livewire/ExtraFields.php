@@ -6,15 +6,17 @@ namespace Modules\ExtraField\Http\Livewire;
 
 use Livewire\Component;
 use Illuminate\Support\Str;
+use Termwind\Components\Dd;
 use Modules\Blog\Models\Category;
 use Illuminate\Support\Facades\Auth;
 use Modules\Cms\Actions\GetViewAction;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Contracts\Support\Renderable;
+use Modules\ExtraField\Models\ExtraFieldGroup;
 use Modules\ExtraField\Models\ExtraFieldMorph;
 use Modules\ExtraField\Models\ExtraFieldGroupMorph;
-use Termwind\Components\Dd;
 use WireElements\Pro\Concerns\InteractsWithConfirmationModal;
+use Modules\ExtraField\Actions\GetExtraFieldGroupCategoriesByModelTypeAction;
 
 // use Modules\PFed\Models\Profile as ProfileModel;
 
@@ -63,9 +65,8 @@ class ExtraFields extends Component
          * @phpstan-var view-string
          */
         $view = app(GetViewAction::class)->execute($this->tpl);
+        $categories = app(GetExtraFieldGroupCategoriesByModelTypeAction::class)->execute($this->model_type);
 
-
-        $categories = Category::ofType($this->model_type)->get();
         $this->showCat($this->cat_id);
         $view_params = [
             'view' => $view,

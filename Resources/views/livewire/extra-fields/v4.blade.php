@@ -26,9 +26,10 @@
                                             <div class="flex-none">
                                                 <i class="bi bi-person-lines-fill"></i>
                                             </div>
-                                            <div class="flex-fill ms-3"><a href="#"
-                                                    wire:click="showCat({{ $category->id }})"
+                                            <div class="flex-fill ms-3">
+                                                <a href="#" wire:click="showCat({{ $category->id }})"
                                                     class="text-sm text-heading font-semibold mb-0">{{ $category->name }}</a>
+                                                <x-badge>{{ $category->e_counts }}</x-badge>
                                             </div>
                                         </div>
                                     @endforeach
