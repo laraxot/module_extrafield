@@ -204,6 +204,7 @@ trait HasExtraFields
                 $value = json_encode($value);
             }
 
+            //qui attacca l'extraField al model
             $this->extraFields()->attach($row->id, ['value' => $value, 'uuid' => $uuid, 'user_id' => $user_id]);
         }
 
