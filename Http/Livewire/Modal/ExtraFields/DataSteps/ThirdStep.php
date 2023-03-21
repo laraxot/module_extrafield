@@ -20,8 +20,8 @@ class ThirdStep extends StepComponent
 
     public function mount(): void
     {
-        $this->form1_data = $this->state()->all()['modal.extra-fields.data-steps.first-step']['form_data'];
-        $this->form2_data = $this->state()->all()['modal.extra-fields.data-steps.second-step']['form_data'];
+        $this->form1_data = $this->state()->all()['extrafield::modal.extra-fields.data-steps.first-step']['form_data'];
+        $this->form2_data = $this->state()->all()['extrafield::modal.extra-fields.data-steps.second-step']['form_data'];
     }
 
     public function render(): Renderable

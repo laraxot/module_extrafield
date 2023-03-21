@@ -13,7 +13,8 @@ use Modules\ExtraField\Models\ExtraFieldGroup;
 use Modules\PFed\Rules\CardinalityRule;
 use Spatie\LivewireWizard\Components\StepComponent;
 
-class FirstStep extends StepComponent {
+class FirstStep extends StepComponent
+{
     public string $cat_id;
     public string $model_type;
     public string $model_id;
@@ -24,17 +25,18 @@ class FirstStep extends StepComponent {
     public bool $is_last = false;
 
     // public function mount(string $cat_id, string $model_type, string $model_id): void {
-    public function mount(): void {
-        // dddx($this->state()->all());
+    public function mount(): void
+    {
+        // dddx($this->state()->all()['extrafield::modal.extra-fields.data-steps.first-step']);
 
         // $this->cat_id = $cat_id;
-        $this->cat_id = (string) $this->state()->all()['modal.extra-fields.data-steps.first-step']['cat_id'];
+        $this->cat_id = (string) $this->state()->all()['extrafield::modal.extra-fields.data-steps.first-step']['cat_id'];
         $this->form_data['cat_id'] = $this->cat_id;
         $this->form_data['user_id'] = (string) Auth::id();
         // $this->form_data['model_type'] = $model_type;
-        $this->form_data['model_type'] = (string) $this->state()->all()['modal.extra-fields.data-steps.first-step']['model_type'];
+        $this->form_data['model_type'] = (string) $this->state()->all()['extrafield::modal.extra-fields.data-steps.first-step']['model_type'];
         // $this->form_data['model_id'] = $model_id;
-        $this->form_data['model_id'] = (string) $this->state()->all()['modal.extra-fields.data-steps.first-step']['model_id'];
+        $this->form_data['model_id'] = (string) $this->state()->all()['extrafield::modal.extra-fields.data-steps.first-step']['model_id'];
 
         $morph_map = [
             'extra_field' => 'Modules\ExtraField\Models\ExtraField',
@@ -61,7 +63,8 @@ class FirstStep extends StepComponent {
         $this->group_opts = $group_opts;
     }
 
-    public function render(): Renderable {
+    public function render(): Renderable
+    {
         /**
          * @phpstan-var view-string
          */
@@ -73,14 +76,16 @@ class FirstStep extends StepComponent {
         return view($view, $view_params);
     }
 
-    public function stepInfo(): array {
+    public function stepInfo(): array
+    {
         return [
             'label' => 'Select Data',
             'icon' => 'fa-shopping-cart',
         ];
     }
 
-    public function goNextStep(): void {
+    public function goNextStep(): void
+    {
         // $this->emit('update_form_data', $this->form_data);
         $this->nextStep();
     }

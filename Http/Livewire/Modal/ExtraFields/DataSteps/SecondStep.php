@@ -38,7 +38,7 @@ class SecondStep extends StepComponent
     public function mount(): void
     {
 
-        $this->form1_data = $this->state()->all()['modal.extra-fields.data-steps.first-step']['form_data'];
+        $this->form1_data = $this->state()->all()['extrafield::modal.extra-fields.data-steps.first-step']['form_data'];
 
         $morph_map = [
             'extra_field' => 'Modules\ExtraField\Models\ExtraField',
@@ -46,8 +46,8 @@ class SecondStep extends StepComponent
 
         Relation::morphMap($morph_map);
 
-        $this->group_id = (string) $this->state()->all()['modal.extra-fields.data-steps.first-step']['form_data']['group_id'];
-        $this->cat_id = (string) $this->state()->all()['modal.extra-fields.data-steps.first-step']['form_data']['cat_id'];
+        $this->group_id = (string) $this->state()->all()['extrafield::modal.extra-fields.data-steps.first-step']['form_data']['group_id'];
+        $this->cat_id = (string) $this->state()->all()['extrafield::modal.extra-fields.data-steps.first-step']['form_data']['cat_id'];
 
 
         $rows = ExtraFieldGroup::find($this->group_id)->fields;
