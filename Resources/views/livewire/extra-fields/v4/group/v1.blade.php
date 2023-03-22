@@ -20,10 +20,10 @@
                 </div>
                 <div class="col-2">
                     <div class="row">
-                        <div class="col-6">
-                            {{-- <i class="bi bi-shield"></i> --}}
+                        {{-- <div class="col-6">
+                            <i class="bi bi-shield"></i>
                             <i class="bi bi-shield-fill-check"></i>
-                        </div>
+                        </div> --}}
                         <div class="col-6">
                             <a href="#" wire:click="setFavouriteGroup('{{ $group->id }}','{{ $group->pivot->uuid }}')">
                             {{-- {{dddx($group)}} --}}
