@@ -82,7 +82,6 @@ class ExtraFieldPanel extends XotBasePanel {
             (object) [
                 'type' => 'Id',
                 'name' => 'id',
-                'rules' => 'required',
                 'comment' => null,
                 'col_size' => 6,
             ],
