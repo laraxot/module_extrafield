@@ -9,11 +9,11 @@ use Illuminate\Database\Eloquent\Collection;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Support\Facades\Auth;
 use Modules\Cms\Actions\GetViewAction;
+use Modules\PFed\Models\Service;
 use Modules\UI\Datas\FieldData;
 use WireElements\Pro\Components\Modal\Modal;
 
-class EditData extends Modal
-{
+class EditData extends Modal {
     /**
      * @property $rows
      *
@@ -29,8 +29,7 @@ class EditData extends Modal
     public Model $model;
     protected $listeners = ['updateFormData' => 'updateFormData'];
 
-    public function mount(string $uuid, string $model_type, int $model_id): void
-    {
+    public function mount(string $uuid, string $model_type, int $model_id): void {
         $this->uuid = $uuid;
         $this->model_type = $model_type;
         $this->model_id = $model_id;
@@ -46,18 +45,15 @@ class EditData extends Modal
         // dddx($this->form_data);
     }
 
-    public function updateFormData($data)
-    {
+    public function updateFormData($data) {
         $this->form_data = array_merge($this->form_data, $data);
     }
 
-    public function getModelProperty()
-    {
+    public function getModelProperty() {
         return $this->model::where('user_id', $this->user_id)->first();
     }
 
-    public function render(): Renderable
-    {
+    public function render(): Renderable {
         $groups = $this->model->getUserExtraFieldValue($this->user_id, $this->uuid);
         $group = collect($groups)->first();
         $fields = $group['fields'];
@@ -73,8 +69,7 @@ class EditData extends Modal
         return view($view, $view_params);
     }
 
-    public static function behavior(): array
-    {
+    public static function behavior(): array {
         return [
             // Close the modal if the escape key is pressed
             'close-on-escape' => true,
@@ -87,8 +82,7 @@ class EditData extends Modal
         ];
     }
 
-    public static function attributes(): array
-    {
+    public static function attributes(): array {
         return [
             // Set the modal size to 2xl, you can choose between:
             // xs, sm, md, lg, xl, 2xl, 3xl, 4xl, 5xl, 6xl, 7xl
@@ -96,16 +90,29 @@ class EditData extends Modal
         ];
     }
 
-    public function save()
-    {
-
+    public function save() {
         $efr = $this->model->getExtraFieldRules($this->form_data);
 
-        if (!empty($efr)) {
+        if (! empty($efr)) {
             $this->validate($efr);
         }
+        // dd($this->form_data);
 
         $this->model->updateUserExtraFieldByGroupTest($this->form_data, $this->user_id, $this->uuid);
+
+        $groups = $this->model->getUserExtraFieldValue($this->user_id, $this->uuid);
+        $group_name = str()->slug(collect($groups)->first()['name']);
+
+        $user_services = Service::whereHas('extraFields', function ($query) {
+            $query->where('user_id', $this->user_id)->where('uuid', $this->uuid);
+        })->get();
+
+        // dd(rowsToSql($query));
+
+        $user_services->map(function ($service) use ($group_name) {
+            $service->updateUserExtraFieldByGroupAndProfileFieldUuid([$group_name => $this->uuid], $this->user_id);
+            // dd($service->extraFields->where('pivot.user_id', $this->user_id)); // ->where('pivot.uuid', $this->uuid));
+        });
 
         $this->close();
 

@@ -29,13 +29,9 @@ trait HasExtraFields {
         $pivot_table = $pivot->getTable();
         $pivot_fields = $pivot->getFillable();
 
-        // dddx($pivot_fields);
-
         return $this->morphToMany(ExtraField::class, 'model', $pivot_table)
             ->using($pivot_class)
-            ->withPivot($pivot_fields)
-            // ->withTimestamps()
-        ;
+            ->withPivot($pivot_fields);
     }
 
     public function userExtraFields(?string $user_id = ''): MorphToMany {
@@ -450,6 +446,9 @@ trait HasExtraFields {
     }
 
     public function updateUserExtraFieldByGroupTest(array $data, string $user_id, ?string $uuid = null) {
+        // così aggiorno solo quelli del modello di partenza (es. Profile)
+        // ma se volessi aggiornare assieme quelli di profile e services?
+
         $extra_field_groups = $this->extraFieldGroups->where('pivot.uuid', $uuid);
 
         // dd($extra_field_groups);
