@@ -98,14 +98,7 @@ class EditData extends Modal {
     }
 
     public function save() {
-        $user_services = Service::whereHas('extraFields', function ($query) {
-            $query->where('user_id', $this->user_id)->where('uuid', $this->uuid);
-        })->get();
-
-        $message = [];
-        foreach ($user_services  as $service) {
-            $message[] = [$service->name];
-        }
+        $message = Service::updatingServicesList($this->user_id, $this->uuid);
 
         $this->askForConfirmation(
             callback: function () {
@@ -136,9 +129,7 @@ class EditData extends Modal {
         $groups = $this->model->getUserExtraFieldValue($this->user_id, $this->uuid);
         $group_name = str()->slug(collect($groups)->first()['name']);
 
-        $user_services = Service::whereHas('extraFields', function ($query) {
-            $query->where('user_id', $this->user_id)->where('uuid', $this->uuid);
-        })->get();
+        $user_services = $this->servicesWithUuid();
 
         $user_services->map(function ($service) use ($group_name) {
             $service->updateUserExtraFieldByGroupAndProfileFieldUuid([$group_name => $this->uuid], $this->user_id);
