@@ -12,8 +12,11 @@ use Modules\Cms\Actions\GetViewAction;
 use Modules\PFed\Models\Service;
 use Modules\UI\Datas\FieldData;
 use WireElements\Pro\Components\Modal\Modal;
+use WireElements\Pro\Concerns\InteractsWithConfirmationModal;
 
 class EditData extends Modal {
+    use InteractsWithConfirmationModal;
+
     /**
      * @property $rows
      *
@@ -43,6 +46,10 @@ class EditData extends Modal {
         session()->flash('form_data', $this->form_data);
 
         // dddx($this->form_data);
+    }
+
+    public static function getName() {
+        return 'modal.extra-fields.edit-data';
     }
 
     public function updateFormData($data) {
@@ -91,12 +98,38 @@ class EditData extends Modal {
     }
 
     public function save() {
+        $user_services = Service::whereHas('extraFields', function ($query) {
+            $query->where('user_id', $this->user_id)->where('uuid', $this->uuid);
+        })->get();
+
+        $message = [];
+        foreach ($user_services  as $service) {
+            $message[] = [$service->name];
+        }
+
+        $this->askForConfirmation(
+            callback: function () {
+                $this->saveConfirmed();
+            },
+            prompt: [
+                'title' => __('Attenzione!'),
+                'message' => __('I seguenti servizi saranno modificati:'),
+                'confirm' => __('Si, confermo'),
+
+                'cancel' => __('Annulla'),
+            ],
+            tableHeaders: [''],
+
+            tableData: $message,
+        );
+    }
+
+    public function saveConfirmed() {
         $efr = $this->model->getExtraFieldRules($this->form_data);
 
         if (! empty($efr)) {
             $this->validate($efr);
         }
-        // dd($this->form_data);
 
         $this->model->updateUserExtraFieldByGroupTest($this->form_data, $this->user_id, $this->uuid);
 
@@ -107,11 +140,8 @@ class EditData extends Modal {
             $query->where('user_id', $this->user_id)->where('uuid', $this->uuid);
         })->get();
 
-        // dd(rowsToSql($query));
-
         $user_services->map(function ($service) use ($group_name) {
             $service->updateUserExtraFieldByGroupAndProfileFieldUuid([$group_name => $this->uuid], $this->user_id);
-            // dd($service->extraFields->where('pivot.user_id', $this->user_id)); // ->where('pivot.uuid', $this->uuid));
         });
 
         $this->close();
