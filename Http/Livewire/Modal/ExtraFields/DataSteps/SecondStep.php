@@ -8,14 +8,12 @@ use Illuminate\Contracts\Support\Renderable;
 use Illuminate\Database\Eloquent\Relations\Relation;
 use Modules\Cms\Actions\GetViewAction;
 // use Modules\PFed\Models\Data;
-use Modules\ExtraField\Models\ExtraField;
 use Modules\ExtraField\Models\ExtraFieldGroup;
 use Modules\UI\Datas\FieldData;
 use Spatie\LaravelData\DataCollection;
 use Spatie\LivewireWizard\Components\StepComponent;
 
-class SecondStep extends StepComponent
-{
+class SecondStep extends StepComponent {
     public string $group_id = '';
     public string $cat_id = '';
     public array $form_data = [];
@@ -35,9 +33,7 @@ class SecondStep extends StepComponent
     */
     public array $fields;
 
-    public function mount(): void
-    {
-
+    public function mount(): void {
         $this->form1_data = $this->state()->all()['extrafield::modal.extra-fields.data-steps.first-step']['form_data'];
 
         $morph_map = [
@@ -49,32 +45,27 @@ class SecondStep extends StepComponent
         $this->group_id = (string) $this->state()->all()['extrafield::modal.extra-fields.data-steps.first-step']['form_data']['group_id'];
         $this->cat_id = (string) $this->state()->all()['extrafield::modal.extra-fields.data-steps.first-step']['form_data']['cat_id'];
 
-
         $rows = ExtraFieldGroup::find($this->group_id)->fields;
 
         $fields = FieldData::collection($rows)->toArray();
         $this->fields = $fields;
-
+        // dddx($this->fields);
         $this->initFormData();
     }
 
-    public function initFormData()
-    {
+    public function initFormData() {
         foreach ($this->fields as $field) {
             $this->form_data[$field['name']] = $field['value'] ?? '';
-        };
+        }
 
-        //dddx($this->form_data);
+        // dddx($this->form_data);
     }
 
-    public function updateFormData($data)
-    {
+    public function updateFormData($data) {
         $this->form_data = array_merge($this->form_data, $data);
     }
 
-
-    public function render(): Renderable
-    {
+    public function render(): Renderable {
         /**
          * @phpstan-var view-string
          */
@@ -88,17 +79,14 @@ class SecondStep extends StepComponent
         return view($view, $view_params);
     }
 
-    public function stepInfo(): array
-    {
+    public function stepInfo(): array {
         return [
             'label' => 'Input Data',
             'icon' => 'fa-shopping-cart',
         ];
     }
 
-    public function goNextStep(): void
-    {
-
+    public function goNextStep(): void {
         $morph_map = [
             'extra_field' => 'Modules\ExtraField\Models\ExtraField',
         ];
@@ -111,11 +99,11 @@ class SecondStep extends StepComponent
         $model_class = collect(config('morph_map'))->get($model_type);
         $model = app($model_class)->find($model_id);
 
-        //dd($model->getExtraFieldRules($this->form_data));
+        // dd($model->getExtraFieldRules($this->form_data));
 
         $efr = $model->getExtraFieldRules($this->form_data);
         // dddx($efr);
-        if (!empty($efr)) {
+        if (! empty($efr)) {
             $this->validate($efr);
         }
 
