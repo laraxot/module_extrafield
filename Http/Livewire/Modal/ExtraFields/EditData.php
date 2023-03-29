@@ -129,7 +129,7 @@ class EditData extends Modal {
         $groups = $this->model->getUserExtraFieldValue($this->user_id, $this->uuid);
         $group_name = str()->slug(collect($groups)->first()['name']);
 
-        $user_services = $this->servicesWithUuid();
+        $user_services = Service::getServicesWithUuid($this->user_id, $this->uuid);
 
         $user_services->map(function ($service) use ($group_name) {
             $service->updateUserExtraFieldByGroupAndProfileFieldUuid([$group_name => $this->uuid], $this->user_id);
