@@ -15,6 +15,7 @@ use Modules\Cms\Actions\GetViewAction;
 use Modules\ExtraField\Actions\GetExtraFieldGroupCategoriesByModelTypeAction;
 use Modules\ExtraField\Models\ExtraFieldGroupMorph;
 use Modules\ExtraField\Models\ExtraFieldMorph;
+use Modules\PFed\Actions\SendConsentsUpdateNotifyToCompanyAction;
 use Modules\PFed\Models\Service;
 use WireElements\Pro\Concerns\InteractsWithConfirmationModal;
 
@@ -103,6 +104,8 @@ class ExtraFields extends Component {
 
     public function delete(string $uuid) {
         $message = Service::updatingServicesList($this->user_id, $uuid);
+        $updating_services = Service::getServicesWithUuid($this->user_id, $uuid);
+
         $data = [
             'uuid' => $uuid,
             'user_id' => $this->user_id,
@@ -116,11 +119,22 @@ class ExtraFields extends Component {
         $ef = ExtraFieldMorph::where($data)->where('model_type', 'service')->get();
 
         $this->askForConfirmation(
-            callback: function () use ($data, $is_required_fields, $ef) {
+            callback: function () use ($is_required_fields, $ef, $updating_services, $data, $group_name) {
+                // i campi del profile li cancella a prescindere
                 ExtraFieldMorph::where($data)?->delete();
                 ExtraFieldGroupMorph::where($data)?->delete();
 
                 if (true == $is_required_fields) {
+                    $updating_services->map(function ($service) {
+                        $company = $service->company;
+
+                        $updates = collect([
+                            'Disiscrizione dal Servizio' => $service->name,
+                        ]);
+                        app(SendConsentsUpdateNotifyToCompanyAction::class)->execute($company, $updates);
+                    });
+
+                    // cancella i campi dei service
                     $ef->map(function ($item) {
                         $d = [
                             'model_type' => $item->model_type,
@@ -128,6 +142,15 @@ class ExtraFields extends Component {
                             'user_id' => $item->user_id,
                         ];
                         ExtraFieldMorph::where($d)?->delete();
+                    });
+                } else {
+                    $updating_services->map(function ($service) use ($group_name) {
+                        $company = $service->company;
+
+                        $updates = collect([
+                            'Eliminazione Dati del Gruppo' => $group_name,
+                        ]);
+                        app(SendConsentsUpdateNotifyToCompanyAction::class)->execute($company, $updates);
                     });
                 }
 

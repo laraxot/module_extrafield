@@ -9,6 +9,7 @@ use Illuminate\Database\Eloquent\Collection;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Support\Facades\Auth;
 use Modules\Cms\Actions\GetViewAction;
+use Modules\PFed\Actions\SendConsentsUpdateNotifyToCompanyAction;
 use Modules\PFed\Models\Service;
 use Modules\UI\Datas\FieldData;
 use WireElements\Pro\Components\Modal\Modal;
@@ -118,6 +119,25 @@ class EditData extends Modal {
     }
 
     public function saveConfirmed() {
+        $updating_services = Service::getServicesWithUuid($this->user_id, $this->uuid);
+        $updating_services->map(function ($service) {
+            $company = $service->company;
+
+            $updates = collect([
+                'Modifica Dati di Sistema del Servizio' => $service->name,
+            ]);
+
+            foreach ($this->form_data as $field => $value) {
+                $updates->put($field, $value);
+            }
+
+            // dd($updates);
+
+            app(SendConsentsUpdateNotifyToCompanyAction::class)->execute($company, $updates);
+        });
+
+        // dd($this->form_data, $updating_services);
+
         $efr = $this->model->getExtraFieldRules($this->form_data);
 
         if (! empty($efr)) {
