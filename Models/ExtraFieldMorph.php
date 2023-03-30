@@ -4,6 +4,7 @@ declare(strict_types=1);
 
 namespace Modules\ExtraField\Models;
 
+use Illuminate\Database\Eloquent\Relations\BelongsTo;
 use Illuminate\Database\Eloquent\Relations\HasMany;
 use Illuminate\Database\Eloquent\Relations\HasOne;
 use Illuminate\Support\Facades\Auth;
@@ -43,8 +44,7 @@ use Spatie\Activitylog\Traits\LogsActivity;
  *
  * @mixin \Eloquent
  */
-class ExtraFieldMorph extends BaseMorphPivot
-{
+class ExtraFieldMorph extends BaseMorphPivot {
     use LogsActivity;
     /**
      * @var string[]
@@ -58,7 +58,7 @@ class ExtraFieldMorph extends BaseMorphPivot
         'value_class',
         'uuid',
         'extra_field_id',
-        'favourite'
+        'favourite',
     ];
 
     /*public function extraFieldMorphUserValues(): HasMany {
@@ -71,8 +71,7 @@ class ExtraFieldMorph extends BaseMorphPivot
         ;
     }*/
 
-    public function userValue(string $user_id)
-    {
+    public function userValue(string $user_id) {
         $res = ExtraFieldMorph::firstOrNew([
             'user_id' => $user_id,
             'model_type' => $this->model_type,
@@ -89,8 +88,7 @@ class ExtraFieldMorph extends BaseMorphPivot
         return $value;
     }
 
-    public function updateUserValue(string $user_id, $value)
-    {
+    public function updateUserValue(string $user_id, $value) {
         // si creano dei doppioni con update. perchè?
         $row = ExtraFieldMorph::firstOrCreate([
             'user_id' => $user_id,
@@ -104,8 +102,7 @@ class ExtraFieldMorph extends BaseMorphPivot
         return $res;
     }
 
-    public function createUserValue(string $user_id, $value, ?string $uuid = null)
-    {
+    public function createUserValue(string $user_id, $value, ?string $uuid = null) {
         // si creano dei doppioni con update. perchè?
         $row = ExtraFieldMorph::create([
             'user_id' => (string) $user_id,
@@ -119,8 +116,11 @@ class ExtraFieldMorph extends BaseMorphPivot
         return $row;
     }
 
-    public function getActivitylogOptions(): LogOptions
-    {
+    public function getActivitylogOptions(): LogOptions {
         return LogOptions::defaults()->logOnly($this->getFillable());
+    }
+
+    public function extraField(): BelongsTo {
+        return $this->belongsTo(ExtraField::class);
     }
 }

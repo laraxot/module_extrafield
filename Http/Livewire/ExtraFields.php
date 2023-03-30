@@ -6,6 +6,7 @@ namespace Modules\ExtraField\Http\Livewire;
 
 use Illuminate\Contracts\Support\Renderable;
 use Illuminate\Database\Eloquent\Model;
+use Illuminate\Support\Arr;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Str;
 use Livewire\Component;
@@ -86,18 +87,49 @@ class ExtraFields extends Component {
         $this->model->setFavouriteGroup($group_id, $uuid);
     }
 
+    public function checkRequiredFields($data) {
+        // vede se stai cancellando campi obbligatori
+        // se si deve cancellare tutti i pivot del servizio
+        $required = ExtraFieldMorph::where($data)->get()->filter(function ($extra_field) {
+            $ret = Arr::get($extra_field->extraField->rules, 'required.checked', false);
+
+            return $ret;
+        });
+        // type bool
+        $required = $required->count() > 1 ?? false;
+
+        return $required;
+    }
+
     public function delete(string $uuid) {
         $message = Service::updatingServicesList($this->user_id, $uuid);
         $data = [
             'uuid' => $uuid,
             'user_id' => $this->user_id,
         ];
-        $group_name = ExtraFieldGroupMorph::where($data)->first()->extraFieldGroup->name;
+        $efg = ExtraFieldGroupMorph::where($data)->first()->extraFieldGroup;
+
+        $group_name = $efg->name;
+
+        $is_required_fields = $this->checkRequiredFields($data);
+
+        $ef = ExtraFieldMorph::where($data)->where('model_type', 'service')->get();
 
         $this->askForConfirmation(
-            callback: function () use ($data) {
+            callback: function () use ($data, $is_required_fields, $ef) {
                 ExtraFieldMorph::where($data)?->delete();
                 ExtraFieldGroupMorph::where($data)?->delete();
+
+                if (true == $is_required_fields) {
+                    $ef->map(function ($item) {
+                        $d = [
+                            'model_type' => $item->model_type,
+                            'model_id' => $item->model_id,
+                            'user_id' => $item->user_id,
+                        ];
+                        ExtraFieldMorph::where($d)?->delete();
+                    });
+                }
 
                 session()->flash('message', 'Post successfully updated.');
                 $this->emit('refreshExtraFields');
