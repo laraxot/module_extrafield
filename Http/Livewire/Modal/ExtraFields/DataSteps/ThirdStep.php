@@ -62,7 +62,7 @@ class ThirdStep extends StepComponent {
         $cat_id = $this->form1_data['cat_id'];
         $model_type = $this->form1_data['model_type'];
         $model_id = $this->form1_data['model_id'];
-        $note = $this->form_data['note'];
+        $note = $this->form_data['note'] ?? '';
 
         $model_class = collect(config('morph_map'))->get($model_type);
         $model = app($model_class)->find($model_id);
