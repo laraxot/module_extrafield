@@ -56,6 +56,7 @@ class ExtraFieldGroupMorph extends BaseMorphPivot {
         'extra_field_id',
         'extra_field_group_id',
         'favourite',
+        'note',
     ];
 
     protected $casts = [

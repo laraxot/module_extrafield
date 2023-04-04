@@ -15,7 +15,12 @@
             <div class="row">
                 <div class="col-10">
                     <h5>
+
                         {{ Str::ucfirst($group->name) }}
+
+                        @if ($group->pivot->note !== null && $group->pivot->note !== '')
+                            - {{ Str::ucfirst($group->pivot->note) }}
+                        @endif
                     </h5>
                 </div>
                 <div class="col-2">
@@ -25,8 +30,9 @@
                             <i class="bi bi-shield-fill-check"></i>
                         </div> --}}
                         <div class="col-6">
-                            <a href="#" wire:click="setFavouriteGroup('{{ $group->id }}','{{ $group->pivot->uuid }}')">
-                            {{-- {{dddx($group)}} --}}
+                            <a href="#"
+                                wire:click="setFavouriteGroup('{{ $group->id }}','{{ $group->pivot->uuid }}')">
+                                {{-- {{dddx($group)}} --}}
                                 @if ($group->is_favourite == true)
                                     <i class="bi bi-suit-heart-fill"></i>
                                 @else
@@ -43,11 +49,11 @@
 
     <x-slot name="body">
         @php
-        $fields = $model
-            ->userExtraFields(auth()->id())
-            ->wherePivot('uuid', $group->pivot->uuid)
-            ->get();
-        
+            $fields = $model
+                ->userExtraFields(auth()->id())
+                ->wherePivot('uuid', $group->pivot->uuid)
+                ->get();
+            
         @endphp
         @foreach ($fields ?? [] as $field)
             <div class="row">

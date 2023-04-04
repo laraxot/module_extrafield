@@ -176,7 +176,7 @@ trait HasExtraFields {
         ]);
     }
 
-    public function addExtraField(array $data, string $user_id, string $group_id) {
+    public function addExtraField(array $data, string $user_id, string $group_id, ?string $note = '') {
         $uuid = Str::uuid();
         $rows = ExtraFieldGroup::find($group_id)->fields;
         foreach ($rows as $row) {
@@ -187,7 +187,7 @@ trait HasExtraFields {
             }
 
             // qui attacca l'extraField al model
-            $this->extraFields()->attach($row->id, ['value' => $value, 'uuid' => $uuid, 'user_id' => $user_id]);
+            $this->extraFields()->attach($row->id, ['value' => $value, 'note' => $note, 'uuid' => $uuid, 'user_id' => $user_id]);
         }
 
         $model_type = Str::snake(class_basename($this));
@@ -199,6 +199,7 @@ trait HasExtraFields {
             'extra_field_group_id' => $group_id,
             'uuid' => $uuid,
         ])->update([
+            'note' => $note,
             'value' => $data,
         ]);
     }

@@ -59,6 +59,7 @@ class ExtraFieldMorph extends BaseMorphPivot {
         'uuid',
         'extra_field_id',
         'favourite',
+        'note',
     ];
 
     /*public function extraFieldMorphUserValues(): HasMany {
