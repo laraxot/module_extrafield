@@ -10,7 +10,7 @@
     <x-slot name="buttons">
 
 
-        <button type="submit" class="btn btn-primary rounded-5">
+        <button type="button" wire:click="save()" class="btn btn-primary rounded-5">
             Save Changes
         </button>
 

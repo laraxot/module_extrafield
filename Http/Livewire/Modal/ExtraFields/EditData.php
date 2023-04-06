@@ -69,6 +69,7 @@ class EditData extends Modal {
          * @phpstan-var view-string
          */
         $view = app(GetViewAction::class)->execute();
+
         $view_params = [
             'view' => $view,
             'fields' => FieldData::collection($fields),
@@ -130,8 +131,6 @@ class EditData extends Modal {
             foreach ($this->form_data as $field => $value) {
                 $updates->put($field, $value);
             }
-
-            // dd($updates);
 
             app(SendConsentsUpdateNotifyToCompanyAction::class)->execute($company, $updates);
         });

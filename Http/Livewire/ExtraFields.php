@@ -4,6 +4,7 @@ declare(strict_types=1);
 
 namespace Modules\ExtraField\Http\Livewire;
 
+use Barryvdh\Debugbar\Facades\Debugbar;
 use Illuminate\Contracts\Support\Renderable;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Support\Arr;
@@ -155,6 +156,8 @@ class ExtraFields extends Component {
                 }
 
                 session()->flash('message', 'Post successfully updated.');
+
+                Debugbar::info('refreshExtraFields');
                 $this->emit('refreshExtraFields');
             },
             prompt: [
