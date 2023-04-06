@@ -1,4 +1,4 @@
-<x-wire-elements-pro::bootstrap.modal on-submit="save" :content-padding="false">
+<x-modal.skin on-submit="save" :content-padding="false">
     <x-slot name="title">Your Title</x-slot>
  
     @foreach($fields as $field)
@@ -15,4 +15,4 @@
             Cancel
         </button>
     </x-slot>
-</x-wire-elements-pro::bootstrap.modal>
+</x-modal.skin>

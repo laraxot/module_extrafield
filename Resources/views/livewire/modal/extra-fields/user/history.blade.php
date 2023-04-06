@@ -1,4 +1,4 @@
-<x-wire-elements-pro::bootstrap.modal on-submit="save" :content-padding="false">
+<x-modal.skin on-submit="save" :content-padding="false">
     <x-slot name="title">Data History</x-slot>
 
     @foreach ($history as $item)
@@ -13,4 +13,4 @@
             Cancel
         </button>
     </x-slot>
-</x-wire-elements-pro::bootstrap.modal>
+</x-modal.skin>
