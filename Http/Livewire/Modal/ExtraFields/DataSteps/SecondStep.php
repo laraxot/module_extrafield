@@ -49,7 +49,7 @@ class SecondStep extends StepComponent {
 
         $fields = FieldData::collection($rows)->toArray();
         $this->fields = $fields;
-        // dddx($this->fields);
+
         $this->initFormData();
     }
 
@@ -57,8 +57,6 @@ class SecondStep extends StepComponent {
         foreach ($this->fields as $field) {
             $this->form_data[$field['name']] = $field['value'] ?? '';
         }
-
-        // dddx($this->form_data);
     }
 
     public function updateFormData($data) {
@@ -99,10 +97,7 @@ class SecondStep extends StepComponent {
         $model_class = collect(config('morph_map'))->get($model_type);
         $model = app($model_class)->find($model_id);
 
-        // dd($model->getExtraFieldRules($this->form_data));
-
         $efr = $model->getExtraFieldRules($this->form_data);
-        // dddx($efr);
         if (! empty($efr)) {
             $this->validate($efr);
         }
