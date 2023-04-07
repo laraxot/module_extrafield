@@ -1,7 +1,6 @@
 <div>
     <div class="row">
         <div class="col-4">
-
             <div class="card position-sticky top-24">
                 <div class="card-body pb-0">
                     <div>
@@ -35,14 +34,10 @@
                                     @endforeach
                                 </div>
                             </div>
-
                         </div>
                     </div>
                 </div>
             </div>
-
-
-
         </div>
 
 
@@ -52,16 +47,15 @@
                     <x-slot name="title">{{ $category_name }}</x-slot>
 
                     <x-slot name="txt">
-                        {{-- @each($view . '.group', $groups, 'group', 'empty', ['model' => $model]) --}}
+
                         @foreach ($groups as $group)
-                            {{-- @include($view . '.group') --}}
                             @include($view . '.group.v1')
                         @endforeach
 
+
                         <div class="row">
                             <div class="col-md-12 mt-3 mb-2">
-                                <button
-                                    class="btn btn-sm bg-soft-success bg-opacity-20 bg-opacity-100-hover text-primary text-white-hover"
+                                <button {{-- class="btn btn-sm bg-soft-success bg-opacity-20 bg-opacity-100-hover text-primary text-white-hover" --}} class="btn btn-primary rounded-5"
                                     onclick="Livewire.emit('modal.open', 'modal.extra-fields.add-data', {'cat_id': {{ $cat_id }},'model_type': '{{ $model_type }}','model_id': {{ $model_id }}})">
                                     Add Fields
                                 </button>

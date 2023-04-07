@@ -45,6 +45,9 @@ class ExtraFields extends Component {
         $this->model_type = Str::snake(class_basename($this->model));
         $this->user_id = Auth::id();
         $this->tpl = $tpl;
+
+        $default_category = Category::ofType('profile')->firstWhere('slug', config('profile.default'))->id;
+        $this->showCat((string) $default_category);
     }
 
     public static function getName(): string {
@@ -67,6 +70,7 @@ class ExtraFields extends Component {
         $categories = app(GetExtraFieldGroupCategoriesByModelTypeAction::class)->execute($this->model_type);
 
         $this->showCat($this->cat_id);
+
         $view_params = [
             'view' => $view,
             'categories' => $categories,
