@@ -79,7 +79,7 @@ class SecondStep extends StepComponent {
 
     public function stepInfo(): array {
         return [
-            'label' => 'Input Data',
+            'label' => trans('pfed::data-steps.input_data'),
             'icon' => 'fa-shopping-cart',
         ];
     }

@@ -37,7 +37,7 @@ class ThirdStep extends StepComponent {
 
     public function stepInfo(): array {
         return [
-            'label' => 'Data Description',
+            'label' => trans('pfed::data-steps.data_description'),
             'icon' => 'fa-shopping-cart',
         ];
     }

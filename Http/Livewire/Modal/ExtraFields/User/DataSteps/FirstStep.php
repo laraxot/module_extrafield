@@ -81,7 +81,7 @@ class FirstStep extends StepComponent {
         ]);
         */
         return [
-            'label' => 'Select Data',
+            'label' => trans('pfed::data-steps.select_data'),
             'icon' => 'fa-shopping-cart',
         ];
     }

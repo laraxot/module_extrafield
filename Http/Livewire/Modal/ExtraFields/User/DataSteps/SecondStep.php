@@ -4,17 +4,16 @@ declare(strict_types=1);
 
 namespace Modules\ExtraField\Http\Livewire\Modal\ExtraFields\User\DataSteps;
 
-use Modules\UI\Datas\FieldData;
+use Illuminate\Contracts\Support\Renderable;
+use Illuminate\Database\Eloquent\Relations\Relation;
 use Modules\Cms\Actions\GetViewAction;
-use Spatie\LaravelData\DataCollection;
 // use Modules\PFed\Models\Data;
 use Modules\ExtraField\Models\ExtraField;
-use Illuminate\Contracts\Support\Renderable;
+use Modules\UI\Datas\FieldData;
+use Spatie\LaravelData\DataCollection;
 use Spatie\LivewireWizard\Components\StepComponent;
-use Illuminate\Database\Eloquent\Relations\Relation;
 
-class SecondStep extends StepComponent
-{
+class SecondStep extends StepComponent {
     public string $group_id = '';
     public string $cat_id = '';
     public array $form_data = [];
@@ -31,8 +30,7 @@ class SecondStep extends StepComponent
     */
     public array $fields;
 
-    public function mount(): void
-    {
+    public function mount(): void {
         $morph_map = [
             'extra_field' => 'Modules\ExtraField\Models\ExtraField',
         ];
@@ -97,8 +95,7 @@ class SecondStep extends StepComponent
     }
     */
 
-    public function render(): Renderable
-    {
+    public function render(): Renderable {
         /**
          * @phpstan-var view-string
          */
@@ -112,16 +109,14 @@ class SecondStep extends StepComponent
         return view($view, $view_params);
     }
 
-    public function stepInfo(): array
-    {
+    public function stepInfo(): array {
         return [
-            'label' => 'Input Data',
+            'label' => trans('pfed::data-steps.input_data'),
             'icon' => 'fa-shopping-cart',
         ];
     }
 
-    public function goNextStep(): void
-    {
+    public function goNextStep(): void {
         // $this->form_data['value'] = $this->form_data;
         // $this->emit('update_form_data', $this->form_data);
         $this->nextStep();
