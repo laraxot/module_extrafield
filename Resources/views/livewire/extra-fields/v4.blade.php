@@ -27,7 +27,7 @@
                                             </div>
                                             <div class="flex-fill ms-3">
                                                 <a href="#" wire:click="showCat({{ $category->id }})"
-                                                    class="text-sm text-heading font-semibold mb-0">{{ $category->name }}</a>
+                                                    class="text-sm text-heading font-semibold mb-0">{{ __('extrafield::profile.category.'$category->name) }}{{ $category->name }}</a>
                                                 <x-badge>{{ $category->e_counts }}</x-badge>
                                             </div>
                                         </div>
