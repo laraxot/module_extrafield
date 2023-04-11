@@ -55,10 +55,15 @@
 
                         <div class="row">
                             <div class="col-md-12 mt-3 mb-2">
-                                <button {{-- class="btn btn-sm bg-soft-success bg-opacity-20 bg-opacity-100-hover text-primary text-white-hover" --}} class="btn btn-primary rounded-5"
+                                {{--  
+                                <button
+                                    class="btn btn-sm bg-soft-success bg-opacity-20 bg-opacity-100-hover text-primary text-white-hover"
+                                    class="btn btn-primary rounded-5"
                                     onclick="Livewire.emit('modal.open', 'modal.extra-fields.add-data', {'cat_id': {{ $cat_id }},'model_type': '{{ $model_type }}','model_id': {{ $model_id }}})">
                                     Add Fields
                                 </button>
+                                --}}
+                                <x-button wire:click="addFields()" title="Add Fields" />
                             </div>
                         </div>
                     </x-slot>

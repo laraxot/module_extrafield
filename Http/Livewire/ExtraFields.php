@@ -4,21 +4,22 @@ declare(strict_types=1);
 
 namespace Modules\ExtraField\Http\Livewire;
 
-use Barryvdh\Debugbar\Facades\Debugbar;
-use Illuminate\Contracts\Support\Renderable;
-use Illuminate\Database\Eloquent\Model;
-use Illuminate\Support\Arr;
-use Illuminate\Support\Facades\Auth;
-use Illuminate\Support\Str;
 use Livewire\Component;
-use Modules\Blog\Models\Category;
-use Modules\Cms\Actions\GetViewAction;
-use Modules\ExtraField\Actions\GetExtraFieldGroupCategoriesByModelTypeAction;
-use Modules\ExtraField\Models\ExtraFieldGroupMorph;
-use Modules\ExtraField\Models\ExtraFieldMorph;
-use Modules\PFed\Actions\SendConsentsUpdateNotifyToCompanyAction;
+use Illuminate\Support\Arr;
+use Illuminate\Support\Str;
 use Modules\PFed\Models\Service;
+use Modules\Blog\Models\Category;
+use Illuminate\Support\Facades\Auth;
+use Modules\Cms\Actions\GetViewAction;
+use Modules\Cms\Services\PanelService;
+use Barryvdh\Debugbar\Facades\Debugbar;
+use Illuminate\Database\Eloquent\Model;
+use Illuminate\Contracts\Support\Renderable;
+use Modules\ExtraField\Models\ExtraFieldMorph;
+use Modules\ExtraField\Models\ExtraFieldGroupMorph;
 use WireElements\Pro\Concerns\InteractsWithConfirmationModal;
+use Modules\PFed\Actions\SendConsentsUpdateNotifyToCompanyAction;
+use Modules\ExtraField\Actions\GetExtraFieldGroupCategoriesByModelTypeAction;
 
 // use Modules\PFed\Models\Profile as ProfileModel;
 
@@ -52,6 +53,8 @@ class ExtraFields extends Component
         if (null != $default_category) {
             $this->showCat((string) $default_category);
         }
+
+       
     }
 
     public static function getName(): string
@@ -185,5 +188,14 @@ class ExtraFields extends Component
 
             tableData: $message,
         );
+    }
+
+    public function addFields(){
+        $parz=[
+            'cat_id'=>$this->cat_id,
+            'model_type'=>$this->model_type,
+            'model_id'=>$this->model_id,
+        ];
+        $this->emit('modal.open', 'modal.extra-fields.add-data', $parz);
     }
 }
