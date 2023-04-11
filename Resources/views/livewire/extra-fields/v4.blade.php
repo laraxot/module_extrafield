@@ -63,7 +63,7 @@
                                     Add Fields
                                 </button>
                                 --}}
-                                <x-button wire:click="addFields()" title="Add Fields" />
+                                <x-button wire:click="addFields()" title="Add Fields">Add</x-button>
                             </div>
                         </div>
                     </x-slot>
