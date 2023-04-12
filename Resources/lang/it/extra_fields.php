@@ -13,9 +13,11 @@ return [
     'plan' => [
         'light' => [
             'title' => 'Piano Light',
+            'subtitle' => 'The perfect way to get started',
         ],
         'full' => [
             'title' => 'Piano Full',
+            'subtitle' => 'Your full consents management',
         ],
     ],
 ];
