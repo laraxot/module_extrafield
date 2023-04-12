@@ -1,23 +1,26 @@
-<?php
-
-declare(strict_types=1);
-
-return [
-    'tab' => [
-        'edit' => 'Modifica',
-        'create' => 'Aggiungi',
-        'index' => 'Lista',
-    ],
+<?php return array (
+  'tab' => 
+  array (
     'edit' => 'Modifica',
-    'delete' => 'Cancella',
-    'plan' => [
-        'light' => [
-            'title' => 'Piano Light',
-            'subtitle' => 'The perfect way to get started',
-        ],
-        'full' => [
-            'title' => 'Piano Full',
-            'subtitle' => 'Your full consents management',
-        ],
-    ],
-];
+    'create' => 'Aggiungi',
+    'index' => 'Lista',
+  ),
+  'edit' => 'Modifica',
+  'delete' => 'Cancella',
+  'plan' => 
+  array (
+    'text' => 'ACQUISTA ABBONAMENTO',
+    'light' => 
+    array (
+      'title' => 'Light Plan',
+      'subtitle' => 'Il modo perfetto per iniziare',
+      'period' => 'mensili',
+    ),
+    'full' => 
+    array (
+      'title' => 'Full Plan',
+      'subtitle' => 'La tua gestione completa dei consensi',
+      'period' => 'annuale',
+    ),
+  ),
+);

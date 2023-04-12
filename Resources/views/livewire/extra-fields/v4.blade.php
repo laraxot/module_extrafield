@@ -77,14 +77,13 @@
             @if (!$profile->hasRole('light') && !$profile->hasRole('full'))
                 <x-card tpl="subscription.v1">
                     <x-slot name="title">{{ __('extrafield::extra_fields.plan.light.title') }}</x-slot>
-                    <x-slot name="subtitle">{{ __('extrafield::extra_fields.plan.light.subtitle') }}The perfect way to
-                        get started</x-slot>
+                    <x-slot name="subtitle">{{ __('extrafield::extra_fields.plan.light.subtitle') }}</x-slot>
                     <x-slot name="currency">€</x-slot>
                     <x-slot name="amount">6,00</x-slot>
-                    <x-slot name="period">month</x-slot>
+                    <x-slot name="period">{{ __('extrafield::extra_fields.plan.light.period') }}</x-slot>
                     <x-slot name="payment_button">
                         <x-nexi-payment type="simple" contract="NC_LIGHT_" amount="6.00" currency="EUR"
-                            text="ACQUISTA ABBONAMENTO" />
+                            text="{{ __('extrafield::extra_fields.plan.text') }}" />
                     </x-slot>
                 </x-card>
             @endif
@@ -92,14 +91,13 @@
             @if (!$profile->hasRole('full'))
                 <x-card tpl="subscription.v1">
                     <x-slot name="title">{{ __('extrafield::extra_fields.plan.full.title') }}</x-slot>
-                    <x-slot name="subtitle">{{ __('extrafield::extra_fields.plan.full.subtitle') }}Your full consents
-                        management</x-slot>
+                    <x-slot name="subtitle">{{ __('extrafield::extra_fields.plan.full.subtitle') }}</x-slot>
                     <x-slot name="currency">€</x-slot>
                     <x-slot name="amount">24,00</x-slot>
-                    <x-slot name="period">year</x-slot>
+                    <x-slot name="period">{{ __('extrafield::extra_fields.plan.full.period') }}</x-slot>
                     <x-slot name="payment_button">
                         <x-nexi-payment type="simple" contract="NC_FULL_" amount="24.00" currency="EUR"
-                            text="ACQUISTA ABBONAMENTO" />
+                            text="{{ __('extrafield::extra_fields.plan.text') }}" />
                     </x-slot>
                 </x-card>
             @endif

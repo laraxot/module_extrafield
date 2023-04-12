@@ -11,11 +11,16 @@ return [
     'edit' => 'Modifica',
     'delete' => 'Cancella',
     'plan' => [
+        'text' => 'BUY SUBSCRIPTION',
         'light' => [
             'title' => 'Light Plan',
+            'subtitle' => 'The perfect way to get started',
+            'period' => 'month',
         ],
         'full' => [
             'title' => 'Full Plan',
+            'subtitle' => 'Your full consents management',
+            'period' => 'year',
         ],
     ],
 ];
