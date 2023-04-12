@@ -12,10 +12,10 @@ return [
     'delete' => 'Cancella',
     'plan' => [
         'light' => [
-            'title' => 'Piano Light',
+            'title' => 'Light Plan',
         ],
         'full' => [
-            'title' => 'Piano Full',
+            'title' => 'Full Plan',
         ],
     ],
 ];

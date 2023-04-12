@@ -76,7 +76,7 @@
         <div class="col-md-12 p-0">
             @if (!$profile->hasRole('light') && !$profile->hasRole('full'))
                 <x-card tpl="subscription.v1">
-                    <x-slot name="title">Light Plan</x-slot>
+                    <x-slot name="title">{{ __('extrafield::extra_fields.plan.light.title') }}</x-slot>
                     <x-slot name="subtitle">The perfect way to get started</x-slot>
                     <x-slot name="currency">€</x-slot>
                     <x-slot name="amount">6,00</x-slot>
@@ -90,7 +90,7 @@
 
             @if (!$profile->hasRole('full'))
                 <x-card tpl="subscription.v1">
-                    <x-slot name="title">Full Plan</x-slot>
+                    <x-slot name="title">{{ __('extrafield::extra_fields.plan.full.title') }}</x-slot>
                     <x-slot name="subtitle">Your full consents management</x-slot>
                     <x-slot name="currency">€</x-slot>
                     <x-slot name="amount">24,00</x-slot>

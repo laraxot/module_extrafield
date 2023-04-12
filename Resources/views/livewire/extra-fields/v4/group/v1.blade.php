@@ -52,7 +52,7 @@
         @endforeach
         <x-button
             wire:click="$emit('modal.open', 'modal.extra-fields.edit-data',{'uuid':'{{ $group->pivot->uuid }}','model_type': '{{ $model_type }}','model_id': {{ $model_id }}})">
-            {{ __('extrafield::extra_fields.edit') }}
+            Edit
         </x-button>
         <x-button wire:click="delete('{{ $group->pivot->uuid }}')" class="btn btn-danger">Delete</x-button>
     </x-slot>
