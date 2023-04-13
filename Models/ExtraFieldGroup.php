@@ -4,24 +4,34 @@ declare(strict_types=1);
 
 namespace Modules\ExtraField\Models;
 
-use Illuminate\Support\Facades\Auth;
-use Spatie\LaravelData\DataCollection;
 use Illuminate\Database\Eloquent\Model;
-use Modules\Blog\Models\Traits\HasCategory;
 use Illuminate\Database\Eloquent\Relations\MorphToMany;
+use Illuminate\Support\Facades\Auth;
+use Modules\Blog\Models\Traits\HasCategory;
 use Modules\LU\Services\ProfileService;
+use Spatie\LaravelData\DataCollection;
+use Spatie\Translatable\HasTranslations;
 
-class ExtraFieldGroup extends BaseModel
-{
+class ExtraFieldGroup extends BaseModel {
     use HasCategory;
-    protected $fillable = ['id', 'name', 'cardinality'];
+    use HasTranslations;
+    protected $fillable = ['id', 'name', 'cardinality', 'description'];
+
+    /**
+     * The attributes that are translatable.
+     *
+     * @var array
+     */
+    public $translatable = [
+        'name',
+        'description',
+    ];
 
     protected $with = [
         'fields',
     ];
 
-    public function fields(): MorphToMany
-    {
+    public function fields(): MorphToMany {
         $pivot_class = ExtraFieldMorph::class;
         $pivot = app($pivot_class);
         $pivot_table = $pivot->getTable();
@@ -33,26 +43,22 @@ class ExtraFieldGroup extends BaseModel
             ->withTimestamps();
     }
 
-    public function extraFields(): MorphToMany
-    {
+    public function extraFields(): MorphToMany {
         return $this->fields();
     }
 
-    public function noUserFields(): MorphToMany
-    {
+    public function noUserFields(): MorphToMany {
         return $this->fields()->wherePivot('user_id', null);
     }
 
-    public function userFields(): MorphToMany
-    {
+    public function userFields(): MorphToMany {
         return $this->fields()->wherePivot('user_id', Auth::id());
     }
 
     /**
      * @return DataCollection <FieldData>
      */
-    public function fieldDataCollection(string $user_id, Model $model)
-    {
+    public function fieldDataCollection(string $user_id, Model $model) {
         $profile = ProfileService::make()->setUserId($user_id)->getProfile();
 
         $fields = $this->noUserFields
@@ -69,6 +75,7 @@ class ExtraFieldGroup extends BaseModel
                 // dddx([$service_value, $profile_value]);
                 return $service_value ?? $profile_value ?? $item;
             });
+
         return $fields;
     }
 }
