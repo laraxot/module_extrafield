@@ -14,18 +14,18 @@ use Spatie\Translatable\HasTranslations;
 
 class ExtraFieldGroup extends BaseModel {
     use HasCategory;
-    use HasTranslations;
+    // use HasTranslations;
     protected $fillable = ['id', 'name', 'cardinality', 'description'];
 
-    /**
-     * The attributes that are translatable.
-     *
-     * @var array
-     */
-    public $translatable = [
-        'name',
-        'description',
-    ];
+    // /**
+    //  * The attributes that are translatable.
+    //  *
+    //  * @var array
+    //  */
+    // public $translatable = [
+    //     'name',
+    //     'description',
+    // ];
 
     protected $with = [
         'fields',

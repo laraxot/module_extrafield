@@ -302,7 +302,7 @@ trait HasExtraFields {
                     return $group;
                 }
             )->toArray();
-        // dd($data);
+
         return $data;
     }
 
@@ -351,14 +351,18 @@ trait HasExtraFields {
         $tmp = $this->getUserExtraFieldValue($user_id, $uuid);
         $data = [];
         foreach ($tmp as $item) {
-            $k = str()->slug($item['name']) ?? '';
+            $name = $item['name'];
+            if (is_array($name)) {
+                $name = array_values($name)[0];
+            }
+
+            $k = str()->slug($name) ?? '';
             // è qui che sceglie il primo
 
             $v = $item['fields'][0]['uuid'] ?? '';
             $data[$k] = $v;
         }
 
-        // dd($data);
         return $data;
     }
 
