@@ -259,8 +259,10 @@ trait HasExtraFields {
 
     public function getUserExtraFieldValue(string $user_id, ?string $uuid = null) {
         $model_fields = $this->extraFields->where('pivot.user_id', $user_id);
+        // $fav_groups = $this->getFavouriteGroups();
+        $fav_groups = app(\Modules\ExtraField\Actions\ExtraFieldGroup\GetFavorites::class)->execute($this);
 
-        $field_groups = $this->getFavouriteGroups()->where('pivot.user_id', $user_id);
+        $field_groups = $fav_groups->where('pivot.user_id', $user_id);
 
         // serve per mostrare i dati del profilo sul campo se sei su addService ad esempio
         if (0 === $field_groups->count()) {

@@ -4,27 +4,25 @@ declare(strict_types=1);
 
 namespace Modules\ExtraField\Http\Livewire;
 
-use Livewire\Component;
-use Illuminate\Support\Arr;
-use Illuminate\Support\Str;
-use Modules\PFed\Models\Service;
-use Modules\Blog\Models\Category;
-use Illuminate\Support\Facades\Auth;
-use Modules\Cms\Actions\GetViewAction;
-use Modules\Cms\Services\PanelService;
 use Barryvdh\Debugbar\Facades\Debugbar;
-use Illuminate\Database\Eloquent\Model;
 use Illuminate\Contracts\Support\Renderable;
-use Modules\ExtraField\Models\ExtraFieldMorph;
-use Modules\ExtraField\Models\ExtraFieldGroupMorph;
-use WireElements\Pro\Concerns\InteractsWithConfirmationModal;
-use Modules\PFed\Actions\SendConsentsUpdateNotifyToCompanyAction;
+use Illuminate\Database\Eloquent\Model;
+use Illuminate\Support\Arr;
+use Illuminate\Support\Facades\Auth;
+use Illuminate\Support\Str;
+use Livewire\Component;
+use Modules\Blog\Models\Category;
+use Modules\Cms\Actions\GetViewAction;
 use Modules\ExtraField\Actions\GetExtraFieldGroupCategoriesByModelTypeAction;
+use Modules\ExtraField\Models\ExtraFieldGroupMorph;
+use Modules\ExtraField\Models\ExtraFieldMorph;
+use Modules\PFed\Actions\SendConsentsUpdateNotifyToCompanyAction;
+use Modules\PFed\Models\Service;
+use WireElements\Pro\Concerns\InteractsWithConfirmationModal;
 
 // use Modules\PFed\Models\Profile as ProfileModel;
 
-class ExtraFields extends Component
-{
+class ExtraFields extends Component {
     use InteractsWithConfirmationModal;
 
     /**
@@ -41,8 +39,7 @@ class ExtraFields extends Component
     public ?string $category_name;
     protected $listeners = ['refreshExtraFields' => '$refresh'];
 
-    public function mount(Model $model, string $tpl = 'v4'): void
-    {
+    public function mount(Model $model, string $tpl = 'v4'): void {
         $this->model = $model;
         $this->model_id = $model->getKey();
         $this->model_type = Str::snake(class_basename($this->model));
@@ -53,20 +50,18 @@ class ExtraFields extends Component
         if (null != $default_category) {
             $this->showCat((string) $default_category);
         }
-
-       
     }
 
-    public static function getName(): string
-    {
+    public static function getName(): string {
         return 'extra-fields';
     }
 
-    public function render(): Renderable
-    {
+    public function render(): Renderable {
         // $this->showPage();
         if ('' != $this->cat_id) {
-            $groups = $this->model->getFavouriteGroups($this->cat_id);
+            // $groups = $this->model->getFavouriteGroups($this->cat_id);
+            $groups = app(\Modules\ExtraField\Actions\ExtraFieldGroup\GetFavorites::class)
+                ->execute($this->model, $this->cat_id);
         } else {
             $groups = collect([]);
         }
@@ -89,8 +84,7 @@ class ExtraFields extends Component
         return view($view, $view_params);
     }
 
-    public function showCat(string $cat_id): void
-    {
+    public function showCat(string $cat_id): void {
         $this->cat_id = $cat_id;
         $category = Category::find($cat_id);
         if (null == $category) {
@@ -99,13 +93,11 @@ class ExtraFields extends Component
         $this->category_name = $category->name;
     }
 
-    public function setFavouriteGroup($group_id, $uuid)
-    {
+    public function setFavouriteGroup($group_id, $uuid) {
         $this->model->setFavouriteGroup($group_id, $uuid);
     }
 
-    public function checkRequiredFields($data)
-    {
+    public function checkRequiredFields($data) {
         // vede se stai cancellando campi obbligatori
         // se si deve cancellare tutti i pivot del servizio
         $required = ExtraFieldMorph::where($data)->get()->filter(function ($extra_field) {
@@ -119,8 +111,16 @@ class ExtraFields extends Component
         return $required;
     }
 
-    public function delete(string $uuid)
-    {
+    public function edit(string $uuid) {
+        $parz = [
+            'uuid' => $uuid,
+            'model_type' => $this->model_type,
+            'model_id' => $this->model_id,
+        ];
+        $this->emit('modal.open', 'modal.extra-fields.edit-data', $parz);
+    }
+
+    public function delete(string $uuid) {
         $message = Service::updatingServicesList($this->user_id, $uuid);
         $updating_services = Service::getServicesWithUuid($this->user_id, $uuid);
 
@@ -190,11 +190,11 @@ class ExtraFields extends Component
         );
     }
 
-    public function addFields(){
-        $parz=[
-            'cat_id'=>$this->cat_id,
-            'model_type'=>$this->model_type,
-            'model_id'=>$this->model_id,
+    public function addFields() {
+        $parz = [
+            'cat_id' => $this->cat_id,
+            'model_type' => $this->model_type,
+            'model_id' => $this->model_id,
         ];
         $this->emit('modal.open', 'modal.extra-fields.add-data', $parz);
     }

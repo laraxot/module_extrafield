@@ -39,9 +39,15 @@ class EditData extends Modal {
         $this->model_id = $model_id;
         $model_class = collect(config('morph_map'))->get($this->model_type);
         $this->model = app($model_class)->find($this->model_id);
+
         $this->user_id = (string) Auth::id();
 
         $this->form_data = $this->model->getUserExtraFieldFormData($this->user_id, $this->uuid);
+        $form_data2 = app(\Modules\ExtraField\Actions\ExtraFieldGroup\GetFormData::class)->execute($this->model, $this->user_id, $this->uuid);
+        dddx([
+            'uno' => $this->form_data,
+            'due' => $form_data2,
+        ]);
 
         // SE QUALCUNO LO CANCELLASSE, SPIEGHI ANCHE COME FARLO MEGLIO, PER FAVORE
         session()->flash('form_data', $this->form_data);

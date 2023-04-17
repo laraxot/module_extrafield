@@ -1,7 +1,6 @@
 <x-std tpl="accordion.container">
     <x-slot name="id">{{ $group->pivot->uuid }}</x-slot>
     <x-slot name="header">
-
         <div class="container">
             <div class="row">
                 <div class="col-10">
@@ -50,10 +49,8 @@
                 </div>
             </div>
         @endforeach
-        <x-button
-            wire:click="$emit('modal.open', 'modal.extra-fields.edit-data',{'uuid':'{{ $group->pivot->uuid }}','model_type': '{{ $model_type }}','model_id': {{ $model_id }}})">
-            Edit
-        </x-button>
+
+        <x-button wire:click="edit('{{ $group->pivot->uuid }}')">Edit</x-button>
         <x-button wire:click="delete('{{ $group->pivot->uuid }}')" class="btn btn-danger">Delete</x-button>
     </x-slot>
 </x-std>
