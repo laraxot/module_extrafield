@@ -44,7 +44,7 @@ class ExtraFieldPanel extends XotBasePanel {
     /**
      * on select the option label.
      *
-     * @param Modules\ExtraField\Models\ExtraField $row
+     * @param \Modules\ExtraField\Models\ExtraField $row
      */
     public function optionLabel($row): string {
         if (is_null($row->name)) {

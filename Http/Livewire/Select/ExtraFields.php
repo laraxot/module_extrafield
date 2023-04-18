@@ -23,12 +23,17 @@ class ExtraFields extends Component {
     public Model $model;
 
     /**
-     * @param mixed $value
+     * @param mixed $group
      */
     public function mount($group): void {
         dddx($group);
     }
 
+    /**
+     * Undocumented function.
+     *
+     * @return void
+     */
     public function getGroups() {
         // return $this->model->extraFields()->wherePivot('user_id', null)->get()->groupBy('group.name');
     }

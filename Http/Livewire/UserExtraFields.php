@@ -4,13 +4,13 @@ declare(strict_types=1);
 
 namespace Modules\ExtraField\Http\Livewire;
 
-use Livewire\Component;
-use Illuminate\Support\Str;
-use Modules\Blog\Models\Category;
-use Illuminate\Support\Facades\Auth;
-use Modules\Cms\Actions\GetViewAction;
-use Illuminate\Database\Eloquent\Model;
 use Illuminate\Contracts\Support\Renderable;
+use Illuminate\Database\Eloquent\Model;
+use Illuminate\Support\Facades\Auth;
+use Illuminate\Support\Str;
+use Livewire\Component;
+use Modules\Blog\Models\Category;
+use Modules\Cms\Actions\GetViewAction;
 
 // use Modules\PFed\Models\Profile as ProfileModel;
 
@@ -34,6 +34,11 @@ class UserExtraFields extends Component {
 
     public array $groups = [];
 
+    /**
+     * Undocumented variable.
+     *
+     * @var array<string, string>
+     */
     protected $listeners = ['refreshExtraFields' => '$refresh'];
 
     public function mount(Model $model, string $tpl = 'v1'): void {

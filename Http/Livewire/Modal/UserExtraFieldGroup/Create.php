@@ -19,7 +19,7 @@ class Create extends Modal {
     public array $form_data = [];
     public array $fields_arr;
 
-    public function mount(string $extra_field_group_id, string $user_id) {
+    public function mount(string $extra_field_group_id, string $user_id): void {
         $this->extra_field_group_id = $extra_field_group_id;
         $this->user_id = $user_id;
         $extra_field_group = ExtraFieldGroup::find($this->extra_field_group_id);

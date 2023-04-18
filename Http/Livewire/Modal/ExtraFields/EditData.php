@@ -5,7 +5,6 @@ declare(strict_types=1);
 namespace Modules\ExtraField\Http\Livewire\Modal\ExtraFields;
 
 use Illuminate\Contracts\Support\Renderable;
-use Illuminate\Database\Eloquent\Collection;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Support\Facades\Auth;
 use Modules\Cms\Actions\GetViewAction;
@@ -18,12 +17,6 @@ use WireElements\Pro\Concerns\InteractsWithConfirmationModal;
 class EditData extends Modal {
     use InteractsWithConfirmationModal;
 
-    /**
-     * @property $rows
-     *
-     * @method Model      getModelProperty()
-     * @method Collection getRowsProperty()
-     */
     public string $title;
     public array $form_data = [];
     public string $user_id;

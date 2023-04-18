@@ -12,6 +12,11 @@ use Modules\LU\Services\ProfileService;
 use Spatie\LaravelData\DataCollection;
 use Spatie\Translatable\HasTranslations;
 
+/**
+ * Undocumented class.
+ *
+ * @property string $name
+ */
 class ExtraFieldGroup extends BaseModel {
     use HasCategory;
     // use HasTranslations;

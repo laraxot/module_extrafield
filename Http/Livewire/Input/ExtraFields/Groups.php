@@ -19,13 +19,12 @@ use Modules\ExtraField\Models\ExtraFieldMorph;
 /**
  * Class Groups.
  *
- * @property string $tpl
- * @property string $name
- * @property array  $groups
- * @property array  $form_data
- * @property mixed  $value
- * @property Model  $model
- * @property $rows
+ * @property string     $tpl
+ * @property string     $name
+ * @property array      $groups
+ * @property array      $form_data
+ * @property mixed      $value
+ * @property Model      $model
  * @property Collection $availableGroups
  * @property Collection $assignedGroups
  * @property Collection $availableFields

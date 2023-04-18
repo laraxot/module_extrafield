@@ -4,11 +4,11 @@ declare(strict_types=1);
 
 namespace Modules\ExtraField\Models;
 
-use Modules\UI\Datas\FieldData;
-use Modules\Blog\Models\Traits\HasCategory;
-use Illuminate\Database\Eloquent\Relations\HasOne;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
+use Illuminate\Database\Eloquent\Relations\HasOne;
 use Illuminate\Database\Eloquent\Relations\MorphToMany;
+use Modules\Blog\Models\Traits\HasCategory;
+use Modules\UI\Datas\FieldData;
 
 /**
  * Modules\ExtraField\Models\ExtraField.
@@ -44,8 +44,7 @@ use Illuminate\Database\Eloquent\Relations\MorphToMany;
  *
  * @mixin \Eloquent
  */
-class ExtraField extends BaseModel
-{
+class ExtraField extends BaseModel {
     use HasCategory;
 
     protected $fillable = [
@@ -64,12 +63,11 @@ class ExtraField extends BaseModel
     //     return $this->belongsTo(ExtraFieldGroup::class);
     // }
 
-    public function extraFieldMorph(): HasOne
-    {
+    public function extraFieldMorph(): HasOne {
         return $this->hasOne(ExtraFieldMorph::class);
     }
-    public function extraFieldGroups()
-    {
+
+    public function extraFieldGroups(): MorphToMany {
         $pivot_class = ExtraFieldGroupMorph::class;
         $pivot = app($pivot_class);
         $pivot_table = $pivot->getTable();
@@ -82,14 +80,12 @@ class ExtraField extends BaseModel
     }
 
     // un campo corrisponde solo ad un gruppo, come da specifiche
-    public function groups(): MorphToMany
-    {
+    public function groups(): MorphToMany {
         // return $this->hasMany(ExtraField::class, 'group_id');
         return $this->extraFieldGroups();
     }
 
-    public function toData()
-    {
+    public function toData(): FieldData {
         return FieldData::from($this);
     }
 }

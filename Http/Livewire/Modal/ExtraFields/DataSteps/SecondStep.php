@@ -22,6 +22,11 @@ class SecondStep extends StepComponent {
     public bool $is_first = false;
     public bool $is_last = false;
 
+    /**
+     * Undocumented variable.
+     *
+     * @var array<string, string>
+     */
     protected $listeners = ['updateFormData' => 'updateFormData'];
 
     /*

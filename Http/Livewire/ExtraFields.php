@@ -37,6 +37,11 @@ class ExtraFields extends Component {
     public string $model_type;
     public int $model_id;
     public ?string $category_name;
+    /**
+     * Undocumented variable.
+     *
+     * @var array<string, string>
+     */
     protected $listeners = ['refreshExtraFields' => '$refresh'];
 
     public function mount(Model $model, string $tpl = 'v4'): void {
