@@ -71,11 +71,11 @@ class ExtraFieldGroup extends BaseModel {
             ->map(function ($item) use ($profile, $model, $user_id) {
                 $service_value = $model
                     ->userExtraFields((string) $user_id)
-                    ->wherePivot('extra_field_id', $item->id)
+                    ->wherePivot('extra_field_id', $item->getKey())
                     ->first();
 
                 $profile_value = $profile->userExtraFields((string) $user_id)
-                    ->wherePivot('extra_field_id', $item->id)
+                    ->wherePivot('extra_field_id', $item->getKey())
                     ->first();
 
                 // dddx([$service_value, $profile_value]);

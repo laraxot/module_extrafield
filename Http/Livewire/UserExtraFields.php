@@ -39,7 +39,8 @@ class UserExtraFields extends Component {
 
     public function mount(Model $model, string $tpl = 'v1'): void {
         $this->model = $model;
-        $this->model_id = (string) $this->model->getKey();
+        $model_id = ''.$this->model->getKey();
+        $this->model_id = $model_id;
         // $this->model_type = Str::snake(class_basename($this->model));
         $this->model_type = app(GetModelTypeByModelAction::class)->execute($this->model);
         $this->user_id = (string) Auth::id();
@@ -87,6 +88,11 @@ class UserExtraFields extends Component {
         $this->groups = $res->all();
     }
 
+    /**
+     * Undocumented function.
+     *
+     * @return mixed
+     */
     public function getFromUserTable($item) {
         return $item->pivot->extraFieldMorphUserValues()->where('user_id', $this->user_id)->get()->last()?->value;
     }

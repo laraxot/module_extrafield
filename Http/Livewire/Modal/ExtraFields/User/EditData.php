@@ -11,6 +11,7 @@ use Illuminate\Support\Collection;
 use Illuminate\Support\Facades\Auth;
 use Modules\Cms\Actions\GetViewAction;
 use Modules\UI\Datas\FieldData;
+use Modules\Xot\Actions\GetModelByModelTypeAction;
 use WireElements\Pro\Components\Modal\Modal;
 
 /**
@@ -22,13 +23,13 @@ class EditData extends Modal {
     public string $user_id;
     public string $uuid;
     public string $model_type;
-    public int $model_id;
+    public string $model_id;
     public Model $model;
     public EloquentCollection $rows;
 
     // verificare o cambiare
 
-    public function mount(string $uuid, string $model_type, int $model_id): void {
+    public function mount(string $uuid, string $model_type, string $model_id): void {
         $this->model_type = $model_type;
         $this->model_id = $model_id;
         $this->model = app(GetModelByModelTypeAction::class)->execute($this->model_type, $this->model_id);

@@ -15,14 +15,16 @@ class GetFormData {
         $data = [];
 
         foreach ($tmp as $item) {
-            foreach ($item['fields'] as $field) {
-                $k = $field['name'];
-                $v = $field['value'];
+            if (is_iterable($item['fields'])) {
+                foreach ($item['fields'] as $field) {
+                    $k = $field['name'];
+                    $v = $field['value'];
 
-                if (isJson($v)) {
-                    $v = json_decode($v);
+                    if (isJson($v)) {
+                        $v = json_decode($v);
+                    }
+                    $data[$k] = $v;
                 }
-                $data[$k] = $v;
             }
         }
 

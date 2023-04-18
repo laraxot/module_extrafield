@@ -50,7 +50,7 @@ class SecondStep extends StepComponent {
         $this->group_id = (string) $this->state()->all()['extrafield::modal.extra-fields.data-steps.first-step']['form_data']['group_id'];
         $this->cat_id = (string) $this->state()->all()['extrafield::modal.extra-fields.data-steps.first-step']['form_data']['cat_id'];
 
-        $rows = ExtraFieldGroup::find($this->group_id)->fields;
+        $rows = ExtraFieldGroup::findOrFail($this->group_id)->fields;
 
         $fields = FieldData::collection($rows)->toArray();
         $this->fields = $fields;

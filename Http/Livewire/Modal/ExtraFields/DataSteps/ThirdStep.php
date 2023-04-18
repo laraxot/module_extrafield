@@ -7,6 +7,7 @@ namespace Modules\ExtraField\Http\Livewire\Modal\ExtraFields\DataSteps;
 use Illuminate\Contracts\Support\Renderable;
 use Illuminate\Database\Eloquent\Relations\Relation;
 use Modules\Cms\Actions\GetViewAction;
+use Modules\Xot\Actions\GetModelByModelTypeAction;
 use Spatie\LivewireWizard\Components\StepComponent;
 
 class ThirdStep extends StepComponent {
@@ -63,10 +64,11 @@ class ThirdStep extends StepComponent {
         $model_type = $this->form1_data['model_type'];
         $model_id = $this->form1_data['model_id'];
         $note = $this->form_data['note'] ?? '';
-
+        /*
         $model_class = collect(config('morph_map'))->get($model_type);
         $model = app($model_class)->find($model_id);
-
+        */
+        $model = app(GetModelByModelTypeAction::class)->execute($model_type, $model_id);
         $model->addExtraField($this->form2_data, $user_id, $group_id, $note);
 
         $this->emit('refreshExtraFields');

@@ -24,6 +24,11 @@ class EditData extends Modal {
     public string $model_type;
     public int $model_id;
     public Model $model;
+    /**
+     * Undocumented variable.
+     *
+     * @var array<string, string>
+     */
     protected $listeners = ['updateFormData' => 'updateFormData'];
 
     public function mount(string $uuid, string $model_type, int $model_id): void {
@@ -48,11 +53,11 @@ class EditData extends Modal {
         // dddx($this->form_data);
     }
 
-    public static function getName() {
+    public static function getName(): string {
         return 'modal.extra-fields.edit-data';
     }
 
-    public function updateFormData($data) {
+    public function updateFormData(array $data): void {
         $this->form_data = array_merge($this->form_data, $data);
     }
 

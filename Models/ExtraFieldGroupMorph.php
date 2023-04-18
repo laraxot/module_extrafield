@@ -99,6 +99,11 @@ class ExtraFieldGroupMorph extends BaseMorphPivot {
         return $value;
     }
 
+    /**
+     * Undocumented function.
+     *
+     * @param mixed $value
+     */
     public function updateUserValue(string $user_id, $value): ExtraFieldMorph {
         $row = ExtraFieldMorph::firstOrCreate([
             'user_id' => $user_id,

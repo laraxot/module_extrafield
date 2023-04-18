@@ -46,7 +46,7 @@ class SecondStep extends StepComponent {
         ;
         $rows = $res->get();
 
-        $fields = FieldData::collection($rows)->toArray();
+        $fields = FieldData::collection($rows->all())->toArray();
         $this->fields = $fields;
         /*
         dddx([

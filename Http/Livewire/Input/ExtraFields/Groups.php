@@ -43,7 +43,7 @@ class Groups extends Component {
     public Model $model;
 
     // verificare o cambiare
-    public $rows;
+    // public $rows;
 
     /**
      * @param mixed $value

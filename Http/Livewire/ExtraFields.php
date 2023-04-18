@@ -18,6 +18,7 @@ use Modules\ExtraField\Models\ExtraFieldGroupMorph;
 use Modules\ExtraField\Models\ExtraFieldMorph;
 use Modules\PFed\Actions\SendConsentsUpdateNotifyToCompanyAction;
 use Modules\PFed\Models\Service;
+use Modules\Xot\Actions\GetModelTypeByModelAction;
 use WireElements\Pro\Concerns\InteractsWithConfirmationModal;
 
 // use Modules\PFed\Models\Profile as ProfileModel;
@@ -35,7 +36,7 @@ class ExtraFields extends Component {
     public string $tpl;
     public Model $model;
     public string $model_type;
-    public int $model_id;
+    public string $model_id;
     public ?string $category_name;
     /**
      * Undocumented variable.
@@ -46,9 +47,11 @@ class ExtraFields extends Component {
 
     public function mount(Model $model, string $tpl = 'v4'): void {
         $this->model = $model;
-        $this->model_id = $model->getKey();
-        $this->model_type = Str::snake(class_basename($this->model));
-        $this->user_id = Auth::id();
+        $model_id = ''.$model->getKey();
+        $this->model_id = $model_id;
+        // $this->model_type = Str::snake(class_basename($this->model));
+        $this->model_type = app(GetModelTypeByModelAction::class)->execute($this->model);
+        $this->user_id = (string) Auth::id();
         $this->tpl = $tpl;
 
         $default_category = Category::ofType('profile')->firstWhere('slug', config('profile.default'))?->id;
