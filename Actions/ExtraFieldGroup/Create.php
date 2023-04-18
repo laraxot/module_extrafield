@@ -21,9 +21,10 @@ class Create {
      */
     public function execute(Model $model, string $extra_field_group_id, string $user_id, array $form_data) {
         $model_type = Str::snake(class_basename($model));
-        $model_id = (string) $model->getKey();
+        $model_id = ''.$model->getKey();
+
         $uuid = Str::uuid();
-        $extra_field_group = ExtraFieldGroup::find($extra_field_group_id);
+        $extra_field_group = ExtraFieldGroup::findOrFail($extra_field_group_id);
 
         // $model->extraFieldGroups()->syncWithoutDetaching($extra_field_group_id, ['value' => $form_data, 'user_id' => $user_id]);
         ExtraFieldGroupMorph::create([

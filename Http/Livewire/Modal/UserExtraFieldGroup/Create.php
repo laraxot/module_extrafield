@@ -22,10 +22,11 @@ class Create extends Modal {
     public function mount(string $extra_field_group_id, string $user_id): void {
         $this->extra_field_group_id = $extra_field_group_id;
         $this->user_id = $user_id;
-        $extra_field_group = ExtraFieldGroup::find($this->extra_field_group_id);
+        $extra_field_group = ExtraFieldGroup::findOrFail($this->extra_field_group_id);
+
         $rows = $extra_field_group->fields;
 
-        $fields = FieldData::collection($rows)->toArray();
+        $fields = FieldData::collection($rows->all())->toArray();
         $this->fields_arr = $fields;
     }
 

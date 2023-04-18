@@ -97,6 +97,11 @@ class ExtraFieldMorph extends BaseMorphPivot {
         return $value;
     }
 
+    /**
+     * Undocumented function.
+     *
+     * @param mixed $value
+     */
     public function updateUserValue(string $user_id, $value): self {
         // si creano dei doppioni con update. perchè?
         $row = ExtraFieldMorph::firstOrCreate([
@@ -111,8 +116,12 @@ class ExtraFieldMorph extends BaseMorphPivot {
         return $res;
     }
 
+    /**
+     * Undocumented function.
+     *
+     * @param mixed $value
+     */
     public function createUserValue(string $user_id, $value, ?string $uuid = null): self {
-        // si creano dei doppioni con update. perchè?
         $row = ExtraFieldMorph::create([
             'user_id' => (string) $user_id,
             'model_type' => $this->model_type,

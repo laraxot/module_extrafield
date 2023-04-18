@@ -16,12 +16,7 @@ use Modules\Xot\Actions\GetModelTypeByModelAction;
 // use Modules\PFed\Models\Profile as ProfileModel;
 
 class UserExtraFields extends Component {
-    /**
-     * Summary of user_id.
-     *
-     * @var int|string|null
-     */
-    public $user_id;
+    public string $user_id;
 
     public string $cat_id = '';
     public string $tpl;
@@ -29,7 +24,7 @@ class UserExtraFields extends Component {
     public Model $model;
 
     public string $model_type;
-    public int $model_id;
+    public string $model_id;
 
     public ?string $category_name;
 
@@ -44,10 +39,10 @@ class UserExtraFields extends Component {
 
     public function mount(Model $model, string $tpl = 'v1'): void {
         $this->model = $model;
-        $this->model_id = $this->model->getKey();
+        $this->model_id = (string) $this->model->getKey();
         // $this->model_type = Str::snake(class_basename($this->model));
         $this->model_type = app(GetModelTypeByModelAction::class)->execute($this->model);
-        $this->user_id = Auth::id();
+        $this->user_id = (string) Auth::id();
         $this->tpl = $tpl;
     }
 

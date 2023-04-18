@@ -27,7 +27,8 @@ class DeleteData extends Modal {
     public function mount(string $uuid, string $model_type, int $model_id): void {
         $this->model_type = $model_type;
         $this->model_id = $model_id;
-        $this->model = config('morph_map')[$this->model_type]::findOrFail($this->model_id);
+        // $this->model = config('morph_map')[$this->model_type]::findOrFail($this->model_id);
+        $this->model = app(GetModelByModelTypeAction::class)->execute($this->model_type, $this->model_id);
         $this->user_id = (string) Auth::id();
         $this->uuid = $uuid;
 
