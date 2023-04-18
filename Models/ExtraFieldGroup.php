@@ -9,6 +9,7 @@ use Illuminate\Database\Eloquent\Relations\MorphToMany;
 use Illuminate\Support\Facades\Auth;
 use Modules\Blog\Models\Traits\HasCategory;
 use Modules\LU\Services\ProfileService;
+use Modules\UI\Datas\FieldData;
 use Spatie\LaravelData\DataCollection;
 use Spatie\Translatable\HasTranslations;
 

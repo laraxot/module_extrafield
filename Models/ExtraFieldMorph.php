@@ -87,6 +87,9 @@ class ExtraFieldMorph extends BaseMorphPivot {
         ]);
 
         $value = $res->value;
+        if (null == $value) {
+            return $value;
+        }
         if (isJson($value)) {
             $value = json_decode($value);
         }

@@ -11,6 +11,7 @@ use Illuminate\Support\Str;
 use Livewire\Component;
 use Modules\Blog\Models\Category;
 use Modules\Cms\Actions\GetViewAction;
+use Modules\Xot\Actions\GetModelTypeByModelAction;
 
 // use Modules\PFed\Models\Profile as ProfileModel;
 
@@ -43,8 +44,9 @@ class UserExtraFields extends Component {
 
     public function mount(Model $model, string $tpl = 'v1'): void {
         $this->model = $model;
-        $this->model_id = $this->model->id;
-        $this->model_type = Str::snake(class_basename($this->model));
+        $this->model_id = $this->model->getKey();
+        // $this->model_type = Str::snake(class_basename($this->model));
+        $this->model_type = app(GetModelTypeByModelAction::class)->execute($this->model);
         $this->user_id = Auth::id();
         $this->tpl = $tpl;
     }
