@@ -9,10 +9,7 @@ use Modules\Cms\Actions\GetViewAction;
 use WireElements\Pro\Components\Modal\Modal;
 
 class Two extends Modal {
-    /**
-     * @return string
-     */
-    public static function getName() {
+    public static function getName(): string {
         return 'modal.extra-fields.two';
     }
 

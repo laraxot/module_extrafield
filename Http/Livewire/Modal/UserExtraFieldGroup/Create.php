@@ -30,10 +30,7 @@ class Create extends Modal {
         $this->fields_arr = $fields;
     }
 
-    /**
-     * @return string
-     */
-    public static function getName() {
+    public static function getName(): string {
         return 'modal.user-extra-field-group.create';
     }
 
