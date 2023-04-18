@@ -28,7 +28,7 @@ class ExtraFields extends Component {
     public Model $model;
 
     public string $model_type;
-    public int $model_id;
+    public string $model_id;
 
     public ?string $category_name;
 

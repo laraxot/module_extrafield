@@ -26,7 +26,6 @@ use Spatie\Activitylog\Traits\LogsActivity;
  * @property string|null                     $value
  * @property string|null                     $value_class
  * @property string|null                     $uuid
- *
  * @method static \Illuminate\Database\Eloquent\Builder|ExtraFieldMorph newModelQuery()
  * @method static \Illuminate\Database\Eloquent\Builder|ExtraFieldMorph newQuery()
  * @method static \Illuminate\Database\Eloquent\Builder|ExtraFieldMorph query()
@@ -41,7 +40,18 @@ use Spatie\Activitylog\Traits\LogsActivity;
  * @method static \Illuminate\Database\Eloquent\Builder|ExtraFieldMorph whereUserId($value)
  * @method static \Illuminate\Database\Eloquent\Builder|ExtraFieldMorph whereValue($value)
  * @method static \Illuminate\Database\Eloquent\Builder|ExtraFieldMorph whereValueClass($value)
- *
+ * @property int $favourite
+ * @property string|null $note
+ * @property-read \Illuminate\Database\Eloquent\Collection<int, \Modules\Activity\Models\Activity> $activities
+ * @property-read int|null $activities_count
+ * @property-read \Modules\ExtraField\Models\ExtraField|null $extraField
+ * @method static \Illuminate\Database\Eloquent\Builder|ExtraFieldMorph whereFavourite($value)
+ * @method static \Illuminate\Database\Eloquent\Builder|ExtraFieldMorph whereNote($value)
+ * @method static \Illuminate\Database\Eloquent\Builder|ExtraFieldMorph whereUuid($value)
+ * @property-read \Illuminate\Database\Eloquent\Collection<int, \Modules\Activity\Models\Activity> $activities
+ * @property-read \Illuminate\Database\Eloquent\Collection<int, \Modules\Activity\Models\Activity> $activities
+ * @property-read \Illuminate\Database\Eloquent\Collection<int, \Modules\Activity\Models\Activity> $activities
+ * @property-read \Illuminate\Database\Eloquent\Collection<int, \Modules\Activity\Models\Activity> $activities
  * @mixin \Eloquent
  */
 class ExtraFieldMorph extends BaseMorphPivot {

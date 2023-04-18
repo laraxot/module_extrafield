@@ -24,7 +24,6 @@ use Illuminate\Support\Facades\Auth;
  * @property string|null                     $value
  * @property string|null                     $value_class
  * @property string|null                     $uuid
- *
  * @method static \Illuminate\Database\Eloquent\Builder|ExtraFieldMorph newModelQuery()
  * @method static \Illuminate\Database\Eloquent\Builder|ExtraFieldMorph newQuery()
  * @method static \Illuminate\Database\Eloquent\Builder|ExtraFieldMorph query()
@@ -39,7 +38,14 @@ use Illuminate\Support\Facades\Auth;
  * @method static \Illuminate\Database\Eloquent\Builder|ExtraFieldMorph whereUserId($value)
  * @method static \Illuminate\Database\Eloquent\Builder|ExtraFieldMorph whereValue($value)
  * @method static \Illuminate\Database\Eloquent\Builder|ExtraFieldMorph whereValueClass($value)
- *
+ * @property int|null $extra_field_group_id
+ * @property int $favourite
+ * @property string|null $note
+ * @property-read \Modules\ExtraField\Models\ExtraFieldGroup|null $extraFieldGroup
+ * @method static \Illuminate\Database\Eloquent\Builder|ExtraFieldGroupMorph whereExtraFieldGroupId($value)
+ * @method static \Illuminate\Database\Eloquent\Builder|ExtraFieldGroupMorph whereFavourite($value)
+ * @method static \Illuminate\Database\Eloquent\Builder|ExtraFieldGroupMorph whereNote($value)
+ * @method static \Illuminate\Database\Eloquent\Builder|ExtraFieldGroupMorph whereUuid($value)
  * @mixin \Eloquent
  */
 class ExtraFieldGroupMorph extends BaseMorphPivot {

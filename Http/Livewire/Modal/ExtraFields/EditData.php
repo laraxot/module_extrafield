@@ -14,7 +14,8 @@ use Modules\UI\Datas\FieldData;
 use WireElements\Pro\Components\Modal\Modal;
 use WireElements\Pro\Concerns\InteractsWithConfirmationModal;
 
-class EditData extends Modal {
+class EditData extends Modal
+{
     use InteractsWithConfirmationModal;
 
     public string $title;
@@ -22,7 +23,7 @@ class EditData extends Modal {
     public string $user_id;
     public string $uuid;
     public string $model_type;
-    public int $model_id;
+    public string $model_id;
     public Model $model;
     /**
      * Undocumented variable.
@@ -31,7 +32,8 @@ class EditData extends Modal {
      */
     protected $listeners = ['updateFormData' => 'updateFormData'];
 
-    public function mount(string $uuid, string $model_type, int $model_id): void {
+    public function mount(string $uuid, string $model_type, int $model_id): void
+    {
         $this->uuid = $uuid;
         $this->model_type = $model_type;
         $this->model_id = $model_id;
@@ -53,19 +55,23 @@ class EditData extends Modal {
         // dddx($this->form_data);
     }
 
-    public static function getName(): string {
+    public static function getName(): string
+    {
         return 'modal.extra-fields.edit-data';
     }
 
-    public function updateFormData(array $data): void {
+    public function updateFormData(array $data): void
+    {
         $this->form_data = array_merge($this->form_data, $data);
     }
 
-    public function getModelProperty() {
+    public function getModelProperty()
+    {
         return $this->model::where('user_id', $this->user_id)->first();
     }
 
-    public function render(): Renderable {
+    public function render(): Renderable
+    {
         $groups = $this->model->getUserExtraFieldValue($this->user_id, $this->uuid);
         $group = collect($groups)->first();
         $fields = $group['fields'];
@@ -82,7 +88,8 @@ class EditData extends Modal {
         return view($view, $view_params);
     }
 
-    public static function behavior(): array {
+    public static function behavior(): array
+    {
         return [
             // Close the modal if the escape key is pressed
             'close-on-escape' => true,
@@ -95,7 +102,8 @@ class EditData extends Modal {
         ];
     }
 
-    public static function attributes(): array {
+    public static function attributes(): array
+    {
         return [
             // Set the modal size to 2xl, you can choose between:
             // xs, sm, md, lg, xl, 2xl, 3xl, 4xl, 5xl, 6xl, 7xl
@@ -103,7 +111,8 @@ class EditData extends Modal {
         ];
     }
 
-    public function save() {
+    public function save()
+    {
         $message = Service::updatingServicesList($this->user_id, $this->uuid);
 
         $this->askForConfirmation(
@@ -123,7 +132,8 @@ class EditData extends Modal {
         );
     }
 
-    public function saveConfirmed() {
+    public function saveConfirmed()
+    {
         $updating_services = Service::getServicesWithUuid($this->user_id, $this->uuid);
         $updating_services->map(function ($service) {
             $company = $service->company;

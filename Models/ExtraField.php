@@ -23,7 +23,6 @@ use Modules\UI\Datas\FieldData;
  * @property string|null                                                  $updated_by
  * @property \Kalnoy\Nestedset\Collection|\Modules\Blog\Models\Category[] $categories
  * @property int|null                                                     $categories_count
- *
  * @method static \Modules\Blog\Database\Factories\ExtraFieldFactory factory(...$parameters)
  * @method static \Illuminate\Database\Eloquent\Builder|ExtraField   newModelQuery()
  * @method static \Illuminate\Database\Eloquent\Builder|ExtraField   newQuery()
@@ -41,7 +40,17 @@ use Modules\UI\Datas\FieldData;
  * @method static \Illuminate\Database\Eloquent\Builder|ExtraField   withCategories($categories)
  * @method static \Illuminate\Database\Eloquent\Builder|ExtraField   withoutAnyCategories()
  * @method static \Illuminate\Database\Eloquent\Builder|ExtraField   withoutCategories($categories)
- *
+ * @property array|null $options
+ * @property string|null $attributes
+ * @property-read \Illuminate\Database\Eloquent\Collection<int, \Modules\ExtraField\Models\ExtraFieldGroup> $extraFieldGroups
+ * @property-read int|null $extra_field_groups_count
+ * @property-read \Modules\ExtraField\Models\ExtraFieldMorph|null $extraFieldMorph
+ * @property-read \Illuminate\Database\Eloquent\Collection<int, \Modules\ExtraField\Models\ExtraFieldGroup> $groups
+ * @property-read int|null $groups_count
+ * @method static \Illuminate\Database\Eloquent\Builder|ExtraField whereAttributes($value)
+ * @method static \Illuminate\Database\Eloquent\Builder|ExtraField whereOptions($value)
+ * @property-read \Illuminate\Database\Eloquent\Collection<int, \Modules\ExtraField\Models\ExtraFieldGroup> $extraFieldGroups
+ * @property-read \Illuminate\Database\Eloquent\Collection<int, \Modules\ExtraField\Models\ExtraFieldGroup> $groups
  * @mixin \Eloquent
  */
 class ExtraField extends BaseModel {

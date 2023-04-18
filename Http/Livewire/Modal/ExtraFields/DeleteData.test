@@ -15,7 +15,7 @@ class DeleteData extends Modal {
     public array $form_data = [];
     public string $user_id;
     public string $model_type;
-    public int $model_id;
+    public string $model_id;
     public Model $model;
 
     public function mount(string $model_type, int $model_id): void {

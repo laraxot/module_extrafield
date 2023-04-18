@@ -17,7 +17,7 @@ class DataSteps extends WizardComponent
     public string $user_id;
     public Model $model;
     public string $model_type;
-    public int $model_id;
+    public string $model_id;
 
     public function mount(int $cat_id, string $model_type, int $model_id): void
     {
