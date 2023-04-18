@@ -5,12 +5,13 @@ declare(strict_types=1);
 namespace Modules\ExtraField\Actions\ExtraFieldGroup;
 
 use Illuminate\Database\Eloquent\Model;
+use Illuminate\Support\Collection;
 use Spatie\QueueableAction\QueueableAction;
 
 class GetFavorites {
     use QueueableAction;
 
-    public function execute(Model $model, ?string $cat_id = null) {
+    public function execute(Model $model, ?string $cat_id = null): Collection {
         $tmp_groups = $model->extraFieldGroups();
         if (null != $cat_id) {
             $tmp_groups = $tmp_groups->withAnyCategories($cat_id);

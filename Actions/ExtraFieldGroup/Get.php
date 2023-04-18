@@ -5,13 +5,14 @@ declare(strict_types=1);
 namespace Modules\ExtraField\Actions\ExtraFieldGroup;
 
 use Illuminate\Database\Eloquent\Model;
+use Illuminate\Support\Collection;
 use Modules\Xot\Datas\XotData;
 use Spatie\QueueableAction\QueueableAction;
 
 class Get {
     use QueueableAction;
 
-    public function execute(Model $model, string $user_id, ?string $uuid = null) {
+    public function execute(Model $model, string $user_id, ?string $uuid = null): Collection {
         $xot = XotData::from(config('xra'));
 
         $model_fields = $model->extraFields->where('pivot.user_id', $user_id);

@@ -21,6 +21,7 @@ class GetExtraFieldGroupCategoriesByModelTypeAction {
 
                 return $item;
             })->filter(function ($item) {
+                // Access to an undefined property Modules\Blog\Models\Category::$e_counts.
                 return $item->e_counts > 0;
             });
 

@@ -4,6 +4,7 @@ declare(strict_types=1);
 
 namespace Modules\ExtraField\Models;
 
+use Illuminate\Database\Eloquent\Relations\BelongsTo;
 use Illuminate\Database\Eloquent\Relations\HasMany;
 use Illuminate\Database\Eloquent\Relations\HasOne;
 use Illuminate\Support\Facades\Auth;
@@ -73,6 +74,11 @@ class ExtraFieldGroupMorph extends BaseMorphPivot {
         ;
     }*/
 
+    /**
+     * Undocumented function.
+     *
+     * @return mixed
+     */
     public function userValue(string $user_id) {
         $res = ExtraFieldMorph::firstOrNew([
             'user_id' => $user_id,
@@ -90,9 +96,7 @@ class ExtraFieldGroupMorph extends BaseMorphPivot {
         return $value;
     }
 
-    public function updateUserValue(string $user_id, $value) {
-        // dddx($this);
-        // si creano dei doppioni con update. perchè?
+    public function updateUserValue(string $user_id, $value): ExtraFieldMorph {
         $row = ExtraFieldMorph::firstOrCreate([
             'user_id' => $user_id,
             'model_type' => $this->model_type,
@@ -101,13 +105,12 @@ class ExtraFieldGroupMorph extends BaseMorphPivot {
             'uuid' => $this->uuid,
         ]);
 
-        // dddx($row);
         $res = tap($row)->update(['value' => $value]);
 
         return $res;
     }
 
-    public function extraFieldGroup() {
+    public function extraFieldGroup(): BelongsTo {
         return $this->belongsTo(ExtraFieldGroup::class);
     }
 }

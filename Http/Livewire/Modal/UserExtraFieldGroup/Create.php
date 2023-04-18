@@ -51,6 +51,11 @@ class Create extends Modal {
         return view($view, $view_params);
     }
 
+    /**
+     * Undocumented function.
+     *
+     * @return void
+     */
     public function save() {
         // app()
 
