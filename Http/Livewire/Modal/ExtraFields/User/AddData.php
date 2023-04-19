@@ -28,7 +28,6 @@ class AddData extends Modal
 
     public function mount(string $cat_id, string $model_type, string $model_id): void
     {
-        // $this->model = config('morph_map')[$model_type]::find($model_id);
         $this->model_type = $model_type;
         $this->model_id = $model_id;
         $this->user_id = (string) Auth::id();

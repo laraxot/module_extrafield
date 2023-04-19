@@ -11,6 +11,7 @@ use Modules\Cms\Actions\GetViewAction;
 use Modules\PFed\Actions\SendConsentsUpdateNotifyToCompanyAction;
 use Modules\PFed\Models\Service;
 use Modules\UI\Datas\FieldData;
+use Modules\Xot\Actions\GetModelByModelTypeAction;
 use WireElements\Pro\Components\Modal\Modal;
 use WireElements\Pro\Concerns\InteractsWithConfirmationModal;
 
@@ -37,9 +38,7 @@ class EditData extends Modal
         $this->uuid = $uuid;
         $this->model_type = $model_type;
         $this->model_id = $model_id;
-        $model_class = collect(config('morph_map'))->get($this->model_type);
-        $this->model = app($model_class)->find($this->model_id);
-
+        $this->model = app(GetModelByModelTypeAction::class)->execute($this->model_type, $this->model_id);
         $this->user_id = (string) Auth::id();
 
         $this->form_data = $this->model->getUserExtraFieldFormData($this->user_id, $this->uuid);
