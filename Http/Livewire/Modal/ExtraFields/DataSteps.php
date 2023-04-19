@@ -19,7 +19,7 @@ class DataSteps extends WizardComponent
     public string $model_type;
     public string $model_id;
 
-    public function mount(int $cat_id, string $model_type, int $model_id): void
+    public function mount(int $cat_id, string $model_type, string $model_id): void
     {
         // dddx(['model_type' => $model_type, 'model_id' => $model_id]);
         $this->cat_id = $cat_id;

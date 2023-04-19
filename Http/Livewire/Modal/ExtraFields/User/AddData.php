@@ -26,7 +26,7 @@ class AddData extends Modal
         'save' => 'save',
     ];
 
-    public function mount(string $cat_id, string $model_type, int $model_id): void
+    public function mount(string $cat_id, string $model_type, string $model_id): void
     {
         // $this->model = config('morph_map')[$model_type]::find($model_id);
         $this->model_type = $model_type;

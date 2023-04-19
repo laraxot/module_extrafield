@@ -32,7 +32,7 @@ class EditData extends Modal
      */
     protected $listeners = ['updateFormData' => 'updateFormData'];
 
-    public function mount(string $uuid, string $model_type, int $model_id): void
+    public function mount(string $uuid, string $model_type, string $model_id): void
     {
         $this->uuid = $uuid;
         $this->model_type = $model_type;

@@ -24,7 +24,7 @@ class DeleteData extends Modal {
     public Model $model;
     // verificare o cambiare
 
-    public function mount(string $uuid, string $model_type, int $model_id): void {
+    public function mount(string $uuid, string $model_type, string $model_id): void {
         $this->model_type = $model_type;
         $this->model_id = $model_id;
         $this->model = config('morph_map')[$this->model_type]::findOrFail($this->model_id);
