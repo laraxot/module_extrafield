@@ -4,6 +4,7 @@
             <div class="card position-sticky top-24">
                 <div class="card-body pb-0">
                     <div>
+
                         <h6 class="mb-4">{{ $profile->handle() }}</h6>
                         <div class="col-auto text-center">
                             <a href="#"
@@ -29,6 +30,7 @@
                                                 <a href="#" wire:click="showCat({{ $category->id }})"
                                                     class="text-sm text-heading font-semibold mb-0">{{ $category->name }}</a>
                                                 <x-badge>{{ $category->e_counts }}</x-badge>
+
                                             </div>
                                         </div>
                                     @endforeach
@@ -74,6 +76,7 @@
     </div>
     <div class="row">
         <div class="col-md-12 p-0">
+
             @if (!$profile->hasRole('light') && !$profile->hasRole('full'))
                 <x-card tpl="subscription.v1">
                     <x-slot name="title">{{ __('extrafield::extra_fields.plan.light.title') }}</x-slot>
@@ -82,8 +85,10 @@
                     <x-slot name="amount">6,00</x-slot>
                     <x-slot name="period">{{ __('extrafield::extra_fields.plan.light.period') }}</x-slot>
                     <x-slot name="payment_button">
-                        <x-nexi-payment type="simple" contract="NC_LIGHT_" amount="6.00" currency="EUR"
-                            text="{{ __('extrafield::extra_fields.plan.text') }}" class='btn btn-sm btn-neutral' />
+
+                        {{-- <x-nexi-payment type="simple" contract="NC_LIGHT_" amount="6.00" currency="EUR"
+                            text="{{ __('extrafield::extra_fields.plan.text') }}" class='btn btn-sm btn-neutral'>
+                        </x-nexi-payment> --}}
                     </x-slot>
                 </x-card>
             @endif
