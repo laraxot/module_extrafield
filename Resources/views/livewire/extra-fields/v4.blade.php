@@ -83,7 +83,7 @@
                     <x-slot name="period">{{ __('extrafield::extra_fields.plan.light.period') }}</x-slot>
                     <x-slot name="payment_button">
                         <x-nexi-payment type="simple" contract="NC_LIGHT_" amount="6.00" currency="EUR"
-                            text="{{ __('extrafield::extra_fields.plan.text') }}" />
+                            text="{{ __('extrafield::extra_fields.plan.text') }}" class='btn btn-sm btn-neutral' />
                     </x-slot>
                 </x-card>
             @endif
@@ -96,8 +96,8 @@
                     <x-slot name="amount">24,00</x-slot>
                     <x-slot name="period">{{ __('extrafield::extra_fields.plan.full.period') }}</x-slot>
                     <x-slot name="payment_button">
-                        <x-nexi-payment type="simple" contract="NC_FULL_" amount="24.00" currency="EUR"
-                            text="{{ __('extrafield::extra_fields.plan.text') }}" />
+                        {{-- <x-nexi-payment type="simple" contract="NC_FULL_" amount="24.00" currency="EUR"
+                            text="{{ __('extrafield::extra_fields.plan.text') }}" /> --}}
                     </x-slot>
                 </x-card>
             @endif
