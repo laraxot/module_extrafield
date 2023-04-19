@@ -13,7 +13,8 @@ use Modules\ExtraField\Models\ExtraFieldGroup;
 use Modules\PFed\Rules\CardinalityRule;
 use Spatie\LivewireWizard\Components\StepComponent;
 
-class FirstStep extends StepComponent {
+class FirstStep extends StepComponent
+{
     public string $cat_id;
     public string $model_type;
     public string $model_id;
@@ -24,7 +25,8 @@ class FirstStep extends StepComponent {
     public bool $is_last = false;
 
     // public function mount(string $cat_id, string $model_type, string $model_id): void {
-    public function mount(): void {
+    public function mount(): void
+    {
         // dddx($this->state()->all()['extrafield::modal.extra-fields.data-steps.first-step']);
 
         // $this->cat_id = $cat_id;
@@ -61,11 +63,17 @@ class FirstStep extends StepComponent {
         $this->group_opts = $group_opts;
     }
 
+    /**
+     * The default rules that the model will validate against.
+     *
+     * @var array
+     */
     protected $rules = [
         'form_data.group_id' => 'required',
     ];
 
-    public function render(): Renderable {
+    public function render(): Renderable
+    {
         /**
          * @phpstan-var view-string
          */
@@ -77,14 +85,16 @@ class FirstStep extends StepComponent {
         return view($view, $view_params);
     }
 
-    public function stepInfo(): array {
+    public function stepInfo(): array
+    {
         return [
             'label' => trans('pfed::data-steps.select_data'),
             'icon' => 'fa-shopping-cart',
         ];
     }
 
-    public function goNextStep(): void {
+    public function goNextStep(): void
+    {
         $this->validate();
         // $this->emit('update_form_data', $this->form_data);
         $this->nextStep();
