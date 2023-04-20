@@ -4,8 +4,17 @@ declare(strict_types=1);
 
 namespace Modules\ExtraField\Models\Contracts;
 
+use Illuminate\Database\Eloquent\Collection as EloquentCollection;
+use Illuminate\Database\Eloquent\Relations\HasMany;
 use Illuminate\Database\Eloquent\Relations\MorphToMany;
+use Modules\ExtraField\Models\ExtraField;
+use Modules\PFed\Models\Consent;
 
+/**
+ * @property string                              $name
+ * @property EloquentCollection<int, ExtraField> $extraFields
+ * @property EloquentCollection<int, Consent>    $consents
+ */
 interface HasExtraFieldsContract
 {
     public function extraFields(): MorphToMany;
@@ -51,4 +60,8 @@ interface HasExtraFieldsContract
     public function updateUserExtraFieldByGroup(array $data, string $user_id, ?string $uuid = null);
 
     public function updateUserExtraFieldByGroupTest(array $data, string $user_id, ?string $uuid = null);
+
+    // public function consents(): HasMany;
+
+    // public function getMandatoryConsentsFormDataRules(): array;
 }

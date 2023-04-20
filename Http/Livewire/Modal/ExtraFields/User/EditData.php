@@ -17,7 +17,8 @@ use WireElements\Pro\Components\Modal\Modal;
 /**
  * ---.
  */
-class EditData extends Modal {
+class EditData extends Modal
+{
     public string $title;
     public array $form_data = [];
     public string $user_id;
@@ -29,7 +30,8 @@ class EditData extends Modal {
 
     // verificare o cambiare
 
-    public function mount(string $uuid, string $model_type, string $model_id): void {
+    public function mount(string $uuid, string $model_type, string $model_id): void
+    {
         $this->model_type = $model_type;
         $this->model_id = $model_id;
         $this->model = app(GetModelByModelTypeAction::class)->execute($this->model_type, $this->model_id);
@@ -48,11 +50,13 @@ class EditData extends Modal {
         $this->form_data = $data;
     }
 
-    public function getModelProperty() {
+    public function getModelProperty()
+    {
         return $this->model::where('user_id', $this->user_id)->first();
     }
 
-    public function getRowsProperty() {
+    public function getRowsProperty(): EloquentCollection
+    {
         $rows = $this->model
             ->extraFields()
             // ->wherePivot('user_id', $this->user_id)
@@ -65,7 +69,8 @@ class EditData extends Modal {
         return $rows;
     }
 
-    public function render(): Renderable {
+    public function render(): Renderable
+    {
         /**
          * @phpstan-var view-string
          */
@@ -79,7 +84,8 @@ class EditData extends Modal {
         return view($view, $view_params);
     }
 
-    public static function attributes(): array {
+    public static function attributes(): array
+    {
         return [
             // Set the modal size to 2xl, you can choose between:
             // xs, sm, md, lg, xl, 2xl, 3xl, 4xl, 5xl, 6xl, 7xl
@@ -87,7 +93,8 @@ class EditData extends Modal {
         ];
     }
 
-    public function save() {
+    public function save()
+    {
         $rows = $this->rows;
         foreach ($rows as $row) {
             $value = collect($this->form_data)->get($row->name);

@@ -5,6 +5,7 @@ declare(strict_types=1);
 namespace Modules\ExtraField\Http\Livewire\Modal\ExtraFields\User;
 
 use Illuminate\Contracts\Support\Renderable;
+use Illuminate\Database\Eloquent\Collection as EloquentCollection;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Support\Collection;
 use Illuminate\Support\Facades\Auth;
@@ -50,7 +51,7 @@ class DeleteData extends Modal
         return $this->model::where('user_id', $this->user_id)->first();
     }
 
-    public function getRowsProperty()
+    public function getRowsProperty(): EloquentCollection
     {
         $rows = $this->model
         ->extraFields()
