@@ -39,20 +39,24 @@ class EditData extends Modal
         $this->user_id = (string) Auth::id();
         $this->uuid = $uuid;
 
-        $data = $this->rows->map(function ($item) {
-            return [
-                'name' => $item->name,
-                'value' => $item->pivot->userValue($this->user_id),
-            ];
-        })->pluck('value', 'name')
+        $data = $this->rows->map(
+            function ($item) {
+                return [
+                    'name' => $item->name,
+                    'value' => $item->pivot->userValue($this->user_id),
+                ];
+            }
+        )->pluck('value', 'name')
             ->all();
 
         $this->form_data = $data;
     }
 
-    public function getModelProperty()
+    public function getModelProperty(): Model
     {
-        return $this->model::where('user_id', $this->user_id)->first();
+        $res = $this->model::where('user_id', $this->user_id)->first();
+
+        return $res;
     }
 
     public function getRowsProperty(): EloquentCollection

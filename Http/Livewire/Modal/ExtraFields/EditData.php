@@ -134,19 +134,20 @@ class EditData extends Modal
     public function saveConfirmed()
     {
         $updating_services = Service::getServicesWithUuid($this->user_id, $this->uuid);
-        $updating_services->map(function ($service) {
-            $company = $service->company;
+        $updating_services->map(
+            function ($service) {
+                $company = $service->company;
 
-            $updates = collect([
-                'Modifica Dati di Sistema del Servizio' => $service->name,
-            ]);
+                $updates = collect([
+                    'Modifica Dati di Sistema del Servizio' => $service->name,
+                ]);
 
-            foreach ($this->form_data as $field => $value) {
-                $updates->put($field, $value);
-            }
+                foreach ($this->form_data as $field => $value) {
+                    $updates->put($field, $value);
+                }
 
-            app(SendConsentsUpdateNotifyToCompanyAction::class)->execute($company, $updates);
-        });
+                app(SendConsentsUpdateNotifyToCompanyAction::class)->execute($company, $updates);
+            });
 
         // dd($this->form_data, $updating_services);
 
@@ -163,9 +164,10 @@ class EditData extends Modal
 
         $user_services = Service::getServicesWithUuid($this->user_id, $this->uuid);
 
-        $user_services->map(function ($service) use ($group_name) {
-            $service->updateUserExtraFieldByGroupAndProfileFieldUuid([$group_name => $this->uuid], $this->user_id);
-        });
+        $user_services->map(
+            function ($service) use ($group_name) {
+                $service->updateUserExtraFieldByGroupAndProfileFieldUuid([$group_name => $this->uuid], $this->user_id);
+            });
 
         $this->close();
 

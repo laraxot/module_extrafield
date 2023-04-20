@@ -20,10 +20,12 @@ use Modules\ExtraField\Models\ExtraFieldMorph;
 use Modules\LU\Models\User;
 use Modules\LU\Services\ProfileService;
 
-trait HasExtraFields {
+trait HasExtraFields
+{
     use \Staudenmeir\EloquentHasManyDeep\HasRelationships;
 
-    public function extraFields(): MorphToMany {
+    public function extraFields(): MorphToMany
+    {
         $pivot_class = ExtraFieldMorph::class;
         $pivot = app($pivot_class);
         $pivot_table = $pivot->getTable();
@@ -34,7 +36,8 @@ trait HasExtraFields {
             ->withPivot($pivot_fields);
     }
 
-    public function userExtraFields(?string $user_id = ''): MorphToMany {
+    public function userExtraFields(?string $user_id = ''): MorphToMany
+    {
         if ('' == $user_id) {
             $user_id = (string) Auth::id();
         }
@@ -44,21 +47,25 @@ trait HasExtraFields {
     }
 
     // c'è qualcosa di sbagliato. legge il gruppo da group_id di extrafield ma deve leggerlo da polimorfica
-    public function extraFieldsFromGroups() {
+    public function extraFieldsFromGroups()
+    {
         // dddx($this->hasManyDeepFromRelations($this->noUserExtraFieldGroups(), (new ExtraFieldGroup())->noUserFields())->withIntermediate(ExtraFieldGroup::class)->toSql());
         // non vanno i wherepivot qua. bisogna passare per relazioni già con il wherepivot
         return $this->hasManyDeepFromRelations($this->noUserExtraFieldGroups(), (new ExtraFieldGroup())->noUserFields())->withIntermediate(ExtraFieldGroup::class);
     }
 
-    public function noUserExtraFields() {
+    public function noUserExtraFields()
+    {
         return $this->extraFields()->wherePivot('user_id', null);
     }
 
-    public function userExtraFieldGroups(string $user_id) {
+    public function userExtraFieldGroups(string $user_id)
+    {
         return $this->extraFieldGroups()->wherePivot('user_id', $user_id);
     }
 
-    public function noUserExtraFieldGroups() {
+    public function noUserExtraFieldGroups()
+    {
         // dd($this->extraFieldGroups()->wherePivot('user_id', null)->toSql());
         // non vanno i wherepivot qua. bisogna passare per relazioni già con il wherepivot
 
@@ -66,7 +73,8 @@ trait HasExtraFields {
         return $this->extraFieldGroups()->wherePivot('user_id', null);
     }
 
-    public function extraFieldGroups(): MorphToMany {
+    public function extraFieldGroups(): MorphToMany
+    {
         // return $this->hasManyDeep(ExtraFieldGroup::class, [ExtraField::class, PermUser::class]);
 
         // return $this->hasManyDeepFromRelations($this->extraFields(), (new Extrafield())->group());
@@ -85,7 +93,8 @@ trait HasExtraFields {
         ;
     }
 
-    public function getFavouriteGroups(?string $cat_id = null) {
+    public function getFavouriteGroups(?string $cat_id = null)
+    {
         $tmp_groups = $this->extraFieldGroups();
         if (null != $cat_id) {
             $tmp_groups = $tmp_groups->withAnyCategories($cat_id);
@@ -94,44 +103,48 @@ trait HasExtraFields {
 
         $iterated_groups = [];
 
-        $groups = $groups->map(function ($group) use (&$iterated_groups, $tmp_groups, $cat_id) {
-            if (1 == $group->cardinality) {
-                $group->is_favourite = true;
-            } else {
-                $tmp_groups = $this->extraFieldGroups();
-                if (null != $cat_id) {
-                    $tmp_groups = $tmp_groups->withAnyCategories($cat_id);
-                }
-                $favourite_group = $tmp_groups->where('extra_field_groups.id', $group->id)->wherePivot('favourite', 1)->first();
-
-                if (null != $favourite_group && $favourite_group->pivot->uuid == $group->pivot->uuid) {
+        $groups = $groups->map(
+            function ($group) use (&$iterated_groups, $tmp_groups, $cat_id) {
+                if (1 == $group->cardinality) {
                     $group->is_favourite = true;
-                } elseif (null == $favourite_group && ! isset($iterated_groups[$group->id])) {
-                    $group->is_favourite = true;
-                }
-            }
-            $iterated_groups[$group->id] = true;
+                } else {
+                    $tmp_groups = $this->extraFieldGroups();
+                    if (null != $cat_id) {
+                        $tmp_groups = $tmp_groups->withAnyCategories($cat_id);
+                    }
+                    $favourite_group = $tmp_groups->where('extra_field_groups.id', $group->id)->wherePivot('favourite', 1)->first();
 
-            return $group;
-        })->sortBy('name');
+                    if (null != $favourite_group && $favourite_group->pivot->uuid == $group->pivot->uuid) {
+                        $group->is_favourite = true;
+                    } elseif (null == $favourite_group && ! isset($iterated_groups[$group->id])) {
+                        $group->is_favourite = true;
+                    }
+                }
+                $iterated_groups[$group->id] = true;
+
+                return $group;
+            })->sortBy('name');
 
         return $groups;
     }
 
-    public function setFavouriteGroup($group_id, $uuid) {
-        $this->extraFieldGroups()->where('extra_field_groups.id', $group_id)->get()->map(function ($group) use ($uuid) {
-            $favourite = 0;
-            // dd([$group->pivot, $uuid]);
-            if ($group->pivot->uuid == $uuid) {
-                $favourite = 1;
-            }
-            $group->pivot->update(['favourite' => $favourite]);
-        });
+    public function setFavouriteGroup($group_id, $uuid)
+    {
+        $this->extraFieldGroups()->where('extra_field_groups.id', $group_id)->get()->map(
+            function ($group) use ($uuid) {
+                $favourite = 0;
+                // dd([$group->pivot, $uuid]);
+                if ($group->pivot->uuid == $uuid) {
+                    $favourite = 1;
+                }
+                $group->pivot->update(['favourite' => $favourite]);
+            });
 
         // dd($this->extraFieldGroups()->where('extra_field_groups.id', $group_id)->get()->pluck('pivot.uuid', 'pivot.favourite'));
     }
 
-    public function updateUserExtraField(array $data, string $user_id, ?string $uuid = null) {
+    public function updateUserExtraField(array $data, string $user_id, ?string $uuid = null)
+    {
         // dddx([$data, $user_id,  $uuid]);
         $model_type = Str::snake(class_basename($this));
         $model_id = (string) $this->getKey();
@@ -176,7 +189,8 @@ trait HasExtraFields {
         ]);
     }
 
-    public function addExtraField(array $data, string $user_id, string $group_id, ?string $note = '') {
+    public function addExtraField(array $data, string $user_id, string $group_id, ?string $note = '')
+    {
         $uuid = Str::uuid();
         $rows = ExtraFieldGroup::find($group_id)->fields;
         foreach ($rows as $row) {
@@ -204,7 +218,8 @@ trait HasExtraFields {
         ]);
     }
 
-    public function getProfileExtraFieldOptions(string $user_id, ?string $uuid = null) {
+    public function getProfileExtraFieldOptions(string $user_id, ?string $uuid = null)
+    {
         $field_groups = $this->extraFieldGroups->where('pivot.user_id', $user_id);
 
         // serve per mostrare i dati del profilo sul campo se sei su addService ad esempio
@@ -239,7 +254,8 @@ trait HasExtraFields {
         return $data;
     }
 
-    public function getProfileExtraFieldGroupsOptions(string $user_id, ?string $uuid = null) {
+    public function getProfileExtraFieldGroupsOptions(string $user_id, ?string $uuid = null)
+    {
         $model_groups = $this->getProfileExtraFieldOptions($user_id);
         foreach ($model_groups as &$group) {
             $group['name'] = str()->slug($group['name']);
@@ -257,7 +273,8 @@ trait HasExtraFields {
         return $model_groups;
     }
 
-    public function getUserExtraFieldValue(string $user_id, ?string $uuid = null) {
+    public function getUserExtraFieldValue(string $user_id, ?string $uuid = null)
+    {
         $model_fields = $this->extraFields->where('pivot.user_id', $user_id);
         // $fav_groups = $this->getFavouriteGroups();
         $fav_groups = app(\Modules\ExtraField\Actions\ExtraFieldGroup\GetFavorites::class)->execute($this);
@@ -308,13 +325,15 @@ trait HasExtraFields {
         return $data;
     }
 
-    public function getExtraFieldValue() {
+    public function getExtraFieldValue()
+    {
         $field_groups = ExtraFieldGroup::get();
 
         return $field_groups;
     }
 
-    public function getExtraFieldRules($form_data): array {
+    public function getExtraFieldRules($form_data): array
+    {
         $extra_fields_groups = $this->getExtraFieldValue();
 
         $rules = [];
@@ -348,7 +367,8 @@ trait HasExtraFields {
         return $rules;
     }
 
-    public function getUserExtraFieldGroupsFormData(string $user_id, ?string $uuid = null): array {
+    public function getUserExtraFieldGroupsFormData(string $user_id, ?string $uuid = null): array
+    {
         // ora di defaut sceglie il primo. poi diventerà il preferito
         $tmp = $this->getUserExtraFieldValue($user_id, $uuid);
         $data = [];
@@ -368,7 +388,8 @@ trait HasExtraFields {
         return $data;
     }
 
-    public function getUserExtraFieldFormData(string $user_id, ?string $uuid = null): array {
+    public function getUserExtraFieldFormData(string $user_id, ?string $uuid = null): array
+    {
         $tmp = $this->getUserExtraFieldValue($user_id, $uuid);
         $data = [];
 
@@ -388,22 +409,25 @@ trait HasExtraFields {
         return $data;
     }
 
-    public function addExtraFieldByGroup(array $data, string $user_id, ?string $uuid = null) {
+    public function addExtraFieldByGroup(array $data, string $user_id, ?string $uuid = null)
+    {
         $extra_field_groups = $this->extraFieldGroups
             ->where('pivot.user_id', null);
 
         foreach ($extra_field_groups as $group) {
             $fields = $group->fields->where('pivot.user_id', null);
-            $up = $fields->map(function ($item) use ($data) {
-                $item->value = collect($data)->get($item->name);
+            $up = $fields->map(
+                function ($item) use ($data) {
+                    $item->value = collect($data)->get($item->name);
 
-                return $item;
-            })->pluck('value', 'name')->all();
+                    return $item;
+                })->pluck('value', 'name')->all();
             $this->addExtraField($up, $user_id, (string) $group->id);
         }
     }
 
-    public function updateUserExtraFieldByGroupAndProfileFieldUuid(array $uuid_data, string $user_id) {
+    public function updateUserExtraFieldByGroupAndProfileFieldUuid(array $uuid_data, string $user_id)
+    {
         $profile = ProfileService::make()->get(User::find($user_id))->getProfile();
         foreach ($uuid_data as $uuid) {
             // $new_uuid = Str::uuid()->toString();
@@ -425,34 +449,37 @@ trait HasExtraFields {
         }
     }
 
-    public function updateUserExtraFieldByGroup(array $data, string $user_id, ?string $uuid = null) {
+    public function updateUserExtraFieldByGroup(array $data, string $user_id, ?string $uuid = null)
+    {
         $extra_field_groups = $this->extraFieldGroups->where('pivot.user_id', null);
 
         foreach ($extra_field_groups as $group) {
             $fields = $group->fields->where('pivot.user_id', null);
-            $up = $fields->map(function ($item) use ($data, $user_id) {
-                $item->value = collect($data)->get($item->name);
+            $up = $fields->map(
+                function ($item) use ($data, $user_id) {
+                    $item->value = collect($data)->get($item->name);
 
-                $res = ExtraFieldMorph::firstOrCreate([
-                    'model_id' => $this->getKey(),
-                    'model_type' => Str::snake(class_basename($this)),
-                    'user_id' => $user_id,
-                    'extra_field_id' => $item->id,
-                    // 'uuid' => $uuid,
-                ]);
+                    $res = ExtraFieldMorph::firstOrCreate([
+                        'model_id' => $this->getKey(),
+                        'model_type' => Str::snake(class_basename($this)),
+                        'user_id' => $user_id,
+                        'extra_field_id' => $item->id,
+                        // 'uuid' => $uuid,
+                    ]);
 
-                $res = tap($res)->update([
-                    'value' => $item->value,
-                ]);
+                    $res = tap($res)->update([
+                        'value' => $item->value,
+                    ]);
 
-                return $item;
-            })->pluck('value', 'name')->all();
+                    return $item;
+                })->pluck('value', 'name')->all();
 
             $this->updateUserExtraField($up, $user_id, $uuid);
         }
     }
 
-    public function updateUserExtraFieldByGroupTest(array $data, string $user_id, ?string $uuid = null) {
+    public function updateUserExtraFieldByGroupTest(array $data, string $user_id, ?string $uuid = null)
+    {
         // così aggiorno solo quelli del modello di partenza (es. Profile)
         // ma se volessi aggiornare assieme quelli di profile e services?
 
@@ -464,25 +491,26 @@ trait HasExtraFields {
 
             // dd($fields);
 
-            $up = $fields->map(function ($item) use ($data, $user_id, $uuid) {
-                Debugbar::info($item->name);
+            $up = $fields->map(
+                function ($item) use ($data, $user_id, $uuid) {
+                    Debugbar::info($item->name);
 
-                $item->value = collect($data)->get($item->name);
+                    $item->value = collect($data)->get($item->name);
 
-                $res = ExtraFieldMorph::firstOrCreate([
-                    'model_id' => $this->getKey(),
-                    'model_type' => Str::snake(class_basename($this)),
-                    'user_id' => $user_id,
-                    'extra_field_id' => $item->id,
-                    'uuid' => $uuid,
-                ]);
+                    $res = ExtraFieldMorph::firstOrCreate([
+                        'model_id' => $this->getKey(),
+                        'model_type' => Str::snake(class_basename($this)),
+                        'user_id' => $user_id,
+                        'extra_field_id' => $item->id,
+                        'uuid' => $uuid,
+                    ]);
 
-                $res = tap($res)->update([
-                    'value' => $item->value,
-                ]);
+                    $res = tap($res)->update([
+                        'value' => $item->value,
+                    ]);
 
-                return $item;
-            })->pluck('value', 'name')->all();
+                    return $item;
+                })->pluck('value', 'name')->all();
 
             // $this->updateExtraField($up, $user_id, $uuid);
         }

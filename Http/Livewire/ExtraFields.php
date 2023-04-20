@@ -160,33 +160,36 @@ class ExtraFields extends Component
                 ExtraFieldGroupMorph::where($data)?->delete();
 
                 if (true == $is_required_fields) {
-                    $updating_services->map(function ($service) {
-                        $company = $service->company;
+                    $updating_services->map(
+                        function ($service) {
+                            $company = $service->company;
 
-                        $updates = collect([
-                            'Disiscrizione dal Servizio' => $service->name,
-                        ]);
-                        app(SendConsentsUpdateNotifyToCompanyAction::class)->execute($company, $updates);
-                    });
+                            $updates = collect([
+                                'Disiscrizione dal Servizio' => $service->name,
+                            ]);
+                            app(SendConsentsUpdateNotifyToCompanyAction::class)->execute($company, $updates);
+                        });
 
                     // cancella i campi dei service
-                    $ef->map(function ($item) {
-                        $d = [
-                            'model_type' => $item->model_type,
-                            'model_id' => $item->model_id,
-                            'user_id' => $item->user_id,
-                        ];
-                        ExtraFieldMorph::where($d)?->delete();
-                    });
+                    $ef->map(
+                        function ($item) {
+                            $d = [
+                                'model_type' => $item->model_type,
+                                'model_id' => $item->model_id,
+                                'user_id' => $item->user_id,
+                            ];
+                            ExtraFieldMorph::where($d)?->delete();
+                        });
                 } else {
-                    $updating_services->map(function ($service) use ($group_name) {
-                        $company = $service->company;
+                    $updating_services->map(
+                        function ($service) use ($group_name) {
+                            $company = $service->company;
 
-                        $updates = collect([
-                            'Eliminazione Dati del Gruppo' => $group_name,
-                        ]);
-                        app(SendConsentsUpdateNotifyToCompanyAction::class)->execute($company, $updates);
-                    });
+                            $updates = collect([
+                                'Eliminazione Dati del Gruppo' => $group_name,
+                            ]);
+                            app(SendConsentsUpdateNotifyToCompanyAction::class)->execute($company, $updates);
+                        });
                 }
 
                 session()->flash('message', 'Post successfully updated.');

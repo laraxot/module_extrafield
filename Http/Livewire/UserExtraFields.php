@@ -11,17 +11,19 @@ use Illuminate\Support\Str;
 use Livewire\Component;
 use Modules\Blog\Models\Category;
 use Modules\Cms\Actions\GetViewAction;
+use Modules\ExtraField\Models\Contracts\HasExtraFieldsContract;
 use Modules\Xot\Actions\GetModelTypeByModelAction;
 
 // use Modules\PFed\Models\Profile as ProfileModel;
 
-class UserExtraFields extends Component {
+class UserExtraFields extends Component
+{
     public string $user_id;
 
     public string $cat_id = '';
     public string $tpl;
 
-    public Model $model;
+    public HasExtraFieldsContract $model;
 
     public string $model_type;
     public string $model_id;
@@ -37,7 +39,8 @@ class UserExtraFields extends Component {
      */
     protected $listeners = ['refreshExtraFields' => '$refresh'];
 
-    public function mount(Model $model, string $tpl = 'v1'): void {
+    public function mount(HasExtraFieldsContract $model, string $tpl = 'v1'): void
+    {
         $this->model = $model;
         $model_id = ''.$this->model->getKey();
         $this->model_id = $model_id;
@@ -51,7 +54,8 @@ class UserExtraFields extends Component {
     //     return ProfileModel::where('user_id', $this->user_id)->first();
     // }
 
-    public function render(): Renderable {
+    public function render(): Renderable
+    {
         /**
          * @phpstan-var view-string
          */
@@ -68,22 +72,24 @@ class UserExtraFields extends Component {
         return view($view, $view_params);
     }
 
-    public function showPage(): void {
+    public function showPage(): void
+    {
         $res = $this->model->extraFields()
         ->wherePivot('user_id', null);
 
         $rows = $res->get();
 
         $res = $rows->groupBy('group_id')
-            ->map(function ($items, $group_id) {
-                $first = $items->first();
+            ->map(
+                function ($items, $group_id) {
+                    $first = $items->first();
 
-                return [
-                    'id' => $group_id,
-                    'label' => $first->group->name,
-                    'items_grouped' => $items->groupBy('pivot.uuid'),
-                ];
-            });
+                    return [
+                        'id' => $group_id,
+                        'label' => $first->group->name,
+                        'items_grouped' => $items->groupBy('pivot.uuid'),
+                    ];
+                });
 
         $this->groups = $res->all();
     }
@@ -93,7 +99,8 @@ class UserExtraFields extends Component {
      *
      * @return mixed
      */
-    public function getFromUserTable($item) {
+    public function getFromUserTable($item)
+    {
         return $item->pivot->extraFieldMorphUserValues()->where('user_id', $this->user_id)->get()->last()?->value;
     }
 }

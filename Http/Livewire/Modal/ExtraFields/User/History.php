@@ -11,17 +11,24 @@ use Modules\ExtraField\Models\ExtraField;
 use Modules\PFed\Models\History as HistoryModel;
 use WireElements\Pro\Components\Modal\Modal;
 
-class History extends Modal {
+class History extends Modal
+{
     public string $service_id;
     public string $extrafield_opts;
     public array $extrafield_opts_arr;
 
-    public function mount(string $service_id, string $extrafield_opts): void {
+    public function mount(string $service_id, string $extrafield_opts): void
+    {
         $this->service_id = $service_id;
-        $this->extrafield_opts_arr = array_keys(json_decode($extrafield_opts, true));
+        $arr = json_decode($extrafield_opts, true);
+        if (! is_array($arr)) {
+            throw new \Exception('['.__LINE__.']['.__FILE__.']');
+        }
+        $this->extrafield_opts_arr = array_keys($arr);
     }
 
-    public function render(): Renderable {
+    public function render(): Renderable
+    {
         $history_collection = HistoryModel::where('causer_id', Auth::id())->where('subject_type', 'extra_field_morph')->get();
 
         $history = $history_collection->filter(function ($item) {
@@ -52,7 +59,8 @@ class History extends Modal {
         return view($view, $view_params);
     }
 
-    public static function attributes(): array {
+    public static function attributes(): array
+    {
         return [
             // Set the modal size to 2xl, you can choose between:
             // xs, sm, md, lg, xl, 2xl, 3xl, 4xl, 5xl, 6xl, 7xl
