@@ -89,7 +89,7 @@ class DeleteData extends Modal
         ];
     }
 
-    public function delete()
+    public function delete(): void
     {
         $rows = $this->rows;
         // dddx($rows);

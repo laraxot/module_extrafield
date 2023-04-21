@@ -83,6 +83,12 @@ class UserExtraFields extends Component
             ->map(
                 function ($items, $group_id) {
                     $first = $items->first();
+                    if (null == $first) {
+                        throw new \Exception('['.__LINE__.']['.__FILE__.']');
+                    }
+                    if (! property_exists($first, 'group')) {
+                        throw new \Exception('['.__LINE__.']['.__FILE__.']');
+                    }
 
                     return [
                         'id' => $group_id,
@@ -103,6 +109,10 @@ class UserExtraFields extends Component
      */
     public function getFromUserTable($item)
     {
+        if (! property_exists($item, 'pivot')) {
+            throw new \Exception('['.__LINE__.']['.__FILE__.']');
+        }
+
         return $item->pivot->extraFieldMorphUserValues()->where('user_id', $this->user_id)->get()->last()?->value;
     }
 }
