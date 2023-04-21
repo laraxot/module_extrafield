@@ -7,7 +7,6 @@ namespace Modules\ExtraField\Http\Livewire\Modal\ExtraFields\DataSteps;
 use Illuminate\Contracts\Support\Renderable;
 use Illuminate\Database\Eloquent\Relations\Relation;
 use Modules\Cms\Actions\GetViewAction;
-use Modules\ExtraField\Models\Contracts\HasExtraFieldsContract;
 use Modules\Xot\Actions\GetModelByModelTypeAction;
 use Spatie\LivewireWizard\Components\StepComponent;
 
@@ -83,12 +82,9 @@ class ThirdStep extends StepComponent
         $this->emit('modal.close');
     }
 
-    public function getModel(string $model_type, string $model_id): HasExtraFieldsContract
+    public function getModel()
     {
         $model = app(GetModelByModelTypeAction::class)->execute($this->model_type, $this->model_id);
-        if (! $model instanceof HasExtraFieldsContract) {
-            throw new \Exception('['.__LINE__.']['.__FILE__.']');
-        }
 
         return $model;
     }

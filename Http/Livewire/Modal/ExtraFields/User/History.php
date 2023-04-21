@@ -34,7 +34,18 @@ class History extends Modal
         $history = $history_collection->filter(function ($item) {
             if (isset($item->properties['attributes'])) {
                 // dddx($item->properties['attributes']['extra_field_id']);
-                $item->extra_field_name = ExtraField::find($item->properties['attributes']['extra_field_id'])?->name;
+                // $item->extra_field_name = ExtraField::find($item->properties['attributes']['extra_field_id'])?->name;
+                $extra_field = ExtraField::find($item->properties['attributes']['extra_field_id']);
+                if (! property_exists($extra_field, 'name')) {
+                    throw new \Exception('['.__LINE__.']['.__FILE__.']');
+                }
+                if (! property_exists($item, 'extra_field_name')) {
+                    throw new \Exception('['.__LINE__.']['.__FILE__.']');
+                }
+                $item->extra_field_name = $extra_field?->name;
+                if (! property_exists($item, 'update')) {
+                    throw new \Exception('['.__LINE__.']['.__FILE__.']');
+                }
                 $item->update = $item['updated_at']->format('d F Y H:i:s');
 
                 return $item;
