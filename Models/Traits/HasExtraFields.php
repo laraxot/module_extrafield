@@ -9,6 +9,7 @@ declare(strict_types=1);
 namespace Modules\ExtraField\Models\Traits;
 
 use Barryvdh\Debugbar\Facades\Debugbar;
+use Illuminate\Database\Eloquent\Collection as EloquentCollection;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\MorphToMany;
 use Illuminate\Support\Collection;
@@ -123,7 +124,7 @@ trait HasExtraFields
                     if (! property_exists($group, 'pivot')) {
                         throw new \Exception('['.__LINE__.']['.__FILE__.']');
                     }
-                    if (null != $favourite_group && $favourite_group->pivot->uuid == $group->pivot->uuid) {
+                    if (null != $favourite_group && $favourite_group->getRelationValue('pivot')->uuid == $group->getRelationValue('pivot')->uuid) {
                         $group->is_favourite = true;
                     } elseif (null == $favourite_group && ! isset($iterated_groups[$group->id])) {
                         $group->is_favourite = true;
@@ -143,10 +144,10 @@ trait HasExtraFields
             function ($group) use ($uuid) {
                 $favourite = 0;
                 // dd([$group->pivot, $uuid]);
-                if ($group->pivot->uuid == $uuid) {
+                if ($group->getRelationValue('pivot')->uuid == $uuid) {
                     $favourite = 1;
                 }
-                $group->pivot->update(['favourite' => $favourite]);
+                $group->getRelationValue('pivot')->update(['favourite' => $favourite]);
             });
 
         // dd($this->extraFieldGroups()->where('extra_field_groups.id', $group_id)->get()->pluck('pivot.uuid', 'pivot.favourite'));
@@ -328,7 +329,7 @@ trait HasExtraFields
                                 // if (! property_exists($extra_field, 'pivot')) {
                                 //     throw new \Exception('['.__LINE__.']['.__FILE__.']');
                                 // }
-                                $model_fields_value = $extra_field?->pivot?->value;
+                                $model_fields_value = $extra_field?->getRelationValue('pivot')?->value;
 
                                 $profile_fields_value = $profile_fields->firstWhere('id', $field->id)?->pivot?->value;
 
@@ -349,14 +350,9 @@ trait HasExtraFields
         return $data;
     }
 
-    /**
-     * @return Illuminate\Database\Eloquent\Collection<int,Modules\ExtraField\Models\ExtraFieldGroup>
-     */
-    public function getExtraFieldValue(): array
+    public function getExtraFieldValue(): EloquentCollection
     {
-        $field_groups = ExtraFieldGroup::get();
-
-        return $field_groups;
+        return ExtraFieldGroup::get();
     }
 
     public function getExtraFieldRules(array $form_data): array

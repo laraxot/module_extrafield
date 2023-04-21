@@ -50,10 +50,7 @@ interface HasExtraFieldsContract extends ModelContract
 
     public function getUserExtraFieldValue(string $user_id, ?string $uuid = null): array;
 
-    /**
-     * @return Illuminate\Database\Eloquent\Collection<int,Modules\ExtraField\Models\ExtraFieldGroup>
-     */
-    public function getExtraFieldValue();
+    public function getExtraFieldValue(): EloquentCollection;
 
     public function getExtraFieldRules(array $form_data): array;
 

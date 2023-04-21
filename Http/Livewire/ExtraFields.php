@@ -122,7 +122,7 @@ class ExtraFields extends Component
             return $ret;
         });
         // type bool
-        $required = $required->count() > 1 ?? false;
+        $required = $required->count() > 1;
 
         return $required;
     }
