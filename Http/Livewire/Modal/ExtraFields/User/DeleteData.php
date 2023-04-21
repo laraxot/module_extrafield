@@ -55,6 +55,9 @@ class DeleteData extends Modal
 
     public function getRowsProperty(): EloquentCollection
     {
+        if (! method_exists($this->model, 'extraFields')) {
+            throw new \Exception('['.__LINE__.']['.__FILE__.']');
+        }
         $rows = $this->model
         ->extraFields()
         // ->wherePivot('user_id', $this->user_id)

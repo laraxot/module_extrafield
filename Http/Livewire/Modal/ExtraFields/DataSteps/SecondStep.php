@@ -68,7 +68,7 @@ class SecondStep extends StepComponent
         }
     }
 
-    public function updateFormData($data): void
+    public function updateFormData(array $data): void
     {
         $this->form_data = array_merge($this->form_data, $data);
     }
@@ -108,7 +108,9 @@ class SecondStep extends StepComponent
         $model_id = $this->form1_data['model_id'];
 
         $model = app(GetModelByModelTypeAction::class)->execute($model_type, $model_id);
-
+        if (! method_exists($model, 'getExtraFieldRules')) {
+            throw new \Exception('['.__LINE__.']['.__FILE__.']');
+        }
         $efr = $model->getExtraFieldRules($this->form_data);
         if (! empty($efr)) {
             $this->validate($efr);

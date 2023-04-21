@@ -42,6 +42,13 @@ class EditData extends Modal
 
         $data = $this->rows->map(
             function ($item) {
+                if (! property_exists($item, 'name')) {
+                    throw new \Exception('['.__LINE__.']['.__FILE__.']');
+                }
+                if (! property_exists($item, 'pivot')) {
+                    throw new \Exception('['.__LINE__.']['.__FILE__.']');
+                }
+
                 return [
                     'name' => $item->name,
                     'value' => $item->pivot->userValue($this->user_id),
@@ -65,6 +72,10 @@ class EditData extends Modal
      */
     public function getRowsProperty(): EloquentCollection
     {
+        if (! method_exists($this->model, 'extraFields')) {
+            throw new \Exception('['.__LINE__.']['.__FILE__.']');
+        }
+
         $rows = $this->model
             ->extraFields()
             // ->wherePivot('user_id', $this->user_id)
@@ -101,13 +112,19 @@ class EditData extends Modal
         ];
     }
 
-    public function save()
+    public function save(): void
     {
         $rows = $this->rows;
         foreach ($rows as $row) {
+            if (! property_exists($row, 'name')) {
+                throw new \Exception('['.__LINE__.']['.__FILE__.']');
+            }
             $value = collect($this->form_data)->get($row->name);
             // $row->pivot->update(['value' => $value]);
             // $row->pivot->extraFieldMorphUserValues()->create(['value' => $value, 'user_id' => $this->user_id]);
+            if (! property_exists($row, 'pivot')) {
+                throw new \Exception('['.__LINE__.']['.__FILE__.']');
+            }
             $row->pivot->updateUserValue($this->user_id, $value);
         }
 

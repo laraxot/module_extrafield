@@ -204,7 +204,11 @@ trait HasExtraFields
     public function addExtraField(array $data, string $user_id, string $group_id, ?string $note = ''): void
     {
         $uuid = Str::uuid();
-        $rows = ExtraFieldGroup::find($group_id)->fields;
+        $extra_field_group = ExtraFieldGroup::find($group_id);
+        if (null == $extra_field_group) {
+            throw new \Exception('['.__LINE__.']['.__FILE__.']');
+        }
+        $rows = $extra_field_group->fields;
         foreach ($rows as $row) {
             $value = collect($data)->get($row->name);
 
@@ -238,8 +242,11 @@ trait HasExtraFields
         if (0 === $field_groups->count()) {
             $field_groups = $this->extraFieldGroups->where('pivot.user_id', null);
         }
-
-        $profile_fields = ProfileService::make()->get(User::find($user_id))->getProfile()->extraFields;
+        $profile = ProfileService::make()->get(User::find($user_id))->getProfile();
+        if (! property_exists($profile, 'extraFields')) {
+            throw new \Exception('['.__LINE__.']['.__FILE__.']');
+        }
+        $profile_fields = $profile->extraFields;
 
         if (null != $uuid) {
             $field_groups = $field_groups->where('pivot.uuid', $uuid);
@@ -316,7 +323,12 @@ trait HasExtraFields
                     $group->fields
                         ->map(
                             function ($field) use ($model_fields, $profile_fields, $profile, $group) {
-                                $model_fields_value = $model_fields->firstWhere('id', $field->id)?->pivot?->value;
+                                $extra_field = $model_fields->firstWhere('id', $field->id);
+                                // $model_fields_value = $model_fields->firstWhere('id', $field->id)?->pivot?->value;
+                                // if (! property_exists($extra_field, 'pivot')) {
+                                //     throw new \Exception('['.__LINE__.']['.__FILE__.']');
+                                // }
+                                $model_fields_value = $extra_field?->pivot?->value;
 
                                 $profile_fields_value = $profile_fields->firstWhere('id', $field->id)?->pivot?->value;
 
@@ -337,6 +349,9 @@ trait HasExtraFields
         return $data;
     }
 
+    /**
+     * @return Illuminate\Database\Eloquent\Collection<int,Modules\ExtraField\Models\ExtraFieldGroup>
+     */
     public function getExtraFieldValue(): array
     {
         $field_groups = ExtraFieldGroup::get();
@@ -430,6 +445,9 @@ trait HasExtraFields
             $fields = $group->fields->where('pivot.user_id', null);
             $up = $fields->map(
                 function ($item) use ($data) {
+                    if (! property_exists($item, 'value')) {
+                        throw new \Exception('['.__LINE__.']['.__FILE__.']');
+                    }
                     $item->value = collect($data)->get($item->name);
 
                     return $item;
@@ -443,6 +461,9 @@ trait HasExtraFields
         $profile = ProfileService::make()->get(User::find($user_id))->getProfile();
         foreach ($uuid_data as $uuid) {
             // $new_uuid = Str::uuid()->toString();
+            if (! property_exists($profile, 'extraFields')) {
+                throw new \Exception('['.__LINE__.']['.__FILE__.']');
+            }
             $profile_fields = $profile->extraFields->where('pivot.uuid', $uuid);
             foreach ($profile_fields as $profile_field) {
                 $res = ExtraFieldMorph::firstOrCreate([

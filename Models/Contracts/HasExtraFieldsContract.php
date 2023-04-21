@@ -10,13 +10,14 @@ use Illuminate\Database\Eloquent\Relations\MorphToMany;
 use Illuminate\Support\Collection;
 use Modules\ExtraField\Models\ExtraField;
 use Modules\PFed\Models\Consent;
+use Modules\Xot\Contracts\ModelContract;
 
 /**
  * @property string                              $name
  * @property EloquentCollection<int, ExtraField> $extraFields
  * @property EloquentCollection<int, Consent>    $consents
  */
-interface HasExtraFieldsContract
+interface HasExtraFieldsContract extends ModelContract
 {
     public function extraFields(): MorphToMany;
 
@@ -49,7 +50,10 @@ interface HasExtraFieldsContract
 
     public function getUserExtraFieldValue(string $user_id, ?string $uuid = null): array;
 
-    public function getExtraFieldValue(): array;
+    /**
+     * @return Illuminate\Database\Eloquent\Collection<int,Modules\ExtraField\Models\ExtraFieldGroup>
+     */
+    public function getExtraFieldValue();
 
     public function getExtraFieldRules(array $form_data): array;
 
