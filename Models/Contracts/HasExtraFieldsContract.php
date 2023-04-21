@@ -33,7 +33,7 @@ interface HasExtraFieldsContract
 
     public function getFavouriteGroups(?string $cat_id = null);
 
-    public function setFavouriteGroup($group_id, $uuid);
+    public function setFavouriteGroup(string $group_id, string $uuid): void;
 
     public function updateUserExtraField(array $data, string $user_id, ?string $uuid = null);
 

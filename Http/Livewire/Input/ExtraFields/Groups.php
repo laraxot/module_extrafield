@@ -5,6 +5,7 @@ declare(strict_types=1);
 namespace Modules\ExtraField\Http\Livewire\Input\ExtraFields;
 
 use Illuminate\Contracts\Support\Renderable;
+use Illuminate\Database\Eloquent\Collection as EloquentCollection;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Support\Collection;
 use Illuminate\Support\Str;
@@ -49,7 +50,7 @@ class Groups extends Component
     /**
      * @param mixed $value
      */
-    public function mount(string $name, Model $model, $value, $tpl = 'v1'): void
+    public function mount(string $name, Model $model, $value, string $tpl = 'v1'): void
     {
         // dddx([$name, $model, $value]);
 
@@ -62,23 +63,23 @@ class Groups extends Component
         // dddx(['availableGroups' => $this->availableGroups, 'assignedGroups' => $this->assignedGroups]);
     }
 
-    public function showPage()
+    public function showPage(): void
     {
         $this->availableGroups = $this->getAvailableGroups();
         $this->assignedGroups = $this->getAssignedGroups();
     }
 
-    public function getAvailableGroups()
+    public function getAvailableGroups(): EloquentCollection
     {
         return ExtraFieldGroup::whereNotIn('id', $this->getAssignedGroupsKeys())->whereHas('fields')->orderBy('name')->get();
     }
 
-    public function getAssignedGroupsKeys()
+    public function getAssignedGroupsKeys(): array
     {
         return $this->model->extraFields()->wherePivot('user_id', null)->get()->groupBy('group.id')->keys();
     }
 
-    public function getAssignedGroups()
+    public function getAssignedGroups(): Collection
     {
         return $this->model->extraFields()->wherePivot('user_id', null)->get()->groupBy('group.name')->map(
             function ($ef, $group) {
@@ -86,7 +87,7 @@ class Groups extends Component
             });
     }
 
-    public function assign()
+    public function assign(): void
     {
         $uuid = Str::uuid()->toString();
         foreach ($this->form_data['available_groups'] as $id) {
@@ -105,7 +106,7 @@ class Groups extends Component
         $this->showPage();
     }
 
-    public function remove()
+    public function remove(): void
     {
         foreach ($this->form_data['assigned_groups'] as $id) {
             $efs = ExtraField::where('group_id', $id)->get();

@@ -11,6 +11,7 @@ namespace Modules\ExtraField\Models\Traits;
 use Barryvdh\Debugbar\Facades\Debugbar;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\MorphToMany;
+use Illuminate\Support\Collection;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Str;
 use Modules\ExtraField\Models\ExtraField;
@@ -47,6 +48,9 @@ trait HasExtraFields
     }
 
     // c'è qualcosa di sbagliato. legge il gruppo da group_id di extrafield ma deve leggerlo da polimorfica
+    /**
+     * @return \Staudenmeir\EloquentHasManyDeep\HasManyDeep
+     */
     public function extraFieldsFromGroups()
     {
         // dddx($this->hasManyDeepFromRelations($this->noUserExtraFieldGroups(), (new ExtraFieldGroup())->noUserFields())->withIntermediate(ExtraFieldGroup::class)->toSql());
@@ -54,17 +58,17 @@ trait HasExtraFields
         return $this->hasManyDeepFromRelations($this->noUserExtraFieldGroups(), (new ExtraFieldGroup())->noUserFields())->withIntermediate(ExtraFieldGroup::class);
     }
 
-    public function noUserExtraFields()
+    public function noUserExtraFields(): MorphToMany
     {
         return $this->extraFields()->wherePivot('user_id', null);
     }
 
-    public function userExtraFieldGroups(string $user_id)
+    public function userExtraFieldGroups(string $user_id): MorphToMany
     {
         return $this->extraFieldGroups()->wherePivot('user_id', $user_id);
     }
 
-    public function noUserExtraFieldGroups()
+    public function noUserExtraFieldGroups(): MorphToMany
     {
         // dd($this->extraFieldGroups()->wherePivot('user_id', null)->toSql());
         // non vanno i wherepivot qua. bisogna passare per relazioni già con il wherepivot
@@ -93,7 +97,7 @@ trait HasExtraFields
         ;
     }
 
-    public function getFavouriteGroups(?string $cat_id = null)
+    public function getFavouriteGroups(?string $cat_id = null): Collection
     {
         $tmp_groups = $this->extraFieldGroups();
         if (null != $cat_id) {
@@ -128,7 +132,7 @@ trait HasExtraFields
         return $groups;
     }
 
-    public function setFavouriteGroup($group_id, $uuid)
+    public function setFavouriteGroup(string $group_id, string $uuid): void
     {
         $this->extraFieldGroups()->where('extra_field_groups.id', $group_id)->get()->map(
             function ($group) use ($uuid) {
@@ -143,7 +147,10 @@ trait HasExtraFields
         // dd($this->extraFieldGroups()->where('extra_field_groups.id', $group_id)->get()->pluck('pivot.uuid', 'pivot.favourite'));
     }
 
-    public function updateUserExtraField(array $data, string $user_id, ?string $uuid = null)
+    /**
+     * --.
+     */
+    public function updateUserExtraField(array $data, string $user_id, ?string $uuid = null): void
     {
         // dddx([$data, $user_id,  $uuid]);
         $model_type = Str::snake(class_basename($this));

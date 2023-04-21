@@ -4,13 +4,15 @@ declare(strict_types=1);
 
 namespace Modules\ExtraField\Actions\ExtraFieldGroup;
 
-use Illuminate\Database\Eloquent\Model;
+use Modules\ExtraField\Models\Contracts\HasExtraFieldsContract;
 use Spatie\QueueableAction\QueueableAction;
 
-class GetFormData {
+class GetFormData
+{
     use QueueableAction;
 
-    public function execute(Model $model, string $user_id, string $uuid): array {
+    public function execute(HasExtraFieldsContract $model, string $user_id, string $uuid): array
+    {
         $tmp = app(\Modules\ExtraField\Actions\ExtraFieldGroup\Get::class)->execute($model, $user_id, $uuid);
         $data = [];
 

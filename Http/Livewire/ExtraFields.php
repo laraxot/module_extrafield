@@ -14,6 +14,7 @@ use Livewire\Component;
 use Modules\Blog\Models\Category;
 use Modules\Cms\Actions\GetViewAction;
 use Modules\ExtraField\Actions\GetExtraFieldGroupCategoriesByModelTypeAction;
+use Modules\ExtraField\Models\Contracts\HasExtraFieldsContract;
 use Modules\ExtraField\Models\ExtraFieldGroupMorph;
 use Modules\ExtraField\Models\ExtraFieldMorph;
 use Modules\PFed\Actions\SendConsentsUpdateNotifyToCompanyAction;
@@ -35,7 +36,7 @@ class ExtraFields extends Component
     public $user_id;
     public string $cat_id = '';
     public string $tpl;
-    public Model $model;
+    public HasExtraFieldsContract $model;
     public string $model_type;
     public string $model_id;
     public ?string $category_name;
@@ -46,7 +47,7 @@ class ExtraFields extends Component
      */
     protected $listeners = ['refreshExtraFields' => '$refresh'];
 
-    public function mount(Model $model, string $tpl = 'v4'): void
+    public function mount(HasExtraFieldsContract $model, string $tpl = 'v4'): void
     {
         $this->model = $model;
         $model_id = ''.$model->getKey();
@@ -106,12 +107,12 @@ class ExtraFields extends Component
         $this->category_name = $category->name;
     }
 
-    public function setFavouriteGroup($group_id, $uuid)
+    public function setFavouriteGroup($group_id, $uuid): void
     {
         $this->model->setFavouriteGroup($group_id, $uuid);
     }
 
-    public function checkRequiredFields($data)
+    public function checkRequiredFields($data): bool
     {
         // vede se stai cancellando campi obbligatori
         // se si deve cancellare tutti i pivot del servizio

@@ -7,6 +7,7 @@ namespace Modules\ExtraField\Http\Livewire\Modal\ExtraFields\DataSteps;
 use Illuminate\Contracts\Support\Renderable;
 use Illuminate\Database\Eloquent\Relations\Relation;
 use Modules\Cms\Actions\GetViewAction;
+use Modules\ExtraField\Models\Contracts\HasExtraFieldsContract;
 use Modules\Xot\Actions\GetModelByModelTypeAction;
 use Spatie\LivewireWizard\Components\StepComponent;
 
@@ -18,6 +19,9 @@ class ThirdStep extends StepComponent
 
     public bool $is_first = false;
     public bool $is_last = true;
+
+    public string $model_type;
+    public string $model_id;
 
     public function mount(): void
     {
@@ -67,15 +71,25 @@ class ThirdStep extends StepComponent
         $user_id = $this->form1_data['user_id'];
         $group_id = $this->form1_data['group_id'];
         $cat_id = $this->form1_data['cat_id'];
-        $model_type = $this->form1_data['model_type'];
-        $model_id = $this->form1_data['model_id'];
+        $this->model_type = $this->form1_data['model_type'];
+        $this->model_id = $this->form1_data['model_id'];
         $note = $this->form_data['note'] ?? '';
-        $model = app(GetModelByModelTypeAction::class)->execute($model_type, $model_id);
-        $model->addExtraField($this->form2_data, $user_id, $group_id, $note);
+
+        $this->getModel()->addExtraField($this->form2_data, $user_id, $group_id, $note);
 
         $this->emit('refreshExtraFields');
         session()->flash('message', 'Post successfully updated.');
 
         $this->emit('modal.close');
+    }
+
+    public function getModel(string $model_type, string $model_id): HasExtraFieldsContract
+    {
+        $model = app(GetModelByModelTypeAction::class)->execute($this->model_type, $this->model_id);
+        if (! $model instanceof HasExtraFieldsContract) {
+            throw new \Exception('['.__LINE__.']['.__FILE__.']');
+        }
+
+        return $model;
     }
 }

@@ -97,6 +97,8 @@ class UserExtraFields extends Component
     /**
      * Undocumented function.
      *
+     * @param HasExtraFieldsContract $item
+     *
      * @return mixed
      */
     public function getFromUserTable($item)

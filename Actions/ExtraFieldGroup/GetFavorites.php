@@ -4,15 +4,15 @@ declare(strict_types=1);
 
 namespace Modules\ExtraField\Actions\ExtraFieldGroup;
 
-use Illuminate\Database\Eloquent\Model;
 use Illuminate\Support\Collection;
+use Modules\ExtraField\Models\Contracts\HasExtraFieldsContract;
 use Spatie\QueueableAction\QueueableAction;
 
 class GetFavorites
 {
     use QueueableAction;
 
-    public function execute(Model $model, ?string $cat_id = null): Collection
+    public function execute(HasExtraFieldsContract $model, ?string $cat_id = null): Collection
     {
         $tmp_groups = $model->extraFieldGroups();
         if (null != $cat_id) {

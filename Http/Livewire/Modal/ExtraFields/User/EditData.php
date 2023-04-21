@@ -10,6 +10,7 @@ use Illuminate\Database\Eloquent\Model;
 use Illuminate\Support\Collection;
 use Illuminate\Support\Facades\Auth;
 use Modules\Cms\Actions\GetViewAction;
+use Modules\ExtraField\Models\Contracts\HasExtraFieldsContract;
 use Modules\UI\Datas\FieldData;
 use Modules\Xot\Actions\GetModelByModelTypeAction;
 use WireElements\Pro\Components\Modal\Modal;
@@ -59,6 +60,9 @@ class EditData extends Modal
         return $res;
     }
 
+    /**
+     * @return EloquentCollection<HasExtraFieldsContract>
+     */
     public function getRowsProperty(): EloquentCollection
     {
         $rows = $this->model

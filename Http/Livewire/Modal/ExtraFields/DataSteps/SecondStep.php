@@ -55,20 +55,20 @@ class SecondStep extends StepComponent
 
         $rows = ExtraFieldGroup::findOrFail($this->group_id)->fields;
 
-        $fields = FieldData::collection($rows)->toArray();
+        $fields = FieldData::collection($rows->all())->toArray();
         $this->fields = $fields;
 
         $this->initFormData();
     }
 
-    public function initFormData()
+    public function initFormData(): void
     {
         foreach ($this->fields as $field) {
             $this->form_data[$field['name']] = $field['value'] ?? '';
         }
     }
 
-    public function updateFormData($data)
+    public function updateFormData($data): void
     {
         $this->form_data = array_merge($this->form_data, $data);
     }
