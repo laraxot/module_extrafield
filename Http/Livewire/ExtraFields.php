@@ -107,12 +107,23 @@ class ExtraFields extends Component
         $this->category_name = $category->name;
     }
 
+    /**
+     * Summary of setFavouriteGroup.
+     *
+     * @param string|int $group_id
+     * @param string     $uuid
+     */
     public function setFavouriteGroup($group_id, $uuid): void
     {
         $this->model->setFavouriteGroup($group_id, $uuid);
     }
 
-    public function checkRequiredFields($data): bool
+    /**
+     * Summary of unsetFavouriteGroup.
+     *
+     * @param array $group_id
+     */
+    public function checkRequiredFields(array $data): bool
     {
         // vede se stai cancellando campi obbligatori
         // se si deve cancellare tutti i pivot del servizio
