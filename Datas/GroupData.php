@@ -9,7 +9,8 @@ use Spatie\LaravelData\Concerns\WireableData;
 use Spatie\LaravelData\Data;
 use Spatie\LaravelData\DataCollection;
 
-class GroupData extends Data implements Wireable {
+class GroupData extends Data implements Wireable
+{
     use WireableData;
 
     public string $name;

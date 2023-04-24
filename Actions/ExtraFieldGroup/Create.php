@@ -11,7 +11,8 @@ use Modules\ExtraField\Models\ExtraFieldGroupMorph;
 use Modules\ExtraField\Models\ExtraFieldMorph;
 use Spatie\QueueableAction\QueueableAction;
 
-class Create {
+class Create
+{
     use QueueableAction;
 
     /**
@@ -19,7 +20,8 @@ class Create {
      *
      * @return void
      */
-    public function execute(Model $model, string $extra_field_group_id, string $user_id, array $form_data) {
+    public function execute(Model $model, string $extra_field_group_id, string $user_id, array $form_data)
+    {
         $model_type = Str::snake(class_basename($model));
         $model_id = ''.$model->getKey();
 

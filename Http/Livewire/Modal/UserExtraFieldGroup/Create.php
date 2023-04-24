@@ -11,7 +11,8 @@ use Modules\UI\Datas\FieldData;
 use Modules\Xot\Datas\XotData;
 use WireElements\Pro\Components\Modal\Modal;
 
-class Create extends Modal {
+class Create extends Modal
+{
     public string $tpl = 'v1';
     public string $extra_field_group_id;
     public string $user_id;
@@ -19,7 +20,8 @@ class Create extends Modal {
     public array $form_data = [];
     public array $fields_arr;
 
-    public function mount(string $extra_field_group_id, string $user_id): void {
+    public function mount(string $extra_field_group_id, string $user_id): void
+    {
         $this->extra_field_group_id = $extra_field_group_id;
         $this->user_id = $user_id;
         $extra_field_group = ExtraFieldGroup::findOrFail($this->extra_field_group_id);
@@ -30,11 +32,13 @@ class Create extends Modal {
         $this->fields_arr = $fields;
     }
 
-    public static function getName(): string {
+    public static function getName(): string
+    {
         return 'modal.user-extra-field-group.create';
     }
 
-    public function render(): Renderable {
+    public function render(): Renderable
+    {
         /**
          * @phpstan-var view-string
          */
@@ -53,7 +57,8 @@ class Create extends Modal {
      *
      * @return void
      */
-    public function save() {
+    public function save()
+    {
         // app()
 
         $xot = XotData::from(config('xra'));
@@ -64,7 +69,8 @@ class Create extends Modal {
         session()->flash('message', 'saved !');
     }
 
-    public static function behavior(): array {
+    public static function behavior(): array
+    {
         return [
             // Close the modal if the escape key is pressed
             'close-on-escape' => true,
@@ -77,7 +83,8 @@ class Create extends Modal {
         ];
     }
 
-    public static function attributes(): array {
+    public static function attributes(): array
+    {
         return [
             // Set the modal size to 2xl, you can choose between:
             // xs, sm, md, lg, xl, 2xl, 3xl, 4xl, 5xl, 6xl, 7xl

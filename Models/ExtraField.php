@@ -23,6 +23,7 @@ use Modules\UI\Datas\FieldData;
  * @property string|null                                                  $updated_by
  * @property \Kalnoy\Nestedset\Collection|\Modules\Blog\Models\Category[] $categories
  * @property int|null                                                     $categories_count
+ *
  * @method static \Modules\Blog\Database\Factories\ExtraFieldFactory factory(...$parameters)
  * @method static \Illuminate\Database\Eloquent\Builder|ExtraField   newModelQuery()
  * @method static \Illuminate\Database\Eloquent\Builder|ExtraField   newQuery()
@@ -40,20 +41,25 @@ use Modules\UI\Datas\FieldData;
  * @method static \Illuminate\Database\Eloquent\Builder|ExtraField   withCategories($categories)
  * @method static \Illuminate\Database\Eloquent\Builder|ExtraField   withoutAnyCategories()
  * @method static \Illuminate\Database\Eloquent\Builder|ExtraField   withoutCategories($categories)
- * @property array|null $options
- * @property string|null $attributes
- * @property-read \Illuminate\Database\Eloquent\Collection<int, \Modules\ExtraField\Models\ExtraFieldGroup> $extraFieldGroups
- * @property-read int|null $extra_field_groups_count
- * @property-read \Modules\ExtraField\Models\ExtraFieldMorph|null $extraFieldMorph
- * @property-read \Illuminate\Database\Eloquent\Collection<int, \Modules\ExtraField\Models\ExtraFieldGroup> $groups
- * @property-read int|null $groups_count
+ *
+ * @property array|null                                                                                $options
+ * @property string|null                                                                               $attributes
+ * @property \Illuminate\Database\Eloquent\Collection<int, \Modules\ExtraField\Models\ExtraFieldGroup> $extraFieldGroups
+ * @property int|null                                                                                  $extra_field_groups_count
+ * @property \Modules\ExtraField\Models\ExtraFieldMorph|null                                           $extraFieldMorph
+ * @property \Illuminate\Database\Eloquent\Collection<int, \Modules\ExtraField\Models\ExtraFieldGroup> $groups
+ * @property int|null                                                                                  $groups_count
+ *
  * @method static \Illuminate\Database\Eloquent\Builder|ExtraField whereAttributes($value)
  * @method static \Illuminate\Database\Eloquent\Builder|ExtraField whereOptions($value)
- * @property-read \Illuminate\Database\Eloquent\Collection<int, \Modules\ExtraField\Models\ExtraFieldGroup> $extraFieldGroups
- * @property-read \Illuminate\Database\Eloquent\Collection<int, \Modules\ExtraField\Models\ExtraFieldGroup> $groups
+ *
+ * @property \Illuminate\Database\Eloquent\Collection<int, \Modules\ExtraField\Models\ExtraFieldGroup> $extraFieldGroups
+ * @property \Illuminate\Database\Eloquent\Collection<int, \Modules\ExtraField\Models\ExtraFieldGroup> $groups
+ *
  * @mixin \Eloquent
  */
-class ExtraField extends BaseModel {
+class ExtraField extends BaseModel
+{
     use HasCategory;
 
     protected $fillable = [
@@ -72,11 +78,13 @@ class ExtraField extends BaseModel {
     //     return $this->belongsTo(ExtraFieldGroup::class);
     // }
 
-    public function extraFieldMorph(): HasOne {
+    public function extraFieldMorph(): HasOne
+    {
         return $this->hasOne(ExtraFieldMorph::class);
     }
 
-    public function extraFieldGroups(): MorphToMany {
+    public function extraFieldGroups(): MorphToMany
+    {
         $pivot_class = ExtraFieldGroupMorph::class;
         $pivot = app($pivot_class);
         $pivot_table = $pivot->getTable();
@@ -89,12 +97,14 @@ class ExtraField extends BaseModel {
     }
 
     // un campo corrisponde solo ad un gruppo, come da specifiche
-    public function groups(): MorphToMany {
+    public function groups(): MorphToMany
+    {
         // return $this->hasMany(ExtraField::class, 'group_id');
         return $this->extraFieldGroups();
     }
 
-    public function toData(): FieldData {
+    public function toData(): FieldData
+    {
         return FieldData::from($this);
     }
 }

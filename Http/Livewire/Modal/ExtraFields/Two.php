@@ -8,12 +8,15 @@ use Illuminate\Contracts\Support\Renderable;
 use Modules\Cms\Actions\GetViewAction;
 use WireElements\Pro\Components\Modal\Modal;
 
-class Two extends Modal {
-    public static function getName(): string {
+class Two extends Modal
+{
+    public static function getName(): string
+    {
         return 'modal.extra-fields.two';
     }
 
-    public function render(): Renderable {
+    public function render(): Renderable
+    {
         /**
          * @phpstan-var view-string
          */

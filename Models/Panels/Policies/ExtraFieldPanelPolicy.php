@@ -9,8 +9,10 @@ use Modules\Cms\Models\Panels\Policies\XotBasePanelPolicy;
 use Modules\LU\Services\ProfileService;
 use Modules\Xot\Contracts\UserContract;
 
-class ExtraFieldPanelPolicy extends XotBasePanelPolicy {
-    public function index(?UserContract $user, PanelContract $panel): bool {
+class ExtraFieldPanelPolicy extends XotBasePanelPolicy
+{
+    public function index(?UserContract $user, PanelContract $panel): bool
+    {
         if (null == $user) {
             return false;
         }

@@ -26,6 +26,7 @@ use Spatie\Activitylog\Traits\LogsActivity;
  * @property string|null                     $value
  * @property string|null                     $value_class
  * @property string|null                     $uuid
+ *
  * @method static \Illuminate\Database\Eloquent\Builder|ExtraFieldMorph newModelQuery()
  * @method static \Illuminate\Database\Eloquent\Builder|ExtraFieldMorph newQuery()
  * @method static \Illuminate\Database\Eloquent\Builder|ExtraFieldMorph query()
@@ -40,21 +41,26 @@ use Spatie\Activitylog\Traits\LogsActivity;
  * @method static \Illuminate\Database\Eloquent\Builder|ExtraFieldMorph whereUserId($value)
  * @method static \Illuminate\Database\Eloquent\Builder|ExtraFieldMorph whereValue($value)
  * @method static \Illuminate\Database\Eloquent\Builder|ExtraFieldMorph whereValueClass($value)
- * @property int $favourite
- * @property string|null $note
- * @property-read \Illuminate\Database\Eloquent\Collection<int, \Modules\Activity\Models\Activity> $activities
- * @property-read int|null $activities_count
- * @property-read \Modules\ExtraField\Models\ExtraField|null $extraField
+ *
+ * @property int                                                                              $favourite
+ * @property string|null                                                                      $note
+ * @property \Illuminate\Database\Eloquent\Collection<int, \Modules\Activity\Models\Activity> $activities
+ * @property int|null                                                                         $activities_count
+ * @property \Modules\ExtraField\Models\ExtraField|null                                       $extraField
+ *
  * @method static \Illuminate\Database\Eloquent\Builder|ExtraFieldMorph whereFavourite($value)
  * @method static \Illuminate\Database\Eloquent\Builder|ExtraFieldMorph whereNote($value)
  * @method static \Illuminate\Database\Eloquent\Builder|ExtraFieldMorph whereUuid($value)
- * @property-read \Illuminate\Database\Eloquent\Collection<int, \Modules\Activity\Models\Activity> $activities
- * @property-read \Illuminate\Database\Eloquent\Collection<int, \Modules\Activity\Models\Activity> $activities
- * @property-read \Illuminate\Database\Eloquent\Collection<int, \Modules\Activity\Models\Activity> $activities
- * @property-read \Illuminate\Database\Eloquent\Collection<int, \Modules\Activity\Models\Activity> $activities
+ *
+ * @property \Illuminate\Database\Eloquent\Collection<int, \Modules\Activity\Models\Activity> $activities
+ * @property \Illuminate\Database\Eloquent\Collection<int, \Modules\Activity\Models\Activity> $activities
+ * @property \Illuminate\Database\Eloquent\Collection<int, \Modules\Activity\Models\Activity> $activities
+ * @property \Illuminate\Database\Eloquent\Collection<int, \Modules\Activity\Models\Activity> $activities
+ *
  * @mixin \Eloquent
  */
-class ExtraFieldMorph extends BaseMorphPivot {
+class ExtraFieldMorph extends BaseMorphPivot
+{
     use LogsActivity;
     /**
      * @var string[]
@@ -87,7 +93,8 @@ class ExtraFieldMorph extends BaseMorphPivot {
      *
      * @return mixed
      */
-    public function userValue(string $user_id) {
+    public function userValue(string $user_id)
+    {
         $res = ExtraFieldMorph::firstOrNew([
             'user_id' => $user_id,
             'model_type' => $this->model_type,
@@ -112,7 +119,8 @@ class ExtraFieldMorph extends BaseMorphPivot {
      *
      * @param mixed $value
      */
-    public function updateUserValue(string $user_id, $value): self {
+    public function updateUserValue(string $user_id, $value): self
+    {
         // si creano dei doppioni con update. perchè?
         $row = ExtraFieldMorph::firstOrCreate([
             'user_id' => $user_id,
@@ -131,7 +139,8 @@ class ExtraFieldMorph extends BaseMorphPivot {
      *
      * @param mixed $value
      */
-    public function createUserValue(string $user_id, $value, ?string $uuid = null): self {
+    public function createUserValue(string $user_id, $value, ?string $uuid = null): self
+    {
         $row = ExtraFieldMorph::create([
             'user_id' => (string) $user_id,
             'model_type' => $this->model_type,
@@ -144,11 +153,13 @@ class ExtraFieldMorph extends BaseMorphPivot {
         return $row;
     }
 
-    public function getActivitylogOptions(): LogOptions {
+    public function getActivitylogOptions(): LogOptions
+    {
         return LogOptions::defaults()->logOnly($this->getFillable());
     }
 
-    public function extraField(): BelongsTo {
+    public function extraField(): BelongsTo
+    {
         return $this->belongsTo(ExtraField::class);
     }
 }

@@ -24,6 +24,7 @@ use Illuminate\Support\Facades\Auth;
  * @property string|null                     $value
  * @property string|null                     $value_class
  * @property string|null                     $uuid
+ *
  * @method static \Illuminate\Database\Eloquent\Builder|ExtraFieldMorph newModelQuery()
  * @method static \Illuminate\Database\Eloquent\Builder|ExtraFieldMorph newQuery()
  * @method static \Illuminate\Database\Eloquent\Builder|ExtraFieldMorph query()
@@ -38,17 +39,21 @@ use Illuminate\Support\Facades\Auth;
  * @method static \Illuminate\Database\Eloquent\Builder|ExtraFieldMorph whereUserId($value)
  * @method static \Illuminate\Database\Eloquent\Builder|ExtraFieldMorph whereValue($value)
  * @method static \Illuminate\Database\Eloquent\Builder|ExtraFieldMorph whereValueClass($value)
- * @property int|null $extra_field_group_id
- * @property int $favourite
- * @property string|null $note
- * @property-read \Modules\ExtraField\Models\ExtraFieldGroup|null $extraFieldGroup
+ *
+ * @property int|null                                        $extra_field_group_id
+ * @property int                                             $favourite
+ * @property string|null                                     $note
+ * @property \Modules\ExtraField\Models\ExtraFieldGroup|null $extraFieldGroup
+ *
  * @method static \Illuminate\Database\Eloquent\Builder|ExtraFieldGroupMorph whereExtraFieldGroupId($value)
  * @method static \Illuminate\Database\Eloquent\Builder|ExtraFieldGroupMorph whereFavourite($value)
  * @method static \Illuminate\Database\Eloquent\Builder|ExtraFieldGroupMorph whereNote($value)
  * @method static \Illuminate\Database\Eloquent\Builder|ExtraFieldGroupMorph whereUuid($value)
+ *
  * @mixin \Eloquent
  */
-class ExtraFieldGroupMorph extends BaseMorphPivot {
+class ExtraFieldGroupMorph extends BaseMorphPivot
+{
     /**
      * @var string[]
      */
@@ -85,7 +90,8 @@ class ExtraFieldGroupMorph extends BaseMorphPivot {
      *
      * @return mixed
      */
-    public function userValue(string $user_id) {
+    public function userValue(string $user_id)
+    {
         $res = ExtraFieldMorph::firstOrNew([
             'user_id' => $user_id,
             'model_type' => $this->model_type,
@@ -110,7 +116,8 @@ class ExtraFieldGroupMorph extends BaseMorphPivot {
      *
      * @param mixed $value
      */
-    public function updateUserValue(string $user_id, $value): ExtraFieldMorph {
+    public function updateUserValue(string $user_id, $value): ExtraFieldMorph
+    {
         $row = ExtraFieldMorph::firstOrCreate([
             'user_id' => $user_id,
             'model_type' => $this->model_type,
@@ -124,7 +131,8 @@ class ExtraFieldGroupMorph extends BaseMorphPivot {
         return $res;
     }
 
-    public function extraFieldGroup(): BelongsTo {
+    public function extraFieldGroup(): BelongsTo
+    {
         return $this->belongsTo(ExtraFieldGroup::class);
     }
 }

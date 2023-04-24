@@ -12,7 +12,8 @@ use Modules\ExtraField\Models\ExtraFieldGroup;
 use Modules\UI\Actions\GetRulesWithParamsAction;
 use Modules\Xot\Contracts\RowsContract;
 
-class ExtraFieldPanel extends XotBasePanel {
+class ExtraFieldPanel extends XotBasePanel
+{
     /**
      * The model the resource corresponds to.
      */
@@ -33,11 +34,13 @@ class ExtraFieldPanel extends XotBasePanel {
     /**
      * The relationships that should be eager loaded on index queries.
      */
-    public function with(): array {
+    public function with(): array
+    {
         return [];
     }
 
-    public function search(): array {
+    public function search(): array
+    {
         return [];
     }
 
@@ -46,7 +49,8 @@ class ExtraFieldPanel extends XotBasePanel {
      *
      * @param \Modules\ExtraField\Models\ExtraField $row
      */
-    public function optionLabel($row): string {
+    public function optionLabel($row): string
+    {
         if (is_null($row->name)) {
             return '';
         }
@@ -57,7 +61,8 @@ class ExtraFieldPanel extends XotBasePanel {
     /**
      * index navigation.
      */
-    public function indexNav(): ?Renderable {
+    public function indexNav(): ?Renderable
+    {
         return null;
     }
 
@@ -68,7 +73,8 @@ class ExtraFieldPanel extends XotBasePanel {
      *
      * @return RowsContract
      */
-    public function indexQuery(array $data, $query) {
+    public function indexQuery(array $data, $query)
+    {
         // return $query->where('user_id', $request->user()->id);
         return $query;
     }
@@ -77,7 +83,8 @@ class ExtraFieldPanel extends XotBasePanel {
      * Get the fields displayed by the resource.
         'value'=>'..',
      */
-    public function fields(): array {
+    public function fields(): array
+    {
         return [
             (object) [
                 'type' => 'Id',
@@ -144,7 +151,8 @@ class ExtraFieldPanel extends XotBasePanel {
     /**
      * Get the tabs available.
      */
-    public function tabs(): array {
+    public function tabs(): array
+    {
         $tabs_name = [];
 
         return $tabs_name;
@@ -153,7 +161,8 @@ class ExtraFieldPanel extends XotBasePanel {
     /**
      * Get the cards available for the request.
      */
-    public function cards(Request $request): array {
+    public function cards(Request $request): array
+    {
         return [];
     }
 
@@ -162,21 +171,24 @@ class ExtraFieldPanel extends XotBasePanel {
      *
      * @param \Illuminate\Http\Request $request
      */
-    public function filters(Request $request = null): array {
+    public function filters(Request $request = null): array
+    {
         return [];
     }
 
     /**
      * Get the lenses available for the resource.
      */
-    public function lenses(Request $request): array {
+    public function lenses(Request $request): array
+    {
         return [];
     }
 
     /**
      * Get the actions available for the resource.
      */
-    public function actions(): array {
+    public function actions(): array
+    {
         return [];
     }
 }

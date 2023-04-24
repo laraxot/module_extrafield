@@ -8,7 +8,8 @@ use Livewire\Wireable;
 use Spatie\LaravelData\Concerns\WireableData;
 use Spatie\LaravelData\Data;
 
-class FieldData extends Data implements Wireable {
+class FieldData extends Data implements Wireable
+{
     use WireableData;
 
     public string $name;
