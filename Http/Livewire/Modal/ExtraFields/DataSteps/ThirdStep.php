@@ -5,6 +5,7 @@ declare(strict_types=1);
 namespace Modules\ExtraField\Http\Livewire\Modal\ExtraFields\DataSteps;
 
 use Illuminate\Contracts\Support\Renderable;
+use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\Relation;
 use Modules\Cms\Actions\GetViewAction;
 use Modules\Xot\Actions\GetModelByModelTypeAction;
@@ -82,7 +83,7 @@ class ThirdStep extends StepComponent
         $this->emit('modal.close');
     }
 
-    public function getModel()
+    public function getModel(): Model
     {
         $model = app(GetModelByModelTypeAction::class)->execute($this->model_type, $this->model_id);
 

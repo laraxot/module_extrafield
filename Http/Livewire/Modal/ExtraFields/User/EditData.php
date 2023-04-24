@@ -62,7 +62,7 @@ class EditData extends Modal
 
     public function getModelProperty(): Model
     {
-        $res = $this->model::where('user_id', $this->user_id)->first();
+        $res = $this->model::where('user_id', $this->user_id)->firstOrFail();
 
         return $res;
     }

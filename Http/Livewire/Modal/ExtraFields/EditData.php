@@ -12,6 +12,7 @@ use Modules\PFed\Actions\SendConsentsUpdateNotifyToCompanyAction;
 use Modules\PFed\Models\Service;
 use Modules\UI\Datas\FieldData;
 use Modules\Xot\Actions\GetModelByModelTypeAction;
+use Modules\Xot\Contracts\ModelContract;
 use WireElements\Pro\Components\Modal\Modal;
 use WireElements\Pro\Concerns\InteractsWithConfirmationModal;
 
@@ -64,7 +65,7 @@ class EditData extends Modal
         $this->form_data = array_merge($this->form_data, $data);
     }
 
-    public function getModelProperty()
+    public function getModelProperty(): ModelContract
     {
         return $this->model::where('user_id', $this->user_id)->first();
     }
@@ -110,7 +111,7 @@ class EditData extends Modal
         ];
     }
 
-    public function save()
+    public function save(): void
     {
         $message = Service::updatingServicesList($this->user_id, $this->uuid);
 
@@ -131,15 +132,15 @@ class EditData extends Modal
         );
     }
 
-    public function saveConfirmed()
+    public function saveConfirmed(): void
     {
         $updating_services = Service::getServicesWithUuid($this->user_id, $this->uuid);
         $updating_services->map(
             function ($service) {
-                $company = $service->company;
+                $company = $service->getAttribute('company');
 
                 $updates = collect([
-                    'Modifica Dati di Sistema del Servizio' => $service->name,
+                    'Modifica Dati di Sistema del Servizio' => $service->getAttribute('name'),
                 ]);
 
                 foreach ($this->form_data as $field => $value) {

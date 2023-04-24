@@ -111,23 +111,18 @@ trait HasExtraFields
         $groups = $groups->map(
             function ($group) use (&$iterated_groups, $tmp_groups, $cat_id) {
                 if (1 == $group->cardinality) {
-                    if (! property_exists($group, 'is_favourite')) {
-                        throw new \Exception('['.__LINE__.']['.__FILE__.']');
-                    }
-                    $group->is_favourite = true;
+                    $group->setAttribute('is_favourite', true);
                 } else {
                     $tmp_groups = $this->extraFieldGroups();
                     if (null != $cat_id) {
                         $tmp_groups = $tmp_groups->withAnyCategories($cat_id);
                     }
                     $favourite_group = $tmp_groups->where('extra_field_groups.id', $group->id)->wherePivot('favourite', 1)->first();
-                    if (! property_exists($group, 'pivot')) {
-                        throw new \Exception('['.__LINE__.']['.__FILE__.']');
-                    }
+
                     if (null != $favourite_group && $favourite_group->getRelationValue('pivot')->uuid == $group->getRelationValue('pivot')->uuid) {
-                        $group->is_favourite = true;
+                        $group->setAttribute('is_favourite', true);
                     } elseif (null == $favourite_group && ! isset($iterated_groups[$group->id])) {
-                        $group->is_favourite = true;
+                        $group->setAttribute('is_favourite', true);
                     }
                 }
                 $iterated_groups[$group->id] = true;

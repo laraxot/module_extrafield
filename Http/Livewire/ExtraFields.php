@@ -127,7 +127,7 @@ class ExtraFields extends Component
         return $required;
     }
 
-    public function edit(string $uuid)
+    public function edit(string $uuid): void
     {
         $parz = [
             'uuid' => $uuid,
@@ -137,7 +137,7 @@ class ExtraFields extends Component
         $this->emit('modal.open', 'modal.extra-fields.edit-data', $parz);
     }
 
-    public function delete(string $uuid)
+    public function delete(string $uuid): void
     {
         $message = Service::updatingServicesList($this->user_id, $uuid);
         $updating_services = Service::getServicesWithUuid($this->user_id, $uuid);
@@ -163,10 +163,10 @@ class ExtraFields extends Component
                 if (true == $is_required_fields) {
                     $updating_services->map(
                         function ($service) {
-                            $company = $service->company;
+                            $company = $service->getAttribute('company');
 
                             $updates = collect([
-                                'Disiscrizione dal Servizio' => $service->name,
+                                'Disiscrizione dal Servizio' => $service->getAttribute('name'),
                             ]);
                             app(SendConsentsUpdateNotifyToCompanyAction::class)->execute($company, $updates);
                         });
@@ -184,7 +184,7 @@ class ExtraFields extends Component
                 } else {
                     $updating_services->map(
                         function ($service) use ($group_name) {
-                            $company = $service->company;
+                            $company = $service->getAttribute('company');
 
                             $updates = collect([
                                 'Eliminazione Dati del Gruppo' => $group_name,
@@ -211,7 +211,7 @@ class ExtraFields extends Component
         );
     }
 
-    public function addFields()
+    public function addFields(): void
     {
         $parz = [
             'cat_id' => $this->cat_id,

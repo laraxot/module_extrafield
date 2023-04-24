@@ -6,11 +6,11 @@ namespace Modules\ExtraField\Http\Livewire\Input\ExtraFields;
 
 use Illuminate\Contracts\Support\Renderable;
 use Illuminate\Database\Eloquent\Collection as EloquentCollection;
-use Illuminate\Database\Eloquent\Model;
 use Illuminate\Support\Collection;
 use Illuminate\Support\Str;
 use Livewire\Component;
 use Modules\Cms\Actions\GetViewAction;
+use Modules\ExtraField\Models\Contracts\HasExtraFieldsContract;
 use Modules\ExtraField\Models\ExtraField;
 use Modules\ExtraField\Models\ExtraFieldGroup;
 use Modules\ExtraField\Models\ExtraFieldMorph;
@@ -20,16 +20,16 @@ use Modules\ExtraField\Models\ExtraFieldMorph;
 /**
  * Class Groups.
  *
- * @property string     $tpl
- * @property string     $name
- * @property array      $groups
- * @property array      $form_data
- * @property mixed      $value
- * @property Model      $model
- * @property Collection $availableGroups
- * @property Collection $assignedGroups
- * @property Collection $availableFields
- * @property Collection $assignedFields
+ * @property string                 $tpl
+ * @property string                 $name
+ * @property array                  $groups
+ * @property array                  $form_data
+ * @property mixed                  $value
+ * @property HasExtraFieldsContract $model
+ * @property Collection             $availableGroups
+ * @property Collection             $assignedGroups
+ * @property Collection             $availableFields
+ * @property Collection             $assignedFields
  */
 class Groups extends Component
 {
@@ -42,7 +42,7 @@ class Groups extends Component
      */
     public $value;
 
-    public Model $model;
+    public HasExtraFieldsContract $model;
 
     // verificare o cambiare
     // public $rows;
@@ -50,7 +50,7 @@ class Groups extends Component
     /**
      * @param mixed $value
      */
-    public function mount(string $name, Model $model, $value, string $tpl = 'v1'): void
+    public function mount(string $name, HasExtraFieldsContract $model, $value, string $tpl = 'v1'): void
     {
         // dddx([$name, $model, $value]);
 
@@ -83,7 +83,7 @@ class Groups extends Component
     {
         return $this->model->extraFields()->wherePivot('user_id', null)->get()->groupBy('group.name')->map(
             function ($ef, $group) {
-                return $group = $ef->first()->group_id;
+                return $ef->first()->getAttribute('group_id');
             });
     }
 
@@ -97,7 +97,7 @@ class Groups extends Component
                 $res = $row->create([
                     'extra_field_id' => $ef->id,
                     'model_type' => 'service',
-                    'model_id' => $this->model->id,
+                    'model_id' => $this->model->getKey(),
                     'user_id' => null,
                     'uuid' => $uuid,
                 ]);
@@ -115,7 +115,7 @@ class Groups extends Component
                 $res = $row->where([
                     'extra_field_id' => $ef->id,
                     'model_type' => 'service',
-                    'model_id' => $this->model->id,
+                    'model_id' => $this->model->getKey(),
                 ])->delete();
             }
         }
