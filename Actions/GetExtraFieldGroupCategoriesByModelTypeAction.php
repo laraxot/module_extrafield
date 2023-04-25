@@ -17,6 +17,8 @@ class GetExtraFieldGroupCategoriesByModelTypeAction
     {
         $categories = Category::ofType($model_type)
             ->ofType('extra_field_group')
+            // ->defaultOrder() //kelnoy ma non fa quello che vogliamo noi
+            ->ordered()
             ->get();
 
         $categories = $categories->map(
