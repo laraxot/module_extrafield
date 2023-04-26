@@ -5,6 +5,7 @@ declare(strict_types=1);
 namespace Modules\ExtraField\Models;
 
 use Illuminate\Database\Eloquent\Model;
+use Illuminate\Database\Eloquent\Relations\HasMany;
 use Illuminate\Database\Eloquent\Relations\MorphToMany;
 use Illuminate\Support\Facades\Auth;
 use Modules\Blog\Models\Traits\HasCategory;
@@ -124,6 +125,23 @@ class ExtraFieldGroup extends BaseModel
         return $this->fields()->wherePivot('user_id', Auth::id());
     }
 
+    public function extraFieldGroupMorphs(): HasMany
+    {
+        return $this->hasMany(ExtraFieldGroupMorph::class, 'extra_field_group_id');
+    }
+
+    public function noUserExtraFieldGroupMorphs(): HasMany
+    {
+        return $this->extraFieldGroupMorphs()
+        ->where('user_id', null);
+    }
+
+    public function userExtraFieldGroupMorphs(string $user_id): HasMany
+    {
+        return $this->extraFieldGroupMorphs()
+        ->where('user_id', $user_id);
+    }
+
     /**
      * @return DataCollection <FieldData>
      */
@@ -154,4 +172,18 @@ class ExtraFieldGroup extends BaseModel
 
         return $fields;
     }
+
+     /**
+      * @param \Illuminate\Database\Eloquent\Builder $query
+      * @param string                                $model_type
+      * @param string                                $model_id
+      *
+      * @return \Illuminate\Database\Eloquent\Builder
+      */
+     public function scopeWithPivotFields($query, $model_type, $model_id)
+     {
+         return $query->with(['noUserExtraFieldGroupMorphs' => function ($q) use ($model_type) {
+             $q->where('model_type', $model_type)->where('model_id', null);
+         }]);
+     }
 }

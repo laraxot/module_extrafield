@@ -5,6 +5,7 @@ declare(strict_types=1);
 namespace Modules\ExtraField\Http\Livewire\ExtraFieldGroups\By;
 
 use Illuminate\Contracts\Support\Renderable;
+use Illuminate\Database\Eloquent\Model;
 use Illuminate\Support\Collection;
 use Illuminate\Support\Facades\Auth;
 use Livewire\Component;
@@ -12,7 +13,6 @@ use Modules\Blog\Models\Category as CategoryModel;
 use Modules\Cms\Actions\GetViewAction;
 use Modules\ExtraField\Actions;
 use Modules\ExtraField\Actions\GetExtraFieldGroupCategoriesByModelTypeAction;
-use Modules\ExtraField\Models\Contracts\HasExtraFieldsContract;
 use Modules\ExtraField\Models\ExtraFieldGroupMorph;
 use Modules\Xot\Actions\GetModelTypeByModelAction;
 use WireElements\Pro\Concerns\InteractsWithConfirmationModal;
@@ -24,7 +24,7 @@ class Category extends Component
     public string $user_id;
     public string $cat_id = '';
     public string $tpl;
-    public HasExtraFieldsContract $model;
+    public Model $model;
     public string $model_type;
     public string $model_id;
     public ?string $category_name;
@@ -35,7 +35,7 @@ class Category extends Component
      */
     protected $listeners = ['refresh' => '$refresh'];
 
-    public function mount(HasExtraFieldsContract $model, string $tpl = 'v1'): void
+    public function mount(Model $model, string $tpl = 'v1'): void
     {
         $this->model = $model;
         $this->model_id = strval($model->getKey());
@@ -96,5 +96,15 @@ class Category extends Component
             dddx(['row' => $row, 'uuid' => $uuid]);
         }
         $row->update(['favourite' => ! $row->favourite]);
+    }
+
+    public function addGroup(): void
+    {
+        $parz = [
+            'cat_id' => $this->cat_id,
+            'model_type' => $this->model_type,
+            'model_id' => $this->model_id,
+        ];
+        $this->emit('modal.open', 'modal.extra-field-group.add', $parz);
     }
 }

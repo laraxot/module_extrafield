@@ -58,7 +58,7 @@
 
                     <div class="row">
                         <div class="col-md-12 mt-3 mb-2">
-                            <x-button wire:click="addFields()" title="Add Fields">Add</x-button>
+                            <x-button wire:click="addGroup()" title="Add Group">Add</x-button>
                         </div>
                     </div>
                 </x-slot>
