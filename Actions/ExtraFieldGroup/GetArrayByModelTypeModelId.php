@@ -52,20 +52,24 @@ class GetArrayByModelTypeModelId
         $uuid = $group->uuid;
 
         $data = $extra_fields->map(
-            function ($field) use ($group, $model_extra_fields, $profile_extra_fields) {
-                $model_value = $model_extra_fields->where('id', $field->id)/* ->where('pivot.uuid', $uuid) */ ->first()?->value;
-                $profile_value = $profile_extra_fields->where('id', $field->id)/* ->where('pivot.uuid', $uuid) */ ->first()?->value;
+            function ($field) use ($model_extra_fields, $profile_extra_fields) {
+                $model_value = $model_extra_fields->where('id', $field->id)/* ->where('pivot.uuid', $uuid) */ ->first()?->pivot->value;
+                $profile_value = $profile_extra_fields->where('id', $field->id)/* ->where('pivot.uuid', $uuid) */ ->first()?->pivot->value;
                 $value = $model_value ?? $profile_value;
                 $field_arr = $field->toArray();
                 $field_arr['value'] = $value;
+                $field_data = FieldData::from($field_arr);
+                /* 4 debug
                 if (1 == $group->id) {
                     dddx([
                         'group' => $group,
-                        'model_extra_fields' => $model_extra_fields->where('id', $field->id)->first()->pivot->value,
+                        'model_value' => $model_value,
+                        'profile_value' => $profile_value,
+                        'field_data' => $field_data,
                     ]);
                 }
-
-                return FieldData::from($field_arr);
+                */
+                return $field_data;
             }
         )->all();
 
