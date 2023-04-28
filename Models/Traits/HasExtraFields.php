@@ -80,25 +80,17 @@ trait HasExtraFields
 
     public function extraFieldGroups(): MorphToMany
     {
-        // return $this->hasManyDeep(ExtraFieldGroup::class, [ExtraField::class, PermUser::class]);
-
-        // return $this->hasManyDeepFromRelations($this->extraFields(), (new Extrafield())->group());
-
         $pivot_class = ExtraFieldGroupMorph::class;
         $pivot = app($pivot_class);
         $pivot_table = $pivot->getTable();
         $pivot_fields = $pivot->getFillable();
 
-        // dddx($pivot_fields);
-
         return $this->morphToMany(ExtraFieldGroup::class, 'model', $pivot_table)
             ->using($pivot_class)
-            ->withPivot($pivot_fields)
-            // ->withTimestamps()
-        ;
+            ->withPivot($pivot_fields);
     }
 
-    public function getFavouriteGroups(?string $cat_id = null): Collection
+    /*public function getFavouriteGroups(?string $cat_id = null): Collection
     {
         $tmp_groups = $this->extraFieldGroups();
         if (null != $cat_id) {
@@ -117,6 +109,7 @@ trait HasExtraFields
                     if (null != $cat_id) {
                         $tmp_groups = $tmp_groups->withAnyCategories($cat_id);
                     }
+
                     $favourite_group = $tmp_groups->where('extra_field_groups.id', $group->id)->wherePivot('favourite', 1)->first();
 
                     if (null != $favourite_group && $favourite_group->pivot->uuid == $group->pivot->uuid) {
@@ -131,9 +124,29 @@ trait HasExtraFields
             })->sortBy('name');
 
         return $groups;
+    }*/
+
+    public function getFavouriteGroups(?string $cat_id = null): Collection
+    {
+        $groups = $this->extraFieldGroups();
+
+        if (null !== $cat_id) {
+            $groups->withAnyCategories($cat_id);
+        }
+
+        $groups = $groups->get()
+            ->map(function ($group) {
+                $is_favourite = (1 === $group->cardinality)
+                    || (1 === $group->pivot->favourite && $group->pivot->uuid === $this->pivot->uuid);
+
+                return $group->setAttribute('is_favourite', $is_favourite);
+            })
+            ->sortBy('name');
+
+        return $groups;
     }
 
-    public function setFavouriteGroup(string $group_id, string $uuid): void
+    /*public function setFavouriteGroup(string $group_id, string $uuid): void
     {
         $this->extraFieldGroups()->where('extra_field_groups.id', $group_id)->get()->map(
             function ($group) use ($uuid) {
@@ -144,20 +157,23 @@ trait HasExtraFields
                 }
                 $group->getRelationValue('pivot')->update(['favourite' => $favourite]);
             });
+    }*/
 
-        // dd($this->extraFieldGroups()->where('extra_field_groups.id', $group_id)->get()->pluck('pivot.uuid', 'pivot.favourite'));
+    public function setFavouriteGroup(string $group_id, string $uuid): void
+    {
+        $this->extraFieldGroups()
+            ->where('extra_field_groups.id', $group_id)
+            ->updateExistingPivot($group_id, ['favourite' => 1, 'uuid' => $uuid]);
     }
 
     /**
      * --.
      */
-    public function updateUserExtraField(array $data, string $user_id, ?string $uuid = null): void
+    /*public function updateUserExtraField(array $data, string $user_id, ?string $uuid = null): void
     {
-        // dddx([$data, $user_id,  $uuid]);
         $model_type = Str::snake(class_basename($this));
         $model_id = (string) $this->getKey();
 
-        // $fields = $this->extraFields->where('pivot.user_id', $user_id)->where('pivot.uuid', $uuid);
         $fields = $this->extraFields->where('pivot.user_id', null);
 
         if (null == $uuid) {
@@ -195,6 +211,50 @@ trait HasExtraFields
         ])->update([
             'value' => $data,
         ]);
+    }*/
+
+    public function updateUserExtraField(array $data, string $user_id, ?string $uuid = null): void
+    {
+        $model_type = Str::snake(class_basename($this));
+        $model_id = (string) $this->getKey();
+
+        if (null == $uuid) {
+            $uuid = Str::uuid();
+        }
+
+        $fields = $this->extraFields->where('pivot.user_id', null);
+
+        $extraFieldMorphs = $fields->map(function ($field) use ($data, $model_id, $model_type, $user_id, $uuid) {
+            $value = collect($data)->get($field->name);
+
+            return [
+                'model_id' => $model_id,
+                'model_type' => $model_type,
+                'user_id' => $user_id,
+                'extra_field_id' => $field->id,
+                'uuid' => $uuid,
+                'value' => $value,
+            ];
+        });
+
+        ExtraFieldMorph::upsert($extraFieldMorphs->toArray(), ['model_id', 'model_type', 'user_id', 'extra_field_id', 'uuid'], ['value']);
+
+        $extraFieldGroupMorph = [
+            'model_id' => $model_id,
+            'model_type' => $model_type,
+            'user_id' => $user_id,
+            'extra_field_group_id' => ExtraFieldGroupMorph::firstOrCreate([
+                'uuid' => $uuid,
+                'user_id' => $user_id,
+            ])->extra_field_group_id,
+            'value' => $data,
+            'uuid' => $uuid,
+        ];
+
+        ExtraFieldGroupMorph::updateOrCreate(
+            ['model_id' => $model_id, 'model_type' => $model_type, 'user_id' => $user_id, 'extra_field_group_id' => $extraFieldGroupMorph['extra_field_group_id'], 'uuid' => $uuid],
+            $extraFieldGroupMorph
+        );
     }
 
     public function addExtraField(array $data, string $user_id, string $group_id, ?string $note = ''): void
