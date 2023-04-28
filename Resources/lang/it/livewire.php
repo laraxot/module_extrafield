@@ -1,9 +1,11 @@
-<?php return array (
-  'modal' => 
-  array (
-    'extra-field-group' => 
-    array (
-      'add' => 'Aggiungi Campo',
-    ),
-  ),
-);
+<?php
+
+declare(strict_types=1);
+
+return [
+    'modal' => [
+        'extra-field-group' => [
+            'add' => 'Aggiungi Campo',
+        ],
+    ],
+];
