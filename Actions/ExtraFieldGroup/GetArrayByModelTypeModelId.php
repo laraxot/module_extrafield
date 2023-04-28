@@ -5,8 +5,10 @@ declare(strict_types=1);
 namespace Modules\ExtraField\Actions\ExtraFieldGroup;
 
 use Illuminate\Support\Facades\Auth;
+use Modules\UI\Datas\FieldData;
 use Modules\Xot\Actions\GetModelByModelTypeAction;
 use Modules\Xot\Datas\XotData;
+use Spatie\LaravelData\DataCollection;
 use Spatie\QueueableAction\QueueableAction;
 
 class GetArrayByModelTypeModelId
@@ -29,14 +31,11 @@ class GetArrayByModelTypeModelId
 
         $res = $extra_field_groups->map(
             function ($item) use ($model_extra_fields, $profile_extra_fields) {
-                // dddx($item->fieldDataCollection($user_id, $model));
-                // dddx($item->userValue($user_id));
-
                 return [
                     'id' => $item->id,
                     'uuid' => $item->uuid,
                     'name' => $item->name,
-                    'fields' => $this->getFielCollByFields($item, $model_extra_fields, $profile_extra_fields),
+                    'fields' => $this->getFielCollByFields($item, $model_extra_fields, $profile_extra_fields)->toArray(),
                 ];
             }
         );
@@ -44,18 +43,32 @@ class GetArrayByModelTypeModelId
         return $res->all();
     }
 
-    public function getFielCollByFields($group, $model_extra_fields, $profile_extra_fields)
+    /**
+     * @return DataCollection<FieldData>
+     */
+    public function getFielCollByFields($group, $model_extra_fields, $profile_extra_fields): DataCollection
     {
         $extra_fields = $group->fields;
         $uuid = $group->uuid;
+
         $data = $extra_fields->map(
-            function ($field) use ($uuid, $model_extra_fields, $profile_extra_fields) {
-                dddx([
-                    'a' => $field,
-                    'b' => $model_extra_fields->where('id', $field->id)->where('pivot.uuid', $uuid),
-                    'c' => $profile_extra_fields->where('id', $field->id)->where('pivot.uuid', $uuid),
-                ]);
+            function ($field) use ($group, $model_extra_fields, $profile_extra_fields) {
+                $model_value = $model_extra_fields->where('id', $field->id)/* ->where('pivot.uuid', $uuid) */ ->first()?->value;
+                $profile_value = $profile_extra_fields->where('id', $field->id)/* ->where('pivot.uuid', $uuid) */ ->first()?->value;
+                $value = $model_value ?? $profile_value;
+                $field_arr = $field->toArray();
+                $field_arr['value'] = $value;
+                if (1 == $group->id) {
+                    dddx([
+                        'group' => $group,
+                        'model_extra_fields' => $model_extra_fields->where('id', $field->id)->first()->pivot->value,
+                    ]);
+                }
+
+                return FieldData::from($field_arr);
             }
-        );
+        )->all();
+
+        return FieldData::collection($data);
     }
 }
