@@ -107,4 +107,14 @@ class ExtraField extends BaseModel
     {
         return FieldData::from($this);
     }
+
+    /**
+     * Undocumented function.
+     *
+     * @return mixed
+     */
+    public function userValue(string $user_id)
+    {
+        dddx($this->pivot);
+    }
 }

@@ -152,16 +152,16 @@ class ExtraFieldGroup extends BaseModel
         $fields = $this->noUserFields
             ->map(
                 function ($item) use ($profile, $model, $user_id) {
-                    if (! method_exists($model, 'userExtraFields')) {
-                        throw new \Exception('['.__LINE__.']['.__FILE__.']');
-                    }
+                    // if (! method_exists($model, 'userExtraFields')) {
+                    //    throw new \Exception('['.__LINE__.']['.__FILE__.']');
+                    // }
                     $service_value = $model
                         ->userExtraFields((string) $user_id)
                         ->wherePivot('extra_field_id', $item->getKey())
                         ->first();
-                    if (! method_exists($profile, 'userExtraFields')) {
-                        throw new \Exception('['.__LINE__.']['.__FILE__.']');
-                    }
+                    // if (! method_exists($profile, 'userExtraFields')) {
+                    //    throw new \Exception('['.__LINE__.']['.__FILE__.']');
+                    // }
                     $profile_value = $profile->userExtraFields((string) $user_id)
                         ->wherePivot('extra_field_id', $item->getKey())
                         ->first();
@@ -185,5 +185,14 @@ class ExtraFieldGroup extends BaseModel
          return $query->with(['noUserExtraFieldGroupMorphs' => function ($q) use ($model_type) {
              $q->where('model_type', $model_type)->where('model_id', null);
          }]);
+     }
+
+     /**
+      * @return mixed
+      */
+     public function userValue(string $user_id)
+     {
+         // dddx(['a' => $this, 'pivot' => $this->pivot]);
+         dddx(['fields' => $this->fields->first()->userValue($user_id)]);
      }
 }

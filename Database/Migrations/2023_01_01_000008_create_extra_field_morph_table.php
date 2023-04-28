@@ -47,6 +47,9 @@ class CreateExtraFieldMorphTable extends XotBaseMigration
                 if (! $this->hasColumn('note')) {
                     $table->string('note')->nullable();
                 }
+                if (! $this->hasColumn('rules')) {
+                    $table->json('rules')->nullable();
+                }
             }
         );
     }

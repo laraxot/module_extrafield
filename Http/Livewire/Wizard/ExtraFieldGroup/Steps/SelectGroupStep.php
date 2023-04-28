@@ -25,6 +25,8 @@ class SelectGroupStep extends StepComponent
         $this->user_id = (string) Auth::id();
         $this->form_data['cat_id'] = $cat_id;
         $this->form_data['user_id'] = (string) Auth::id();
+        $this->form_data['model_type'] = $model_type;
+        $this->form_data['model_id'] = $model_id;
         $this->model_type = $model_type;
         $this->model_id = $model_id;
 

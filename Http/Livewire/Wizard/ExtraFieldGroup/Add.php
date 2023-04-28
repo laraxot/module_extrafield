@@ -30,7 +30,7 @@ class Add extends WizardComponent
         return [
             Steps\SelectGroupStep::class,
             Steps\InsertDataStep::class,
-            // Steps\ThirdStep::class,
+            Steps\InsertDescriptionStep::class,
         ];
     }
 

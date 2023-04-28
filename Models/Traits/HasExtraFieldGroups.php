@@ -14,7 +14,7 @@ use Modules\ExtraField\Models\ExtraFieldGroup;
 use Modules\ExtraField\Models\ExtraFieldGroupMorph;
 use Modules\LU\Models\User;
 
-trait HasExtraFieldGroup
+trait HasExtraFieldGroups
 {
     use \Staudenmeir\EloquentHasManyDeep\HasRelationships;
 

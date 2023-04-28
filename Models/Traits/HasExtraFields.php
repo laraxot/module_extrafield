@@ -119,7 +119,7 @@ trait HasExtraFields
                     }
                     $favourite_group = $tmp_groups->where('extra_field_groups.id', $group->id)->wherePivot('favourite', 1)->first();
 
-                    if (null != $favourite_group && $favourite_group->getRelationValue('pivot')->uuid == $group->getRelationValue('pivot')->uuid) {
+                    if (null != $favourite_group && $favourite_group->pivot->uuid == $group->pivot->uuid) {
                         $group->setAttribute('is_favourite', true);
                     } elseif (null == $favourite_group && ! isset($iterated_groups[$group->id])) {
                         $group->setAttribute('is_favourite', true);
@@ -239,9 +239,10 @@ trait HasExtraFields
             $field_groups = $this->extraFieldGroups->where('pivot.user_id', null);
         }
         $profile = ProfileService::make()->get(User::find($user_id))->getProfile();
-        if (! property_exists($profile, 'extraFields')) {
-            throw new \Exception('['.__LINE__.']['.__FILE__.']');
-        }
+        // [244][/var/www/html/_bases/base_pfed/laravel/Modules/ExtraField/Models/Traits/HasExtraFields.php]
+        // if (! property_exists($profile, 'extraFields')) {
+        //     throw new \Exception('['.__LINE__.']['.__FILE__.']');
+        // }
         $profile_fields = $profile->extraFields;
 
         if (null != $uuid) {

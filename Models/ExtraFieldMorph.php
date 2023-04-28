@@ -76,6 +76,16 @@ class ExtraFieldMorph extends BaseMorphPivot
         'extra_field_id',
         'favourite',
         'note',
+        'rules',
+    ];
+
+    /**
+     * @var array<string, string>
+     */
+    protected $casts = [
+        // 'date_start' => 'datetime:Y-m-d\TH:i',
+        // 'date_end' => 'datetime:Y-m-d\TH:i',
+        'rules' => 'array',
     ];
 
     /*public function extraFieldMorphUserValues(): HasMany {

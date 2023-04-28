@@ -5,25 +5,19 @@ declare(strict_types=1);
 namespace Modules\ExtraField\Http\Livewire\Wizard\ExtraFieldGroup\Steps;
 
 use Illuminate\Contracts\Support\Renderable;
-use Illuminate\Database\Eloquent\Relations\Relation;
-use Modules\Cms\Actions\GetViewAction;
 // use Modules\PFed\Models\Data;
-use Modules\ExtraField\Models\ExtraFieldGroup;
+use Illuminate\Support\Arr;
+use Modules\Cms\Actions\GetViewAction;
+use Modules\ExtraField\Actions;
 use Modules\UI\Actions\GetStateDataAction;
 use Modules\UI\Datas\FieldData;
-use Modules\Xot\Actions\GetModelByModelTypeAction;
 use Spatie\LaravelData\DataCollection;
 use Spatie\LivewireWizard\Components\StepComponent;
 
 class InsertDataStep extends StepComponent
 {
-    public string $group_id = '';
-    public string $cat_id = '';
     public array $form_data = [];
-    public array $form1_data = [];
-
-    public bool $is_first = false;
-    public bool $is_last = false;
+    public array $rules;
 
     /**
      * Undocumented variable.
@@ -44,23 +38,12 @@ class InsertDataStep extends StepComponent
     public function mount(): void
     {
         $this->form_data = app(GetStateDataAction::class)->execute($this->state());
-        dddx($this->form_data);
 
-        $this->form1_data = $this->state()->all()['extrafield::modal.extra-fields.data-steps.first-step']['form_data'];
+        $this->fields = app(Actions\ExtraFieldGroup\GetFieldsArrayByGroupId::class)->execute($this->form_data['group_id']);
 
-        $this->group_id = (string) $this->state()->all()['extrafield::modal.extra-fields.data-steps.first-step']['form_data']['group_id'];
-        $this->cat_id = (string) $this->state()->all()['extrafield::modal.extra-fields.data-steps.first-step']['form_data']['cat_id'];
+        $this->rules = app(Actions\ExtraFieldGroup\GetRulesByGroupId::class)->execute($this->form_data['group_id']);
 
-        $morph_map = [
-            'extra_field' => 'Modules\ExtraField\Models\ExtraField',
-        ];
-
-        Relation::morphMap($morph_map);
-
-        $rows = ExtraFieldGroup::findOrFail($this->group_id)->fields;
-
-        $fields = FieldData::collection($rows->all())->toArray();
-        $this->fields = $fields;
+        $this->rules = Arr::prependKeysWith($this->rules, 'form_data.');
 
         $this->initFormData();
     }
@@ -102,23 +85,9 @@ class InsertDataStep extends StepComponent
 
     public function goNextStep(): void
     {
-        $morph_map = [
-            'extra_field' => 'Modules\ExtraField\Models\ExtraField',
-        ];
-
-        Relation::morphMap($morph_map);
-
-        $model_type = $this->form1_data['model_type'];
-        $model_id = $this->form1_data['model_id'];
-
-        $model = app(GetModelByModelTypeAction::class)->execute($model_type, $model_id);
-        if (! method_exists($model, 'getExtraFieldRules')) {
-            throw new \Exception('['.__LINE__.']['.__FILE__.']');
-        }
-        $efr = $model->getExtraFieldRules($this->form_data);
-        if (! empty($efr)) {
-            $this->validate($efr);
-        }
+        // if (! empty()) {
+        $this->validate();
+        // }
 
         $this->nextStep();
     }

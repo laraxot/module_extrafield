@@ -4,14 +4,15 @@ declare(strict_types=1);
 
 namespace Modules\ExtraField\Actions\ExtraFieldGroup;
 
-use Modules\ExtraField\Models\Contracts\HasExtraFieldsContract;
+use Illuminate\Database\Eloquent\Collection;
+use Modules\ExtraField\Models\Contracts\HasExtraFieldGroupsContract;
 use Spatie\QueueableAction\QueueableAction;
 
 class GetByModelUserIdCategoryId
 {
     use QueueableAction;
 
-    public function execute(HasExtraFieldsContract $model, string $user_id, string $cat_id)
+    public function execute(HasExtraFieldGroupsContract $model, string $user_id, string $cat_id): Collection
     {
         $res = $model->extraFieldGroups()
             ->wherePivot('user_id', $user_id)
