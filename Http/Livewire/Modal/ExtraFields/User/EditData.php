@@ -42,12 +42,12 @@ class EditData extends Modal
 
         $data = $this->rows->map(
             function ($item) {
-                if (! property_exists($item, 'name')) {
-                    throw new \Exception('['.__LINE__.']['.__FILE__.']');
-                }
-                if (! property_exists($item, 'pivot')) {
-                    throw new \Exception('['.__LINE__.']['.__FILE__.']');
-                }
+                // if (! property_exists($item, 'name')) {
+                //     throw new \Exception('['.__LINE__.']['.__FILE__.']');
+                // }
+                // if (! property_exists($item, 'pivot')) {
+                //     throw new \Exception('['.__LINE__.']['.__FILE__.']');
+                // }
 
                 return [
                     'name' => $item->name,
@@ -72,6 +72,7 @@ class EditData extends Modal
      */
     public function getRowsProperty(): EloquentCollection
     {
+        dddx('a');
         if (! method_exists($this->model, 'extraFields')) {
             throw new \Exception('['.__LINE__.']['.__FILE__.']');
         }

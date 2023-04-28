@@ -126,25 +126,25 @@ trait HasExtraFields
         return $groups;
     }*/
 
-    public function getFavouriteGroups(?string $cat_id = null): Collection
-    {
-        $groups = $this->extraFieldGroups();
+    // public function getFavouriteGroups(?string $cat_id = null): Collection
+    // {
+    //     $groups = $this->extraFieldGroups();
 
-        if (null !== $cat_id) {
-            $groups->withAnyCategories($cat_id);
-        }
+    //     if (null !== $cat_id) {
+    //         $groups->withAnyCategories($cat_id);
+    //     }
 
-        $groups = $groups->get()
-            ->map(function ($group) {
-                $is_favourite = (1 === $group->cardinality)
-                    || (1 === $group->pivot->favourite && $group->pivot->uuid === $this->pivot->uuid);
+    //     $groups = $groups->get()
+    //         ->map(function ($group) {
+    //             $is_favourite = (1 === $group->cardinality)
+    //                 || (1 === $group->pivot->favourite && $group->pivot->uuid === $this->pivot->uuid);
 
-                return $group->setAttribute('is_favourite', $is_favourite);
-            })
-            ->sortBy('name');
+    //             return $group->setAttribute('is_favourite', $is_favourite);
+    //         })
+    //         ->sortBy('name');
 
-        return $groups;
-    }
+    //     return $groups;
+    // }
 
     /*public function setFavouriteGroup(string $group_id, string $uuid): void
     {
@@ -349,7 +349,7 @@ trait HasExtraFields
         return $model_groups;
     }
 
-    public function getUserExtraFieldValue(string $user_id, ?string $uuid = null): array
+    /*public function getUserExtraFieldValue(string $user_id, ?string $uuid = null): array
     {
         $model_fields = $this->extraFields->where('pivot.user_id', $user_id);
         // $fav_groups = $this->getFavouriteGroups();
@@ -404,6 +404,78 @@ trait HasExtraFields
             )->toArray();
 
         return $data;
+    }*/
+
+    public function getUserExtraFieldValue(string $userId, ?string $uuid = null): array
+    {
+        $extraFields = $this->getExtraFields($userId, $uuid);
+        $favoriteGroups = $this->getFavoriteGroups($userId, $uuid);
+        $profileFields = $this->getProfileFields($userId);
+        $data = $this->combineData($favoriteGroups, $extraFields, $profileFields, $userId);
+
+        return $data;
+    }
+
+    protected function getExtraFields($userId, $uuid)
+    {
+        $extraFields = $this->extraFields->where('pivot.user_id', $userId);
+        if (null !== $uuid) {
+            $extraFields = $extraFields->where('pivot.uuid', $uuid);
+        }
+
+        return $extraFields;
+    }
+
+    protected function getFavoriteGroups($userId, $uuid)
+    {
+        $favoriteGroups = app(\Modules\ExtraField\Actions\ExtraFieldGroup\GetFavorites::class)->execute($this)->where('pivot.user_id', $userId);
+        if ($favoriteGroups->isEmpty()) {
+            $favoriteGroups = $this->extraFieldGroups->where('pivot.user_id', null);
+        }
+        if (null !== $uuid) {
+            $favoriteGroups = $favoriteGroups->where('pivot.uuid', $uuid);
+        }
+
+        return $favoriteGroups;
+    }
+
+    protected function getProfileFields($userId)
+    {
+        $profile = ProfileService::make()->get(User::find($userId))->getProfile();
+        $profileFields = $profile->extraFields;
+
+        return $profileFields;
+    }
+
+    protected function combineData($favoriteGroups, $extraFields, $profileFields, $userId)
+    {
+        $data = $favoriteGroups->map(function ($group) use ($extraFields, $profileFields, $userId) {
+            $group->fields->map(function ($field) use ($extraFields, $profileFields, $userId, $group) {
+                $extraField = $extraFields->firstWhere('id', $field->id);
+                $modelFieldsValue = $extraField?->getRelationValue('pivot')?->value;
+                $profileFieldsValue = $profileFields->firstWhere('id', $field->id)?->pivot?->value;
+                $field->value = $modelFieldsValue ?? $profileFieldsValue;
+                $favoriteGroupUuid = $this->getFavoriteGroupUuid($group, $userId);
+                $field->uuid = $extraFields->firstWhere('id', $field->id)?->pivot?->uuid ?? $favoriteGroupUuid;
+
+                return $field;
+            });
+
+            return $group;
+        })->toArray();
+
+        return $data;
+    }
+
+    protected function getFavoriteGroupUuid($group, $userId)
+    {
+        $favoriteGroupUuid = null;
+        $favoriteGroup = $group->pivot->where('user_id', $userId)->where('is_favourite', 1)->first();
+        if ($favoriteGroup) {
+            $favoriteGroupUuid = $favoriteGroup->uuid;
+        }
+
+        return $favoriteGroupUuid;
     }
 
     public function getExtraFieldValue(): EloquentCollection
@@ -448,45 +520,76 @@ trait HasExtraFields
 
     public function getUserExtraFieldGroupsFormData(string $user_id, ?string $uuid = null): array
     {
-        // ora di defaut sceglie il primo. poi diventerà il preferito
-        $tmp = $this->getUserExtraFieldValue($user_id, $uuid);
-        $data = [];
-        foreach ($tmp as $item) {
-            $name = $item['name'];
-            if (is_array($name)) {
-                $name = array_values($name)[0];
-            }
+        $extraFields = $this->getUserExtraFieldValue($user_id, $uuid);
+        $formData = [];
 
-            $k = str()->slug($name) ?? '';
-            // è qui che sceglie il primo
-
-            $v = $item['fields'][0]['uuid'] ?? '';
-            $data[$k] = $v;
+        foreach ($extraFields as $field) {
+            $name = is_array($field['name']) ? array_values($field['name'])[0] : $field['name'];
+            $key = str()->slug($name) ?? '';
+            $value = $field['fields'][0]['uuid'] ?? '';
+            $formData[$key] = $value;
         }
 
-        return $data;
+        return $formData;
     }
 
     public function getUserExtraFieldFormData(string $user_id, ?string $uuid = null): array
     {
-        $tmp = $this->getUserExtraFieldValue($user_id, $uuid);
-        $data = [];
+        $extraFields = $this->getUserExtraFieldValue($user_id, $uuid);
+        $formData = [];
 
-        foreach ($tmp as $item) {
-            foreach ($item['fields'] as $field) {
-                $k = $field['name'];
-                $v = $field['value'];
-
-                if (isJson($v)) {
-                    $v = json_decode($v);
-                }
-                $data[$k] = $v;
+        foreach ($extraFields as $field) {
+            foreach ($field['fields'] as $item) {
+                $key = $item['name'];
+                $value = isJson($item['value']) ? json_decode($item['value']) : $item['value'];
+                $formData[$key] = $value;
             }
         }
 
-        // dd($data);
-        return $data;
+        return $formData;
     }
+
+    /*public function getUserExtraFieldGroupsFormData(string $user_id, ?string $uuid = null): array
+        {
+            // ora di defaut sceglie il primo. poi diventerà il preferito
+            $tmp = $this->getUserExtraFieldValue($user_id, $uuid);
+            $data = [];
+            foreach ($tmp as $item) {
+                $name = $item['name'];
+                if (is_array($name)) {
+                    $name = array_values($name)[0];
+                }
+
+                $k = str()->slug($name) ?? '';
+                // è qui che sceglie il primo
+
+                $v = $item['fields'][0]['uuid'] ?? '';
+                $data[$k] = $v;
+            }
+
+            return $data;
+        }
+
+        public function getUserExtraFieldFormData(string $user_id, ?string $uuid = null): array
+        {
+            $tmp = $this->getUserExtraFieldValue($user_id, $uuid);
+            $data = [];
+
+            foreach ($tmp as $item) {
+                foreach ($item['fields'] as $field) {
+                    $k = $field['name'];
+                    $v = $field['value'];
+
+                    if (isJson($v)) {
+                        $v = json_decode($v);
+                    }
+                    $data[$k] = $v;
+                }
+            }
+
+            // dd($data);
+            return $data;
+        }*/
 
     public function addExtraFieldByGroup(array $data, string $user_id, ?string $uuid = null): void
     {
@@ -503,7 +606,8 @@ trait HasExtraFields
                     $item->value = collect($data)->get($item->name);
 
                     return $item;
-                })->pluck('value', 'name')->all();
+                }
+            )->pluck('value', 'name')->all();
             $this->addExtraField($up, $user_id, (string) $group->id);
         }
     }
@@ -560,7 +664,8 @@ trait HasExtraFields
                     ]);
 
                     return $item;
-                })->pluck('value', 'name')->all();
+                }
+            )->pluck('value', 'name')->all();
 
             $this->updateUserExtraField($up, $user_id, $uuid);
         }
@@ -600,7 +705,8 @@ trait HasExtraFields
                     ]);
 
                     return $item;
-                })->pluck('value', 'name')->all();
+                }
+            )->pluck('value', 'name')->all();
 
             // $this->updateExtraField($up, $user_id, $uuid);
         }

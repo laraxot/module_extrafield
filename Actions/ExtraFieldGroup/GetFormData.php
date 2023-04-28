@@ -4,14 +4,14 @@ declare(strict_types=1);
 
 namespace Modules\ExtraField\Actions\ExtraFieldGroup;
 
-use Modules\ExtraField\Models\Contracts\HasExtraFieldsContract;
+use Modules\ExtraField\Models\Contracts\HasExtraFieldGroupsContract;
 use Spatie\QueueableAction\QueueableAction;
 
 class GetFormData
 {
     use QueueableAction;
 
-    public function execute(HasExtraFieldsContract $model, string $user_id, string $uuid): array
+    public function execute(HasExtraFieldGroupsContract $model, string $user_id, string $uuid): array
     {
         $tmp = app(\Modules\ExtraField\Actions\ExtraFieldGroup\Get::class)->execute($model, $user_id, $uuid);
         $data = [];

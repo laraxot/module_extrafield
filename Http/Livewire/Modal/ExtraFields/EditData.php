@@ -6,6 +6,7 @@ namespace Modules\ExtraField\Http\Livewire\Modal\ExtraFields;
 
 use Illuminate\Contracts\Support\Renderable;
 use Illuminate\Database\Eloquent\Model;
+use Illuminate\Support\Arr;
 use Illuminate\Support\Facades\Auth;
 use Modules\Cms\Actions\GetViewAction;
 use Modules\PFed\Actions\SendConsentsUpdateNotifyToCompanyAction;
@@ -41,18 +42,14 @@ class EditData extends Modal
         $this->model_id = $model_id;
         $this->model = app(GetModelByModelTypeAction::class)->execute($this->model_type, $this->model_id);
         $this->user_id = (string) Auth::id();
+        // dddx($this->model->extraFieldsByUserId($this->user_id)->where('uuid', $this->uuid)->get());
+        // $this->form_data = $this->model->extraFieldsByUserId($this->user_id)->where('uuid', $this->uuid)->get()->all();
+        // $this->form_data = $this->model->getUserExtraFieldFormData($this->user_id, $this->uuid);
 
-        $this->form_data = $this->model->getUserExtraFieldFormData($this->user_id, $this->uuid);
-        $form_data2 = app(\Modules\ExtraField\Actions\ExtraFieldGroup\GetFormData::class)->execute($this->model, $this->user_id, $this->uuid);
-        dddx([
-            'uno' => $this->form_data,
-            'due' => $form_data2,
-        ]);
+        $this->form_data = app(\Modules\ExtraField\Actions\ExtraFieldGroup\GetFormData::class)->execute($this->model, $this->user_id, $this->uuid);
 
         // SE QUALCUNO LO CANCELLASSE, SPIEGHI ANCHE COME FARLO MEGLIO, PER FAVORE
         session()->flash('form_data', $this->form_data);
-
-        // dddx($this->form_data);
     }
 
     public static function getName(): string
@@ -72,9 +69,14 @@ class EditData extends Modal
 
     public function render(): Renderable
     {
-        $groups = $this->model->getUserExtraFieldValue($this->user_id, $this->uuid);
-        $group = collect($groups)->first();
-        $fields = $group['fields'];
+        // $groups = $this->model->getUserExtraFieldValue($this->user_id, $this->uuid);
+        $fields = $this->model->extraFieldsByUserId($this->user_id)->where('uuid', $this->uuid)->get();
+        $fields = $fields->map(function ($field) {
+            $field->value = $field->pivot->value;
+
+            return $field;
+        });
+
         /*
          * @phpstan-var view-string
          */
@@ -152,23 +154,21 @@ class EditData extends Modal
 
         // dd($this->form_data, $updating_services);
 
-        $efr = $this->model->getExtraFieldRules($this->form_data);
+        $fields = $this->model->extraFieldsByUserId($this->user_id)->where('uuid', $this->uuid)->get();
+        $efr = $fields->map(function ($item) {
+            return ['name' => $item->name, 'rules' => array_merge($item->rules ?? [], $item->pivot->rules ?? [])];
+        })->pluck('rules', 'name');
+        $efr = Arr::prependKeysWith($efr, 'form_data.');
+
+        // $efr = $this->model->getExtraFieldRules($this->form_data);
 
         if (! empty($efr)) {
             $this->validate($efr);
         }
 
-        $this->model->updateUserExtraFieldByGroupTest($this->form_data, $this->user_id, $this->uuid);
-
-        $groups = $this->model->getUserExtraFieldValue($this->user_id, $this->uuid);
-        $group_name = str()->slug(collect($groups)->first()['name']);
-
-        $user_services = Service::getServicesWithUuid($this->user_id, $this->uuid);
-
-        $user_services->map(
-            function ($service) use ($group_name) {
-                $service->updateUserExtraFieldByGroupAndProfileFieldUuid([$group_name => $this->uuid], $this->user_id);
-            });
+        $fields->map(function ($field) {
+            $field->pivot->update(['value', $this->form_data[$field->name] ?? null]);
+        });
 
         $this->close();
 

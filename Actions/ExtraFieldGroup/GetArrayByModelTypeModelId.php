@@ -5,6 +5,8 @@ declare(strict_types=1);
 namespace Modules\ExtraField\Actions\ExtraFieldGroup;
 
 use Illuminate\Support\Facades\Auth;
+use Illuminate\Support\Str;
+use Modules\ExtraField\Models\ExtraFieldGroup;
 use Modules\UI\Datas\FieldData;
 use Modules\Xot\Actions\GetModelByModelTypeAction;
 use Modules\Xot\Datas\XotData;
@@ -30,17 +32,44 @@ class GetArrayByModelTypeModelId
         $extra_field_groups = app(GetByModelTypeModelId::class)->execute($model_type, $model_id);
 
         $res = $extra_field_groups->map(
-            function ($item) use ($model_extra_fields, $profile_extra_fields) {
+            function ($item) use ($profile_extra_fields) {
                 return [
                     'id' => $item->id,
                     'uuid' => $item->uuid,
                     'name' => $item->name,
-                    'fields' => $this->getFielCollByFields($item, $model_extra_fields, $profile_extra_fields)->toArray(),
+                    'options' => $this->getOptions($item, $profile_extra_fields),
+                    // 'fields' => $this->getFielCollByFields($item, $model_extra_fields, $profile_extra_fields)->toArray(),
                 ];
             }
         );
 
         return $res->all();
+    }
+
+    public function getOptions(ExtraFieldGroup $group, $profile_extra_fields): array
+    {
+        $extra_fields = $group->fields;
+        $data = $extra_fields->map(
+            function ($field) use ($profile_extra_fields) {
+                return $profile_extra_fields->where('id', $field->id);
+            }
+        );
+        $name = [];
+        foreach ($data as $v) {
+            foreach ($v as $v1) {
+                $k = $v1->pivot->uuid;
+                if (strlen(strval($k)) < 2) {
+                    $v1->pivot->update(['uuid' => Str::uuid()]);
+                }
+                $v = $v1->pivot->value;
+                if (! isset($name[$k])) {
+                    $name[$k] = '';
+                }
+                $name[$k] .= $v.' ';
+            }
+        }
+
+        return $name;
     }
 
     /**

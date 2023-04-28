@@ -110,6 +110,16 @@ class Category extends Component
         $this->emit('modal.open', 'modal.extra-field-group.add', $parz);
     }
 
+    public function edit(string $uuid)
+    {
+        $parz = [
+            'uuid' => $uuid,
+            'model_type' => $this->model_type,
+            'model_id' => $this->model_id,
+        ];
+        $this->emit('modal.open', 'modal.extra-field-group.edit', $parz);
+    }
+
     public function getFieldsByGroup(ExtraFieldGroup $group): EloquentCollection
     {
         $fields = $this->model

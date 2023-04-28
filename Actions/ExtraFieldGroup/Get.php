@@ -4,8 +4,7 @@ declare(strict_types=1);
 
 namespace Modules\ExtraField\Actions\ExtraFieldGroup;
 
-use Illuminate\Support\Collection;
-use Modules\ExtraField\Models\Contracts\HasExtraFieldsContract;
+use Modules\ExtraField\Models\Contracts\HasExtraFieldGroupsContract;
 use Modules\Xot\Datas\XotData;
 use Spatie\QueueableAction\QueueableAction;
 
@@ -13,7 +12,7 @@ class Get
 {
     use QueueableAction;
 
-    public function execute(HasExtraFieldsContract $model, string $user_id, ?string $uuid = null): Collection
+    public function execute(HasExtraFieldGroupsContract $model, string $user_id, ?string $uuid = null): array
     {
         $xot = XotData::from(config('xra'));
 
