@@ -22,4 +22,6 @@ interface HasExtraFieldGroupsContract extends ModelContract
     public function noUserExtraFieldGroups(): MorphToMany;
 
     public function extraFieldGroups(): MorphToMany;
+
+    public function extraFieldsByUserId(?string $user_id): MorphToMany;
 }

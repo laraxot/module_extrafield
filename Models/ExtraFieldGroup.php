@@ -156,13 +156,13 @@ class ExtraFieldGroup extends BaseModel
                     //    throw new \Exception('['.__LINE__.']['.__FILE__.']');
                     // }
                     $service_value = $model
-                        ->userExtraFields((string) $user_id)
+                        ->extraFieldsByUserId((string) $user_id)
                         ->wherePivot('extra_field_id', $item->getKey())
                         ->first();
                     // if (! method_exists($profile, 'userExtraFields')) {
                     //    throw new \Exception('['.__LINE__.']['.__FILE__.']');
                     // }
-                    $profile_value = $profile->userExtraFields((string) $user_id)
+                    $profile_value = $profile->extraFieldsByUserId((string) $user_id)
                         ->wherePivot('extra_field_id', $item->getKey())
                         ->first();
 

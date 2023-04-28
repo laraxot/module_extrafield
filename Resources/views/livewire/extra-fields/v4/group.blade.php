@@ -10,10 +10,10 @@
     {{ Str::ucfirst($group->name) }} {{-- $group->pivot->uuid --}}
 </h5>
 {{-- {{ dddx($model->userFields) }} --}}
-{{-- {{ dddx(rowsToSql($model->userExtraFields())) }} --}}
+{{-- {{ dddx(rowsToSql($model->extraFieldsByUserId())) }} --}}
 @php
     $fields = $model
-        ->userExtraFields(auth()->id())
+        ->extraFieldsByUserId(auth()->id())
         // ->whereHas('groups', function ($query) use ($group) {
         //     $query->where('extra_field_groups.id', $group->id);
         // })

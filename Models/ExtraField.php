@@ -115,6 +115,6 @@ class ExtraField extends BaseModel
      */
     public function userValue(string $user_id)
     {
-        dddx($this->pivot);
+        dddx($this);
     }
 }

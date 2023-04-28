@@ -33,7 +33,7 @@
     <x-slot name="body">
         @php
             $fields = $model
-                ->userExtraFields(auth()->id())
+                ->extraFieldsByUserId(auth()->id())
                 ->wherePivot('uuid', $group->pivot->uuid)
                 ->get();
             
