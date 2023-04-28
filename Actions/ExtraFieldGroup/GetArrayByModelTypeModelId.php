@@ -47,12 +47,13 @@ class GetArrayByModelTypeModelId
     public function getFielCollByFields($group, $model_extra_fields, $profile_extra_fields)
     {
         $extra_fields = $group->fields;
+        $uuid = $group->uuid;
         $data = $extra_fields->map(
-            function ($field) use ($model_extra_fields, $profile_extra_fields) {
+            function ($field) use ($uuid, $model_extra_fields, $profile_extra_fields) {
                 dddx([
                     'a' => $field,
-                    'b' => $model_extra_fields->where('id', $field->id),
-                    'c' => $profile_extra_fields->where('id', $field->id),
+                    'b' => $model_extra_fields->where('id', $field->id)->where('pivot.uuid', $uuid),
+                    'c' => $profile_extra_fields->where('id', $field->id)->where('pivot.uuid', $uuid),
                 ]);
             }
         );
