@@ -5,6 +5,7 @@ declare(strict_types=1);
 namespace Modules\ExtraField\Actions\ExtraFieldGroup;
 
 use Illuminate\Database\Eloquent\Relations\Relation;
+use Illuminate\Support\Arr;
 use Modules\ExtraField\Models\ExtraFieldGroup;
 use Spatie\QueueableAction\QueueableAction;
 
@@ -15,7 +16,7 @@ class GetRulesByGroupId
     /**
      * Undocumented function.
      */
-    public function execute(string $group_id): array
+    public function execute(string $group_id, ?string $prefix = ''): array
     {
         $morph_map = [
             'extra_field' => 'Modules\ExtraField\Models\ExtraField',
@@ -30,6 +31,10 @@ class GetRulesByGroupId
             return ['name' => $item->name, 'rules' => array_merge($item->rules ?? [], $item->pivot->rules ?? [])];
         })->pluck('rules', 'name');
 
-        return $rules->all();
+        $rules = $rules->all();
+
+        $rules = Arr::prependKeysWith($rules, $prefix);
+
+        return $rules;
     }
 }

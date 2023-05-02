@@ -6,7 +6,6 @@ namespace Modules\ExtraField\Http\Livewire\Wizard\ExtraFieldGroup\Steps;
 
 use Illuminate\Contracts\Support\Renderable;
 // use Modules\PFed\Models\Data;
-use Illuminate\Support\Arr;
 use Modules\Cms\Actions\GetViewAction;
 use Modules\ExtraField\Actions;
 use Modules\UI\Actions\GetStateDataAction;
@@ -41,9 +40,9 @@ class InsertDataStep extends StepComponent
 
         $this->fields = app(Actions\ExtraFieldGroup\GetFieldsArrayByGroupId::class)->execute($this->form_data['group_id']);
 
-        $this->rules = app(Actions\ExtraFieldGroup\GetRulesByGroupId::class)->execute($this->form_data['group_id']);
+        $this->rules = app(Actions\ExtraFieldGroup\GetRulesByGroupId::class)->execute($this->form_data['group_id'], 'form_data.');
 
-        $this->rules = Arr::prependKeysWith($this->rules, 'form_data.');
+        $this->rules = $this->rules;
 
         $this->initFormData();
     }

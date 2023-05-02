@@ -4,6 +4,7 @@ declare(strict_types=1);
 
 namespace Modules\ExtraField\Actions\ExtraFieldGroup;
 
+use Modules\ExtraField\Models\ExtraFieldGroupMorph;
 use Modules\ExtraField\Models\ExtraFieldMorph;
 use Spatie\QueueableAction\QueueableAction;
 
@@ -13,6 +14,9 @@ class UpdateByUuid
 
     public function execute(string $uuid, array $form_data): bool
     {
+        ExtraFieldGroupMorph::where(['uuid' => $uuid])
+        ->update(['value' => json_encode($form_data)]);
+
         foreach ($form_data as $index => $value) {
             ExtraFieldMorph::whereHas('extraField', function ($q) use ($index) {
                 $q->where('name', $index);
