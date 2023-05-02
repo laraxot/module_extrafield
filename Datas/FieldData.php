@@ -14,4 +14,5 @@ class FieldData extends Data implements Wireable
 
     public string $name;
     public ?string $value;
+    public ?string $type;
 }

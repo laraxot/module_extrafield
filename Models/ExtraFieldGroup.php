@@ -152,21 +152,15 @@ class ExtraFieldGroup extends BaseModel
         $fields = $this->noUserFields
             ->map(
                 function ($item) use ($profile, $model, $user_id) {
-                    // if (! method_exists($model, 'userExtraFields')) {
-                    //    throw new \Exception('['.__LINE__.']['.__FILE__.']');
-                    // }
                     $service_value = $model
                         ->extraFieldsByUserId((string) $user_id)
                         ->wherePivot('extra_field_id', $item->getKey())
                         ->first();
-                    // if (! method_exists($profile, 'userExtraFields')) {
-                    //    throw new \Exception('['.__LINE__.']['.__FILE__.']');
-                    // }
+
                     $profile_value = $profile->extraFieldsByUserId((string) $user_id)
                         ->wherePivot('extra_field_id', $item->getKey())
                         ->first();
 
-                    // dddx([$service_value, $profile_value]);
                     return $service_value ?? $profile_value ?? $item;
                 });
 

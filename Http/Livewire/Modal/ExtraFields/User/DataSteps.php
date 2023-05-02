@@ -6,9 +6,9 @@ namespace Modules\ExtraField\Http\Livewire\Modal\ExtraFields\User;
 
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Support\Facades\Auth;
-use Modules\ExtraField\Http\Livewire\Modal\ExtraFields\DataSteps\FirstStep;
-use Modules\ExtraField\Http\Livewire\Modal\ExtraFields\DataSteps\SecondStep;
-use Modules\ExtraField\Http\Livewire\Modal\ExtraFields\DataSteps\ThirdStep;
+use Modules\ExtraField\Http\Livewire\Modal\ExtraFields\User\DataSteps\FirstStep;
+use Modules\ExtraField\Http\Livewire\Modal\ExtraFields\User\DataSteps\SecondStep;
+use Modules\ExtraField\Http\Livewire\Modal\ExtraFields\User\DataSteps\ThirdStep;
 use Spatie\LivewireWizard\Components\WizardComponent;
 
 class DataSteps extends WizardComponent

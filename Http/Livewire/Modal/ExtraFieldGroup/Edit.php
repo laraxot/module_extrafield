@@ -35,9 +35,8 @@ class Edit extends Modal
         $this->model_type = $model_type;
         $this->model_id = $model_id;
         $this->user_id = strval(Auth::id());
-        // $this->model = $this->getModel();
         $this->fields = app(Actions\ExtraFieldGroup\GetFieldCollByUuidModelTypeModelId::class)->execute($uuid, $model_type, $model_id)->toArray();
-        dddx($this->fields);
+
         foreach ($this->fields as $field) {
             $k = $field['name'];
             $v = $field['value'];
@@ -77,6 +76,15 @@ class Edit extends Modal
     public static function getName(): string
     {
         return 'modal.extra-field-group.edit';
+    }
+
+    public function save(): void
+    {
+        app(Actions\ExtraFieldGroup\UpdateByUuid::class)->execute($this->uuid, $this->form_data);
+
+        $this->emit('refresh');
+
+        $this->close();
     }
 
     public static function behavior(): array

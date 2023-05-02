@@ -2,12 +2,7 @@
     <x-slot name="title">Modifica Campo</x-slot>
 
     @foreach ($fields as $field)
-        @php
-            dddx($field);
-            $field_data = $this->toFieldData($field);
-            dddx($field_data);
-        @endphp
-        <x-input.field :field="$field_data" />
+        <x-input.field :field="$this->toFieldData($field)" />
     @endforeach
 
     <x-flash-message />
