@@ -12,51 +12,44 @@ use Spatie\Activitylog\LogOptions;
 use Spatie\Activitylog\Traits\LogsActivity;
 
 /**
- * Modules\ExtraField\Models\ExtraFieldMorph.
+ * Modules\ExtraField\Models\ExtraFieldMorph
  *
- * @property int                             $id
- * @property string|null                     $model_type
- * @property int|null                        $model_id
- * @property int|null                        $user_id
- * @property string|null                     $created_by
- * @property string|null                     $updated_by
+ * @property int $id
+ * @property string|null $model_type
+ * @property int|null $model_id
+ * @property int|null $user_id
+ * @property string|null $created_by
+ * @property string|null $updated_by
  * @property \Illuminate\Support\Carbon|null $created_at
  * @property \Illuminate\Support\Carbon|null $updated_at
- * @property int|null                        $extra_field_id
- * @property string|null                     $value
- * @property string|null                     $value_class
- * @property string|null                     $uuid
- *
+ * @property int|null $extra_field_id
+ * @property string|null $value
+ * @property string|null $value_class
+ * @property string|null $uuid
+ * @property int $favourite
+ * @property string|null $note
+ * @property array|null $rules
+ * @property-read \Illuminate\Database\Eloquent\Collection<int, \Modules\Activity\Models\Activity> $activities
+ * @property-read int|null $activities_count
+ * @property-read \Modules\ExtraField\Models\ExtraField|null $extraField
  * @method static \Illuminate\Database\Eloquent\Builder|ExtraFieldMorph newModelQuery()
  * @method static \Illuminate\Database\Eloquent\Builder|ExtraFieldMorph newQuery()
  * @method static \Illuminate\Database\Eloquent\Builder|ExtraFieldMorph query()
  * @method static \Illuminate\Database\Eloquent\Builder|ExtraFieldMorph whereCreatedAt($value)
  * @method static \Illuminate\Database\Eloquent\Builder|ExtraFieldMorph whereCreatedBy($value)
  * @method static \Illuminate\Database\Eloquent\Builder|ExtraFieldMorph whereExtraFieldId($value)
+ * @method static \Illuminate\Database\Eloquent\Builder|ExtraFieldMorph whereFavourite($value)
  * @method static \Illuminate\Database\Eloquent\Builder|ExtraFieldMorph whereId($value)
  * @method static \Illuminate\Database\Eloquent\Builder|ExtraFieldMorph whereModelId($value)
  * @method static \Illuminate\Database\Eloquent\Builder|ExtraFieldMorph whereModelType($value)
+ * @method static \Illuminate\Database\Eloquent\Builder|ExtraFieldMorph whereNote($value)
+ * @method static \Illuminate\Database\Eloquent\Builder|ExtraFieldMorph whereRules($value)
  * @method static \Illuminate\Database\Eloquent\Builder|ExtraFieldMorph whereUpdatedAt($value)
  * @method static \Illuminate\Database\Eloquent\Builder|ExtraFieldMorph whereUpdatedBy($value)
  * @method static \Illuminate\Database\Eloquent\Builder|ExtraFieldMorph whereUserId($value)
+ * @method static \Illuminate\Database\Eloquent\Builder|ExtraFieldMorph whereUuid($value)
  * @method static \Illuminate\Database\Eloquent\Builder|ExtraFieldMorph whereValue($value)
  * @method static \Illuminate\Database\Eloquent\Builder|ExtraFieldMorph whereValueClass($value)
- *
- * @property int                                                                              $favourite
- * @property string|null                                                                      $note
- * @property \Illuminate\Database\Eloquent\Collection<int, \Modules\Activity\Models\Activity> $activities
- * @property int|null                                                                         $activities_count
- * @property \Modules\ExtraField\Models\ExtraField|null                                       $extraField
- *
- * @method static \Illuminate\Database\Eloquent\Builder|ExtraFieldMorph whereFavourite($value)
- * @method static \Illuminate\Database\Eloquent\Builder|ExtraFieldMorph whereNote($value)
- * @method static \Illuminate\Database\Eloquent\Builder|ExtraFieldMorph whereUuid($value)
- *
- * @property \Illuminate\Database\Eloquent\Collection<int, \Modules\Activity\Models\Activity> $activities
- * @property \Illuminate\Database\Eloquent\Collection<int, \Modules\Activity\Models\Activity> $activities
- * @property \Illuminate\Database\Eloquent\Collection<int, \Modules\Activity\Models\Activity> $activities
- * @property \Illuminate\Database\Eloquent\Collection<int, \Modules\Activity\Models\Activity> $activities
- *
  * @mixin \Eloquent
  */
 class ExtraFieldMorph extends BaseMorphPivot
