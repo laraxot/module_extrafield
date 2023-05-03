@@ -86,10 +86,16 @@ class Groups extends Component
 
     public function getAssignedGroups(): Collection
     {
-        return $this->model->extraFields()->wherePivot('user_id', null)->get()->groupBy('group.name')->map(
-            function ($ef, $group) {
-                return $ef->first()->getAttribute('group_id');
-            });
+        return $this->model
+            ->extraFields()
+            ->wherePivot('user_id', null)
+            ->get()
+            ->groupBy('group.name')
+            ->map(
+                function ($ef, $group) {
+                    return $ef->first()?->getAttribute('group_id');
+                }
+            );
     }
 
     public function assign(): void

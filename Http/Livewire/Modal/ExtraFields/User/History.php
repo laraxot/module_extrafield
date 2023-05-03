@@ -29,6 +29,7 @@ class History extends Modal
 
     public function render(): Renderable
     {
+        /* --- trasformare in azione !!
         $history_collection = HistoryModel::where('causer_id', Auth::id())->where('subject_type', 'extra_field_morph')->get();
 
         $history = $history_collection->filter(function ($item) {
@@ -42,14 +43,14 @@ class History extends Modal
                 return $item;
             }
         })->toArray();
-
+        */
         /**
          * @phpstan-var view-string
          */
         $view = app(GetViewAction::class)->execute();
 
         $view_params = [
-            'history' => $history,
+            // 'history' => $history,
             'view' => $view,
         ];
 

@@ -50,6 +50,8 @@ class InsertDescriptionStep extends StepComponent
 
     public function save(): void
     {
+        dddx('da fare !!!');
+        /*
         $morph_map = [
             'extra_field' => 'Modules\ExtraField\Models\ExtraField',
         ];
@@ -57,7 +59,7 @@ class InsertDescriptionStep extends StepComponent
         Relation::morphMap($morph_map);
 
         $this->getModel()->addExtraField($this->form_data, $this->form_data['user_id'], $this->form_data['group_id'], $this->form_data['note']);
-
+        */
         $this->emit('refresh');
         session()->flash('message', 'Post successfully updated.');
 

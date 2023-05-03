@@ -10,26 +10,27 @@ use Illuminate\Database\Eloquent\Relations\HasOne;
 use Illuminate\Support\Facades\Auth;
 
 /**
- * Modules\ExtraField\Models\ExtraFieldGroupMorph
+ * Modules\ExtraField\Models\ExtraFieldGroupMorph.
  *
- * @property int $id
- * @property string|null $model_type
- * @property int|null $model_id
- * @property int|null $user_id
- * @property string|null $created_by
- * @property string|null $updated_by
- * @property \Illuminate\Support\Carbon|null $created_at
- * @property \Illuminate\Support\Carbon|null $updated_at
- * @property int|null $extra_field_group_id
- * @property array|null $value
- * @property string|null $value_class
- * @property string|null $uuid
- * @property int $favourite
- * @property string|null $note
- * @property int|null $cardinality
- * @property int|null $is_verified
- * @property string|null $token
- * @property-read \Modules\ExtraField\Models\ExtraFieldGroup|null $extraFieldGroup
+ * @property int                                             $id
+ * @property string|null                                     $model_type
+ * @property int|null                                        $model_id
+ * @property int|null                                        $user_id
+ * @property string|null                                     $created_by
+ * @property string|null                                     $updated_by
+ * @property \Illuminate\Support\Carbon|null                 $created_at
+ * @property \Illuminate\Support\Carbon|null                 $updated_at
+ * @property int|null                                        $extra_field_group_id
+ * @property array|null                                      $value
+ * @property string|null                                     $value_class
+ * @property string|null                                     $uuid
+ * @property int                                             $favourite
+ * @property string|null                                     $note
+ * @property int|null                                        $cardinality
+ * @property int|null                                        $is_verified
+ * @property string|null                                     $token
+ * @property \Modules\ExtraField\Models\ExtraFieldGroup|null $extraFieldGroup
+ *
  * @method static \Illuminate\Database\Eloquent\Builder|ExtraFieldGroupMorph newModelQuery()
  * @method static \Illuminate\Database\Eloquent\Builder|ExtraFieldGroupMorph newQuery()
  * @method static \Illuminate\Database\Eloquent\Builder|ExtraFieldGroupMorph query()
@@ -50,6 +51,7 @@ use Illuminate\Support\Facades\Auth;
  * @method static \Illuminate\Database\Eloquent\Builder|ExtraFieldGroupMorph whereUuid($value)
  * @method static \Illuminate\Database\Eloquent\Builder|ExtraFieldGroupMorph whereValue($value)
  * @method static \Illuminate\Database\Eloquent\Builder|ExtraFieldGroupMorph whereValueClass($value)
+ *
  * @mixin \Eloquent
  */
 class ExtraFieldGroupMorph extends BaseMorphPivot
@@ -87,18 +89,18 @@ class ExtraFieldGroupMorph extends BaseMorphPivot
         ;
     }*/
 
-    /**
+    /*--- DEPRECATED
      * Undocumented function.
      *
      * @return mixed
-     */
+
     public function userValue(string $user_id)
     {
         $res = ExtraFieldMorph::firstOrNew([
             'user_id' => $user_id,
             'model_type' => $this->model_type,
             'model_id' => $this->model_id,
-            'extra_field_id' => $this->extra_field_id,
+            //'extra_field_id' => $this->extra_field_id,
             'uuid' => $this->uuid,
         ]);
 
@@ -112,12 +114,13 @@ class ExtraFieldGroupMorph extends BaseMorphPivot
 
         return $value;
     }
+    */
 
-    /**
+    /* --- DEPRECATED
      * Undocumented function.
      *
      * @param mixed $value
-     */
+
     public function updateUserValue(string $user_id, $value): ExtraFieldMorph
     {
         $row = ExtraFieldMorph::firstOrCreate([
@@ -132,6 +135,7 @@ class ExtraFieldGroupMorph extends BaseMorphPivot
 
         return $res;
     }
+    */
 
     public function extraFieldGroup(): BelongsTo
     {

@@ -16,9 +16,10 @@ class GetByModelUserIdCategoryId
     {
         // Call to an undefined method Illuminate\Database\Eloquent\Relations\MorphToMany::withAnyCategories().
         $res = $model->extraFieldGroups()
+            ->withAnyCategories($cat_id)
             ->wherePivot('user_id', $user_id)
             ->wherePivot('uuid', '!=', '')
-            ->withAnyCategories($cat_id)
+
             ->get();
 
         return $res;

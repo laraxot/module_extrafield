@@ -5,6 +5,7 @@ declare(strict_types=1);
 namespace Modules\ExtraField\Actions\ExtraFieldGroup;
 
 use Modules\ExtraField\Actions;
+use Modules\ExtraField\Models\ExtraFieldGroup;
 use Spatie\QueueableAction\QueueableAction;
 
 class GetOptionsByModelTypeModelIdCategoryIdUserId
@@ -18,6 +19,9 @@ class GetOptionsByModelTypeModelIdCategoryIdUserId
     {
         $groups = app(Actions\ExtraFieldGroup\GetBuilderByModelTypeModelIdCategoryId::class)->execute($model_type, $model_id, $cat_id);
         $groups = $groups->get()->map(function ($item) use ($user_id) {
+            if (! $item instanceof ExtraFieldGroup) {
+                throw new \Exception('[][]');
+            }
             $cardinality = $item->noUserExtraFieldGroupMorphs->first()?->cardinality ?? 0;
             $count = $item->userExtraFieldGroupMorphs($user_id)->count();
 

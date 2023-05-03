@@ -100,13 +100,13 @@ class UserExtraFields extends Component
         $this->groups = $res->all();
     }
 
-    /**
+    /*---- DEPRECATED
      * Undocumented function.
      *
      * @param HasExtraFieldsContract $item
      *
      * @return mixed
-     */
+
     public function getFromUserTable($item)
     {
         if (! property_exists($item, 'pivot')) {
@@ -115,4 +115,5 @@ class UserExtraFields extends Component
 
         return $item->pivot?->extraFieldMorphUserValues()->where('user_id', $this->user_id)->get()->last()?->value;
     }
+    */
 }

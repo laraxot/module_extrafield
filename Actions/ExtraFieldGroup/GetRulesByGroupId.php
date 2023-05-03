@@ -16,7 +16,7 @@ class GetRulesByGroupId
     /**
      * Undocumented function.
      */
-    public function execute(string $group_id, ?string $prefix = ''): array
+    public function execute(string $group_id, string $prefix = ''): array
     {
         $morph_map = [
             'extra_field' => 'Modules\ExtraField\Models\ExtraField',
@@ -36,6 +36,9 @@ class GetRulesByGroupId
 
         $rules = $rules->all();
 
+        if (null == $prefix) {
+            throw new \Exception('['.__LINE__.']['.__FILE__.']');
+        }
         $rules = Arr::prependKeysWith($rules, $prefix);
 
         return $rules;

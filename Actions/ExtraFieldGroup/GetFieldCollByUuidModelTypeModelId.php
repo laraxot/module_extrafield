@@ -6,6 +6,7 @@ namespace Modules\ExtraField\Actions\ExtraFieldGroup;
 
 use Modules\ExtraField\Models\Contracts\HasExtraFieldGroupsContract;
 use Modules\ExtraField\Models\ExtraFieldGroupMorph;
+use Modules\ExtraField\Models\ExtraFieldMorph;
 use Modules\UI\Datas\FieldData;
 use Modules\Xot\Actions\GetModelByModelTypeAction;
 use Spatie\LaravelData\DataCollection;
@@ -35,11 +36,21 @@ class GetFieldCollByUuidModelTypeModelId
         $model = $this->getModel();
         $model_fields = $model->extraFields()->wherePivot('uuid', $uuid)->get();
         $fields = $row->extraFieldGroup?->fields;
+        if (null == $fields) {
+            $fields = collect([]);
+        }
         $fields = $fields->map(
             function ($field) use ($model_fields, $uuid) {
                 $field_arr = $field->toArray();
                 $field_data = FieldData::from($field_arr);
-                $value = $model_fields->where('id', $field->id)->where('pivot.uuid', $uuid)->first()?->pivot->value;
+                $pivot = $model_fields->where('id', $field->id)
+                    ->where('pivot.uuid', $uuid)
+                    ->first()
+                    ?->getRelationValue('pivot');
+                if (! $pivot instanceof ExtraFieldMorph) {
+                    throw new \Exception('[][]');
+                }
+                $value = $pivot->value;
                 $field_data->value = $value;
 
                 return $field_data;

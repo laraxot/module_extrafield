@@ -5,8 +5,8 @@ declare(strict_types=1);
 namespace Modules\ExtraField\Http\Livewire\ExtraFieldGroups\By;
 
 use Illuminate\Contracts\Support\Renderable;
-use Illuminate\Database\Eloquent\Collection;
 use Illuminate\Database\Eloquent\Collection  as EloquentCollection;
+use Illuminate\Support\Collection;
 use Illuminate\Support\Facades\Auth;
 use Livewire\Component;
 use Modules\Blog\Models\Category as CategoryModel;
@@ -71,10 +71,19 @@ class Category extends Component
         return view($view, $view_params);
     }
 
-    public function getGroups(EloquentCollection $categories): Collection
+    /**
+     * Undocumented function.
+     *
+     * @param Collection<CategoryModel> $categories
+     */
+    public function getGroups(Collection $categories): Collection
     {
         if ('' == $this->cat_id) {
-            $this->cat_id = $categories->first()->id;
+            $category_first = $categories->first();
+            if (! $category_first instanceof CategoryModel) {
+                throw new \Exception('['.__LINE__.']['.__FILE__.']');
+            }
+            $this->cat_id = strval($category_first->getKey());
         }
 
         return app(Actions\ExtraFieldGroup\GetByModelUserIdCategoryId::class)
@@ -88,7 +97,7 @@ class Category extends Component
         if (null == $category) {
             return;
         }
-        $this->category_name = $category->name;
+        $this->category_name = strval($category->name);
     }
 
     public function toggleFavourite(string $uuid): void
@@ -111,7 +120,7 @@ class Category extends Component
         $this->emit('modal.open', 'modal.extra-field-group.add', $parz);
     }
 
-    public function edit(string $uuid)
+    public function edit(string $uuid): void
     {
         $parz = [
             'uuid' => $uuid,
@@ -123,9 +132,14 @@ class Category extends Component
 
     public function getFieldsByGroup(ExtraFieldGroup $group): EloquentCollection
     {
+        $pivot = $group->getRelationValue('pivot');
+        if (! $pivot instanceof ExtraFieldGroupMorph) {
+            throw new \Exception('[][]');
+        }
+        $uuid = $pivot->uuid;
         $fields = $this->model
                 ->extraFieldsByUserId($this->user_id)
-                ->wherePivot('uuid', $group->pivot->uuid)
+                ->wherePivot('uuid', $uuid)
                 ->get();
 
         return $fields;
