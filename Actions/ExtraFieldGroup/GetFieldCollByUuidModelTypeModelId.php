@@ -34,7 +34,7 @@ class GetFieldCollByUuidModelTypeModelId
         }
         $model = $this->getModel();
         $model_fields = $model->extraFields()->wherePivot('uuid', $uuid)->get();
-        $fields = $row->extraFieldGroup->fields;
+        $fields = $row->extraFieldGroup?->fields;
         $fields = $fields->map(
             function ($field) use ($model_fields, $uuid) {
                 $field_arr = $field->toArray();

@@ -77,7 +77,7 @@ class Groups extends Component
     /**
      * Undocumented function.
      *
-     * @return Illuminate\Support\Collection<int, (int|string)>
+     * @return \Illuminate\Support\Collection<int, (int|string)>
      */
     public function getAssignedGroupsKeys()
     {

@@ -33,8 +33,6 @@ class History extends Modal
 
         $history = $history_collection->filter(function ($item) {
             if (isset($item->properties['attributes'])) {
-                // dddx($item->properties['attributes']['extra_field_id']);
-                // $item->extra_field_name = ExtraField::find($item->properties['attributes']['extra_field_id'])?->name;
                 $extra_field = ExtraField::find($item->properties['attributes']['extra_field_id']);
 
                 $item->extra_field_name = $extra_field?->name;
@@ -44,11 +42,6 @@ class History extends Modal
                 return $item;
             }
         })->toArray();
-
-        // $history = $history_collection->pluck('properties.attributes');
-
-        // dddx(['history_collection' => $history_collection, 'history' => $history]);
-        // $history = $history_collection->whereIn('id', $this->extrafield_opts_arr); // ->where('service_id', $this->service_id)->groupBy('id');
 
         /**
          * @phpstan-var view-string

@@ -5,8 +5,8 @@ declare(strict_types=1);
 namespace Modules\ExtraField\Http\Livewire\ExtraFieldGroups\By;
 
 use Illuminate\Contracts\Support\Renderable;
+use Illuminate\Database\Eloquent\Collection;
 use Illuminate\Database\Eloquent\Collection  as EloquentCollection;
-use Illuminate\Support\Collection;
 use Illuminate\Support\Facades\Auth;
 use Livewire\Component;
 use Modules\Blog\Models\Category as CategoryModel;
@@ -71,7 +71,7 @@ class Category extends Component
         return view($view, $view_params);
     }
 
-    public function getGroups(Collection $categories): Collection
+    public function getGroups(EloquentCollection $categories): Collection
     {
         if ('' == $this->cat_id) {
             $this->cat_id = $categories->first()->id;

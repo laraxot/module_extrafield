@@ -35,7 +35,7 @@ class GetArrayByModelTypeModelId
         $model = $this->getModel();
         $model_extra_fields = $model->extraFieldsByUserId($user_id)->get();
         $profile = $xot->getProfileModelByUserId($user_id);
-        if(|$profile instanceof HasExtraFieldGroupsContract){
+        if ($profile instanceof HasExtraFieldGroupsContract) {
             throw new \Exception('[][]');
         }
         $profile_extra_fields = $profile->extraFieldsByUserId($user_id)->get();
@@ -49,7 +49,6 @@ class GetArrayByModelTypeModelId
                     'uuid' => $item->uuid,
                     'name' => $item->name,
                     'options' => $this->getOptions($item, $profile_extra_fields),
-                    // 'fields' => $this->getFielCollByFields($item, $model_extra_fields, $profile_extra_fields)->toArray(),
                 ];
             }
         );

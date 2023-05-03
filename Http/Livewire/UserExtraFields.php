@@ -113,6 +113,6 @@ class UserExtraFields extends Component
             throw new \Exception('['.__LINE__.']['.__FILE__.']');
         }
 
-        return $item->pivot->extraFieldMorphUserValues()->where('user_id', $this->user_id)->get()->last()?->value;
+        return $item->pivot?->extraFieldMorphUserValues()->where('user_id', $this->user_id)->get()->last()?->value;
     }
 }
