@@ -25,6 +25,9 @@ class GetRulesByGroupId
         Relation::morphMap($morph_map);
 
         $extra_field_group = ExtraFieldGroup::find($group_id);
+        if (null == $extra_field_group) {
+            throw new \Exception('empty ['.$group_id.']');
+        }
         $extra_field = $extra_field_group->fields;
 
         $rules = $extra_field->map(function ($item) {

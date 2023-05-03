@@ -5,7 +5,7 @@ declare(strict_types=1);
 namespace Modules\ExtraField\Actions\ExtraFieldGroup;
 
 use Illuminate\Database\Eloquent\Collection;
-use Illuminate\Database\Eloquent\Model;
+use Modules\ExtraField\Models\Contracts\HasExtraFieldGroupsContract;
 use Spatie\QueueableAction\QueueableAction;
 
 class GetPivotByModel
@@ -15,7 +15,7 @@ class GetPivotByModel
     /**
      * Undocumented function.
      */
-    public function execute(Model $model): Collection
+    public function execute(HasExtraFieldGroupsContract $model): Collection
     {
         $extraFieldGroupsNoUserId = $model->extraFieldGroups()->wherePivot('user_id', null)->get();
 

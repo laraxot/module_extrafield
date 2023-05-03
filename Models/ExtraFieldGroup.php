@@ -142,9 +142,9 @@ class ExtraFieldGroup extends BaseModel
         ->where('user_id', $user_id);
     }
 
-    /**
+    /* -- DEPRECATED
      * @return DataCollection <FieldData>
-     */
+
     public function fieldDataCollection(string $user_id, Model $model)
     {
         $profile = ProfileService::make()->setUserId($user_id)->getProfile();
@@ -166,6 +166,7 @@ class ExtraFieldGroup extends BaseModel
 
         return $fields;
     }
+    */
 
      /**
       * @param \Illuminate\Database\Eloquent\Builder $query
@@ -181,12 +182,12 @@ class ExtraFieldGroup extends BaseModel
          }]);
      }
 
-     /**
+     /*
       * @return mixed
       */
-     public function userValue(string $user_id)
-     {
+     // public function userValue(string $user_id)
+    // {
          // dddx(['a' => $this, 'pivot' => $this->pivot]);
-         dddx(['fields' => $this->fields->first()->userValue($user_id)]);
-     }
+         // dddx(['fields' => $this->fields->first()->userValue($user_id)]);
+     // }
 }

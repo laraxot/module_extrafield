@@ -16,7 +16,7 @@ class GetFavorites
     {
         $tmp_groups = $model->extraFieldGroups();
         if (null != $cat_id) {
-            $tmp_groups = $tmp_groups->withAnyCategories($cat_id);
+            $tmp_groups = $tmp_groups::withAnyCategories($cat_id);
         }
         $groups = $tmp_groups->get();
 

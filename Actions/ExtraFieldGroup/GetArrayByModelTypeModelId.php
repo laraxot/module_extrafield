@@ -4,8 +4,10 @@ declare(strict_types=1);
 
 namespace Modules\ExtraField\Actions\ExtraFieldGroup;
 
+use Illuminate\Database\Eloquent\Collection;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Str;
+use Modules\ExtraField\Models\Contracts\HasExtraFieldGroupsContract;
 use Modules\ExtraField\Models\ExtraFieldGroup;
 use Modules\UI\Datas\FieldData;
 use Modules\Xot\Actions\GetModelByModelTypeAction;
@@ -17,6 +19,9 @@ class GetArrayByModelTypeModelId
 {
     use QueueableAction;
 
+    public string $model_id;
+    public string $model_type;
+
     /**
      * Undocumented function.
      */
@@ -24,9 +29,15 @@ class GetArrayByModelTypeModelId
     {
         $xot = XotData::make();
         $user_id = strval(Auth::id());
-        $model = app(GetModelByModelTypeAction::class)->execute($model_type, $model_id);
+        $this->model_type = $model_type;
+        $this->model_id = $model_id;
+
+        $model = $this->getModel();
         $model_extra_fields = $model->extraFieldsByUserId($user_id)->get();
         $profile = $xot->getProfileModelByUserId($user_id);
+        if(|$profile instanceof HasExtraFieldGroupsContract){
+            throw new \Exception('[][]');
+        }
         $profile_extra_fields = $profile->extraFieldsByUserId($user_id)->get();
 
         $extra_field_groups = app(GetByModelTypeModelId::class)->execute($model_type, $model_id);
@@ -46,7 +57,17 @@ class GetArrayByModelTypeModelId
         return $res->all();
     }
 
-    public function getOptions(ExtraFieldGroup $group, $profile_extra_fields): array
+    public function getModel(): HasExtraFieldGroupsContract
+    {
+        $model = app(GetModelByModelTypeAction::class)->execute($this->model_type, $this->model_id);
+        if (! $model instanceof HasExtraFieldGroupsContract) {
+            throw new \Exception('add on model ['.get_class($model).'] implements HasExtraFieldGroupsContract');
+        }
+
+        return $model;
+    }
+
+    public function getOptions(ExtraFieldGroup $group, Collection $profile_extra_fields): array
     {
         $extra_fields = $group->fields;
         $data = $extra_fields->map(

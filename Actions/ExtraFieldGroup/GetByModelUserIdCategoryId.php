@@ -14,6 +14,7 @@ class GetByModelUserIdCategoryId
 
     public function execute(HasExtraFieldGroupsContract $model, string $user_id, string $cat_id): Collection
     {
+        // Call to an undefined method Illuminate\Database\Eloquent\Relations\MorphToMany::withAnyCategories().
         $res = $model->extraFieldGroups()
             ->wherePivot('user_id', $user_id)
             ->wherePivot('uuid', '!=', '')

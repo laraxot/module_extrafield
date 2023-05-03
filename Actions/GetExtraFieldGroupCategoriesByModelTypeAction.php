@@ -4,7 +4,7 @@ declare(strict_types=1);
 
 namespace Modules\ExtraField\Actions;
 
-use Illuminate\Support\Collection;
+use Illuminate\Database\Eloquent\Collection as EloquentCollection;
 use Modules\Blog\Models\Category;
 use Modules\ExtraField\Models\ExtraFieldGroup;
 use Spatie\QueueableAction\QueueableAction;
@@ -13,7 +13,12 @@ class GetExtraFieldGroupCategoriesByModelTypeAction
 {
     use QueueableAction;
 
-    public function execute(string $model_type): Collection
+    /**
+     * Undocumented function.
+     *
+     * @return EloquentCollection<Category>
+     */
+    public function execute(string $model_type): EloquentCollection
     {
         $categories = Category::ofType($model_type)
             ->ofType('extra_field_group')

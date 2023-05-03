@@ -35,13 +35,14 @@ class Edit extends Modal
         $this->model_type = $model_type;
         $this->model_id = $model_id;
         $this->user_id = strval(Auth::id());
-        $this->fields = app(Actions\ExtraFieldGroup\GetFieldCollByUuidModelTypeModelId::class)->execute($uuid, $model_type, $model_id)->toArray();
+        $fields_data = app(Actions\ExtraFieldGroup\GetFieldCollByUuidModelTypeModelId::class)->execute($uuid, $model_type, $model_id);
 
-        foreach ($this->fields as $field) {
-            $k = $field['name'];
-            $v = $field['value'];
+        foreach ($fields_data as $field) {
+            $k = $field->name;
+            $v = $field->value;
             $this->form_data[$k] = $v;
         }
+        $this->fields = $fields_data->toArray();
     }
 
     public function getModel(): HasExtraFieldGroupsContract
@@ -80,9 +81,9 @@ class Edit extends Modal
 
     public function save(): void
     {
-        $group_id = $this->getModel()->extraFieldGroups()->wherePivot('uuid', $this->uuid)->first()->id;
+        $group_id = $this->getModel()->extraFieldGroups()->wherePivot('uuid', $this->uuid)->first()?->getKey();
 
-        $rules = app(Actions\ExtraFieldGroup\GetRulesByGroupId::class)->execute((string) $group_id, 'form_data.');
+        $rules = app(Actions\ExtraFieldGroup\GetRulesByGroupId::class)->execute(strval($group_id), 'form_data.');
 
         $this->validate($rules);
 

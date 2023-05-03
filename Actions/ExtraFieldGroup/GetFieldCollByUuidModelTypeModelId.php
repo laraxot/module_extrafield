@@ -4,9 +4,9 @@ declare(strict_types=1);
 
 namespace Modules\ExtraField\Actions\ExtraFieldGroup;
 
-use Modules\ExtraField\Datas\FieldData;
 use Modules\ExtraField\Models\Contracts\HasExtraFieldGroupsContract;
 use Modules\ExtraField\Models\ExtraFieldGroupMorph;
+use Modules\UI\Datas\FieldData;
 use Modules\Xot\Actions\GetModelByModelTypeAction;
 use Spatie\LaravelData\DataCollection;
 use Spatie\QueueableAction\QueueableAction;
@@ -29,6 +29,9 @@ class GetFieldCollByUuidModelTypeModelId
         $this->model_id = $model_id;
 
         $row = ExtraFieldGroupMorph::firstWhere(['uuid' => $uuid]);
+        if (null == $row) {
+            throw new \Exception('[][]');
+        }
         $model = $this->getModel();
         $model_fields = $model->extraFields()->wherePivot('uuid', $uuid)->get();
         $fields = $row->extraFieldGroup->fields;

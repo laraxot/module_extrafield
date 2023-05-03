@@ -96,6 +96,7 @@ class Category extends Component
         $row = ExtraFieldGroupMorph::firstWhere(['uuid' => $uuid]);
         if (null == $row) {
             dddx(['row' => $row, 'uuid' => $uuid]);
+            throw new \Exception('uuid ['.$uuid.'] is empty');
         }
         $row->update(['favourite' => ! $row->favourite]);
     }
