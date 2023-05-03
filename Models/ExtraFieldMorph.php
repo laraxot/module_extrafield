@@ -12,26 +12,27 @@ use Spatie\Activitylog\LogOptions;
 use Spatie\Activitylog\Traits\LogsActivity;
 
 /**
- * Modules\ExtraField\Models\ExtraFieldMorph
+ * Modules\ExtraField\Models\ExtraFieldMorph.
  *
- * @property int $id
- * @property string|null $model_type
- * @property int|null $model_id
- * @property int|null $user_id
- * @property string|null $created_by
- * @property string|null $updated_by
- * @property \Illuminate\Support\Carbon|null $created_at
- * @property \Illuminate\Support\Carbon|null $updated_at
- * @property int|null $extra_field_id
- * @property string|null $value
- * @property string|null $value_class
- * @property string|null $uuid
- * @property int $favourite
- * @property string|null $note
- * @property array|null $rules
- * @property-read \Illuminate\Database\Eloquent\Collection<int, \Modules\Activity\Models\Activity> $activities
- * @property-read int|null $activities_count
- * @property-read \Modules\ExtraField\Models\ExtraField|null $extraField
+ * @property int                                                                              $id
+ * @property string|null                                                                      $model_type
+ * @property int|null                                                                         $model_id
+ * @property int|null                                                                         $user_id
+ * @property string|null                                                                      $created_by
+ * @property string|null                                                                      $updated_by
+ * @property \Illuminate\Support\Carbon|null                                                  $created_at
+ * @property \Illuminate\Support\Carbon|null                                                  $updated_at
+ * @property int|null                                                                         $extra_field_id
+ * @property string|null                                                                      $value
+ * @property string|null                                                                      $value_class
+ * @property string|null                                                                      $uuid
+ * @property int                                                                              $favourite
+ * @property string|null                                                                      $note
+ * @property array|null                                                                       $rules
+ * @property \Illuminate\Database\Eloquent\Collection<int, \Modules\Activity\Models\Activity> $activities
+ * @property int|null                                                                         $activities_count
+ * @property \Modules\ExtraField\Models\ExtraField|null                                       $extraField
+ *
  * @method static \Illuminate\Database\Eloquent\Builder|ExtraFieldMorph newModelQuery()
  * @method static \Illuminate\Database\Eloquent\Builder|ExtraFieldMorph newQuery()
  * @method static \Illuminate\Database\Eloquent\Builder|ExtraFieldMorph query()
@@ -50,6 +51,7 @@ use Spatie\Activitylog\Traits\LogsActivity;
  * @method static \Illuminate\Database\Eloquent\Builder|ExtraFieldMorph whereUuid($value)
  * @method static \Illuminate\Database\Eloquent\Builder|ExtraFieldMorph whereValue($value)
  * @method static \Illuminate\Database\Eloquent\Builder|ExtraFieldMorph whereValueClass($value)
+ *
  * @mixin \Eloquent
  */
 class ExtraFieldMorph extends BaseMorphPivot
