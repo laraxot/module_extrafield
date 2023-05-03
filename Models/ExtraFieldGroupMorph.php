@@ -69,6 +69,8 @@ class ExtraFieldGroupMorph extends BaseMorphPivot
         'favourite',
         'note',
         'cardinality',
+        'is_verified',
+        'token',
     ];
 
     protected $casts = [

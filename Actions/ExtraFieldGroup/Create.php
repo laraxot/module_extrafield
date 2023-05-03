@@ -28,7 +28,6 @@ class Create
         $uuid = Str::uuid();
         $extra_field_group = ExtraFieldGroup::findOrFail($extra_field_group_id);
 
-        // $model->extraFieldGroups()->syncWithoutDetaching($extra_field_group_id, ['value' => $form_data, 'user_id' => $user_id]);
         ExtraFieldGroupMorph::create([
             'model_type' => $model_type,
             'model_id' => $model_id,
