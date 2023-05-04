@@ -4,7 +4,6 @@ declare(strict_types=1);
 
 namespace Modules\ExtraField\Models;
 
-use Illuminate\Database\Eloquent\Relations\BelongsTo;
 use Illuminate\Database\Eloquent\Relations\HasOne;
 use Illuminate\Database\Eloquent\Relations\MorphToMany;
 use Modules\Blog\Models\Traits\HasCategory;
@@ -68,10 +67,6 @@ class ExtraField extends BaseModel
         'options' => 'array',
         'rules' => 'array',
     ];
-
-    // public function group(): BelongsTo {
-    //     return $this->belongsTo(ExtraFieldGroup::class);
-    // }
 
     public function extraFieldMorph(): HasOne
     {

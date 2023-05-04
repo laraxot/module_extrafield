@@ -7,6 +7,7 @@ namespace Modules\ExtraField\Models\Contracts;
 use Illuminate\Database\Eloquent\Collection as EloquentCollection;
 use Illuminate\Database\Eloquent\Relations\MorphToMany;
 use Modules\ExtraField\Models\ExtraField;
+use Modules\ExtraField\Models\ExtraFieldGroup;
 use Modules\PFed\Models\Consent;
 use Modules\Xot\Contracts\ModelContract;
 
@@ -22,9 +23,15 @@ interface HasExtraFieldGroupsContract extends ModelContract
 
     public function noUserExtraFieldGroups(): MorphToMany;
 
+    /**
+     * @return MorphToMany<ExtraFieldGroup>
+     */
     public function extraFieldGroups(): MorphToMany;
 
     public function extraFieldsByUserId(?string $user_id = null): MorphToMany;
 
+    /**
+     * @return MorphToMany<ExtraField>
+     */
     public function extraFields(): MorphToMany;
 }
