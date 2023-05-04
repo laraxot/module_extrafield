@@ -34,18 +34,17 @@ trait HasExtraFieldGroups
         return $this->extraFieldGroups()->wherePivot('user_id', null);
     }
 
+    /**
+     * Undocumented function.
+     *
+     * @return MorphToMany<ExtraFieldGroup>
+     */
     public function extraFieldGroups(): MorphToMany
     {
-        // return $this->hasManyDeep(ExtraFieldGroup::class, [ExtraField::class, PermUser::class]);
-
-        // return $this->hasManyDeepFromRelations($this->extraFields(), (new Extrafield())->group());
-
         $pivot_class = ExtraFieldGroupMorph::class;
         $pivot = app($pivot_class);
         $pivot_table = $pivot->getTable();
         $pivot_fields = $pivot->getFillable();
-
-        // dddx($pivot_fields);
 
         return $this->morphToMany(ExtraFieldGroup::class, 'model', $pivot_table)
             ->using($pivot_class)
