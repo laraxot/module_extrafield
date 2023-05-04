@@ -46,11 +46,11 @@ class GetArrayByModelTypeModelId
             function ($item) use ($profile_extra_fields) {
                 /** @var ExtraFieldGroup */
                 $i = $item;
-                dddx($i);
+                // dddx($i);
 
                 return [
                     'id' => $i->id,
-                    'uuid' => $i->uuid, // Access to an undefined property Modules\ExtraField\Models\ExtraFieldGroup::$uuid.
+                    // 'uuid' => $i->uuid, // Access to an undefined property Modules\ExtraField\Models\ExtraFieldGroup::$uuid.
                     'name' => $i->name,
                     'options' => $this->getOptions($i, $profile_extra_fields),
                 ];
@@ -110,7 +110,7 @@ class GetArrayByModelTypeModelId
     /**
      * @return DataCollection<FieldData>
      */
-    public function getFielCollByFields(ExtraFieldGroup $group, Collection $model_extra_fields, Collection $profile_extra_fields)
+    public function getFielCollByFields(ExtraFieldGroup $group, EloquentCollection $model_extra_fields, EloquentCollection $profile_extra_fields)
     {
         $extra_fields = $group->fields;
         // $uuid = $group->uuid;
