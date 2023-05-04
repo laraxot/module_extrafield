@@ -27,7 +27,7 @@
                                                 <i class="bi bi-person-lines-fill"></i>
                                             </div>
                                             <div class="flex-fill ms-3">
-                                                <a wire:click="showCat({{ $category->id }})"
+                                                <a href="#" wire:click="showCat({{ $category->id }})"
                                                     class="text-sm text-heading font-semibold mb-0">
                                                     {{ $category->name }}
                                                 </a>

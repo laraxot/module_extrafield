@@ -4,7 +4,7 @@ declare(strict_types=1);
 
 namespace Modules\ExtraField\Actions\ExtraFieldGroup;
 
-use Illuminate\Database\Eloquent\Collection;
+use Illuminate\Database\Eloquent\Collection as EloquentCollection;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Str;
 use Modules\ExtraField\Models\Contracts\HasExtraFieldGroupsContract;
@@ -39,14 +39,14 @@ class GetArrayByModelTypeModelId
 
         $profile_extra_fields = $profile->extraFieldsByUserId($user_id)->get();
 
+        /** @var EloquentCollection */
         $extra_field_groups = app(GetByModelTypeModelId::class)->execute($model_type, $model_id);
 
         $res = $extra_field_groups->map(
             function ($item) use ($profile_extra_fields) {
-                /**
-                 * @var ExtraFieldGroup
-                 */
+                /** @var ExtraFieldGroup */
                 $i = $item;
+                dddx($i);
 
                 return [
                     'id' => $i->id,
@@ -81,7 +81,7 @@ class GetArrayByModelTypeModelId
         return $model;
     }
 
-    public function getOptions(ExtraFieldGroup $group, Collection $profile_extra_fields): array
+    public function getOptions(ExtraFieldGroup $group, EloquentCollection $profile_extra_fields): array
     {
         $extra_fields = $group->fields;
         $data = $extra_fields->map(

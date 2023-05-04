@@ -5,6 +5,7 @@ declare(strict_types=1);
 namespace Modules\ExtraField\Actions\ExtraFieldGroup;
 
 use Illuminate\Database\Eloquent\Model;
+use Illuminate\Database\Eloquent\Relations\Relation;
 use Illuminate\Support\Str;
 use Modules\ExtraField\Models\ExtraFieldGroup;
 use Modules\ExtraField\Models\ExtraFieldGroupMorph;
@@ -22,6 +23,12 @@ class Create
      */
     public function execute(Model $model, string $extra_field_group_id, string $user_id, array $form_data)
     {
+        $morph_map = [
+            'extra_field' => 'Modules\ExtraField\Models\ExtraField',
+        ];
+
+        Relation::morphMap($morph_map);
+
         $model_type = Str::snake(class_basename($model));
         $model_id = ''.$model->getKey();
 
@@ -35,7 +42,9 @@ class Create
             'extra_field_group_id' => $extra_field_group_id,
             'value' => $form_data,
             'uuid' => $uuid,
+            'note' => $form_data['note'] ?? '',
         ]);
+
         foreach ($extra_field_group->fields as $field) {
             $value = collect($form_data)->get($field->name);
             if (is_array($value)) {

@@ -21,7 +21,7 @@ class Add extends WizardComponent
         $this->cat_id = $cat_id;
         $this->model_type = $model_type;
         $this->model_id = $model_id;
-        $this->user_id = (string) Auth::id();
+        $this->user_id = strval(Auth::id());
     }
 
     public function steps(): array
@@ -40,6 +40,7 @@ class Add extends WizardComponent
                 'cat_id' => $this->cat_id,
                 'model_type' => $this->model_type,
                 'model_id' => $this->model_id,
+                'user_id' => $this->user_id,
             ],
         ];
     }

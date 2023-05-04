@@ -4,8 +4,9 @@ declare(strict_types=1);
 
 namespace Modules\ExtraField\Actions\ExtraFieldGroup;
 
-use Illuminate\Database\Eloquent\Collection;
+use Illuminate\Database\Eloquent\Collection as EloquentCollection;
 use Modules\ExtraField\Models\Contracts\HasExtraFieldGroupsContract;
+use Modules\ExtraField\Models\ExtraFieldGroup;
 use Modules\Xot\Actions\GetModelByModelTypeAction;
 use Spatie\QueueableAction\QueueableAction;
 
@@ -19,8 +20,10 @@ class GetByModelTypeModelId
 
     /**
      * Undocumented function.
+     *
+     * @return EloquentCollection<ExtraFieldGroup>
      */
-    public function execute(string $model_type, string $model_id): Collection
+    public function execute(string $model_type, string $model_id): EloquentCollection
     {
         $this->model_type = $model_type;
         $this->model_id = $model_id;
