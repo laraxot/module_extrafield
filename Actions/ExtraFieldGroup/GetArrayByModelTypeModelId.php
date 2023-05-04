@@ -9,6 +9,7 @@ use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Str;
 use Modules\ExtraField\Models\Contracts\HasExtraFieldGroupsContract;
 use Modules\ExtraField\Models\ExtraFieldGroup;
+use Modules\ExtraField\Models\ExtraFieldMorph;
 use Modules\UI\Datas\FieldData;
 use Modules\Xot\Actions\GetModelByModelTypeAction;
 use Modules\Xot\Datas\XotData;
@@ -117,8 +118,12 @@ class GetArrayByModelTypeModelId
 
         $data = $extra_fields->map(
             function ($field) use ($model_extra_fields, $profile_extra_fields) {
-                $model_value = $model_extra_fields->where('id', $field->id)/* ->where('pivot.uuid', $uuid) */ ->first()?->pivot->value;
-                $profile_value = $profile_extra_fields->where('id', $field->id)/* ->where('pivot.uuid', $uuid) */ ->first()?->pivot->value;
+                /** @var ExtraFieldMorph */
+                $model_pivot = $model_extra_fields->where('id', $field->id)->first()?->getRelationValue('pivot');
+                $model_value = $model_pivot->value;
+                /** @var ExtraFieldMorph */
+                $profile_pivot = $profile_extra_fields->where('id', $field->id)->first()?->getRelationValue('pivot');
+                $profile_value = $profile_pivot->value;
                 $value = $model_value ?? $profile_value;
                 $field_arr = $field->toArray();
                 $field_arr['value'] = $value;
