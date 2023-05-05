@@ -44,28 +44,29 @@
             </div>
         </div>
 
+        @if ($category_name != null)
+            <div class="col-8">
+                <x-card>
+                    <x-slot name="title">{{ $category_name }}</x-slot>
 
-        <div class="col-8">
-            <x-card>
-                <x-slot name="title">{{ $category_name }}</x-slot>
+                    <x-slot name="txt">
 
-                <x-slot name="txt">
-
-                    @foreach ($groups as $group)
-                        @include($view . '.group.v1')
-                    @endforeach
+                        @foreach ($groups as $group)
+                            @include($view . '.group.v1')
+                        @endforeach
 
 
-                    <div class="row">
-                        <div class="col-md-12 mt-3 mb-2">
-                            <x-button wire:click="addGroup()" title="Add Group">Add</x-button>
+                        <div class="row">
+                            <div class="col-md-12 mt-3 mb-2">
+                                <x-button wire:click="addGroup()" title="Add Group">Add</x-button>
+                            </div>
                         </div>
-                    </div>
-                </x-slot>
-            </x-card>
+                    </x-slot>
+                </x-card>
 
-            <hr />
-        </div>
+                <hr />
+            </div>
+        @endif
     </div>
 
 </div>

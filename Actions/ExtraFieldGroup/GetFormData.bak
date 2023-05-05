@@ -30,7 +30,6 @@ class GetFormData
             }
         }
 
-        // dd($data);
         return $data;
     }
 }

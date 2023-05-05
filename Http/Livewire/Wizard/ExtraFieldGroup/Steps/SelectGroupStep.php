@@ -20,7 +20,10 @@ class SelectGroupStep extends BaseStep
     public function mount(): void
     {
         $this->form_data = app(GetStateDataAction::class)->execute($this->state());
-
+        // dddx([
+        //     $this->state()->all(),
+        //     $this->getView(),
+        // ]);
         // $this->groups = app(Actions\ExtraFieldGroup\GetOptionsByModelTypeModelIdCategoryIdUserId::class)->execute($model_type, null, $cat_id, $user_id);
     }
 }

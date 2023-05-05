@@ -59,8 +59,6 @@ class Create extends Modal
      */
     public function save()
     {
-        // app()
-
         $xot = XotData::from(config('xra'));
         $profile = $xot->getProfileModelByUserId($this->user_id);
         app(\Modules\ExtraField\Actions\ExtraFieldGroup\Create::class)
