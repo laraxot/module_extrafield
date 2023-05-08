@@ -31,18 +31,21 @@
 
     <x-slot name="body">
         @php
-            /*
             $fields = $model
                 ->extraFieldsByUserId(auth()->id())
                 ->wherePivot('uuid', $group->pivot->uuid)
                 ->get();
 <<<<<<< HEAD
+<<<<<<< HEAD
           */
 =======
             */
 >>>>>>> 6b49862 (up)
+=======
+            
+>>>>>>> 1e62979 (.)
         @endphp
-        @foreach ($this->getFieldsByGroup($group) as $field)
+        @foreach ($fields ?? [] as $field)
             <div class="row">
                 <div class="col-md-9 mb-2">
                     <p>{{ $field->name }} : {{ $field->pivot->value }}
