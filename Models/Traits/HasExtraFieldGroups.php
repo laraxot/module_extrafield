@@ -20,8 +20,12 @@ trait HasExtraFieldGroups
 {
     use \Staudenmeir\EloquentHasManyDeep\HasRelationships;
 
-    public function userExtraFieldGroups(string $user_id): MorphToMany
+    public function userExtraFieldGroups(?string $user_id = null): MorphToMany
     {
+        if (null == $user_id) {
+            $user_id = Auth::id();
+        }
+
         return $this->extraFieldGroups()->wherePivot('user_id', $user_id);
     }
 
