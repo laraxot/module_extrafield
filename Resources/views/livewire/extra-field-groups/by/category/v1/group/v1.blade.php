@@ -36,7 +36,11 @@
                 ->extraFieldsByUserId(auth()->id())
                 ->wherePivot('uuid', $group->pivot->uuid)
                 ->get();
+<<<<<<< HEAD
           */
+=======
+            */
+>>>>>>> 6b49862 (up)
         @endphp
         @foreach ($this->getFieldsByGroup($group) as $field)
             <div class="row">
