@@ -11,10 +11,10 @@ use Modules\UI\Http\Wizard\BaseStep;
 class SelectGroupStep extends BaseStep
 {
     public array $groups;
-    public string $cat_id;
-    public string $model_type;
-    public string $model_id;
-    public string $user_id;
+    // public string $cat_id;
+    // public string $model_type;
+    // public string $model_id;
+    // public string $user_id;
 
     /** @var array */
     protected $rules = [
@@ -25,7 +25,7 @@ class SelectGroupStep extends BaseStep
     {
         $this->form_data = app(GetStateDataAction::class)->execute($this->state());
 
-        $this->groups = app(Actions\ExtraFieldGroup\GetOptionsByModelTypeModelIdCategoryIdUserId::class)->execute($this->model_type, null, $this->cat_id, $this->user_id);
+        $this->groups = app(Actions\ExtraFieldGroup\GetOptionsByModelTypeModelIdCategoryIdUserId::class)->execute($this->form_data['model_type'], null, (string) $this->form_data['cat_id'], $this->form_data['user_id']);
     }
 
     public static function getName(): string

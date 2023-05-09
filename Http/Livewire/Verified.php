@@ -9,7 +9,7 @@ use Livewire\Component;
 use Modules\Cms\Actions\GetViewAction;
 
 /**
- * @property string $form_data
+ * @property array  $form_data
  * @property string $tpl
  */
 class Verified extends Component

@@ -37,10 +37,16 @@ class Add extends WizardComponent
     {
         return [
             'extrafield::wizard.extra-field-group.steps.select-group-step' => [
-                'cat_id' => $this->cat_id,
-                'model_type' => $this->model_type,
-                'model_id' => $this->model_id,
-                'user_id' => $this->user_id,
+                // 'cat_id' => $this->cat_id,
+                // 'model_type' => $this->model_type,
+                // 'model_id' => $this->model_id,
+                // 'user_id' => $this->user_id,
+                'form_data' => [
+                    'cat_id' => $this->cat_id,
+                    'model_type' => $this->model_type,
+                    'model_id' => $this->model_id,
+                    'user_id' => $this->user_id,
+                ],
             ],
         ];
     }
