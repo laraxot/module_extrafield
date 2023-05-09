@@ -144,4 +144,9 @@ class Category extends Component
 
         return $fields;
     }
+
+    public function delete(string $uuid)
+    {
+        dddx('a');
+    }
 }

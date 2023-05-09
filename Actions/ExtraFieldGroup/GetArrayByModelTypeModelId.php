@@ -47,13 +47,13 @@ class GetArrayByModelTypeModelId
             function ($item) use ($profile_extra_fields) {
                 /** @var ExtraFieldGroup */
                 $i = $item;
-                // dddx($i);
 
                 return [
                     'id' => $i->id,
-                    // 'uuid' => $i->uuid, // Access to an undefined property Modules\ExtraField\Models\ExtraFieldGroup::$uuid.
                     'name' => $i->name,
                     'options' => $this->getOptions($i, $profile_extra_fields),
+                    'value' => $i->pivot->value,
+                    'uuid' => $i->pivot->uuid,
                 ];
             }
         );

@@ -65,6 +65,10 @@ class Create extends Modal
             ->execute($profile, $this->extra_field_group_id, $this->user_id, $this->form_data);
 
         session()->flash('message', 'saved !');
+
+        $this->emit('modal.close');
+        // qui bisognerebbe ricaricare/richiamare lo step InsertData
+        // $this->showStep('insert-data');
     }
 
     public static function behavior(): array
