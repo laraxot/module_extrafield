@@ -11,8 +11,11 @@
 
     "require": {
         "illuminate/contracts": "^8.83|^9.30|^10.0",
+        "laraxot/module_blog": "*",
         "laraxot/module_cms": "*",
-        "laraxot/module_xot": "*"
+        "laraxot/module_xot": "*",
+        "spatie/laravel-activitylog": "*",
+        "spatie/laravel-livewire-wizard": "*"
     },
     "require-dev": {
         "laravel/pint": "^1.0",

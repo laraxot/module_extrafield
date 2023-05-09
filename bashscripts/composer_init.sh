@@ -11,6 +11,8 @@ php -d memory_limit=-1 composer.phar require -W illuminate/contracts
 php -d memory_limit=-1 composer.phar require -W illuminate/support
 php -d memory_limit=-1 composer.phar require -W laraxot/module_cms
 php -d memory_limit=-1 composer.phar require -W laraxot/module_xot
+php -d memory_limit=-1 composer.phar require -W spatie/laravel-activitylog
+php -d memory_limit=-1 composer.phar require -W spatie/laravel-livewire-wizard
 
 ############################ DEV ###############################
 php -d memory_limit=-1 composer.phar require -W --dev laravel/pint
