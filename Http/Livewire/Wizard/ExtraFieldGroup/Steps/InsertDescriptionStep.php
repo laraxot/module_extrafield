@@ -12,6 +12,10 @@ use Modules\Xot\Actions\GetModelByModelTypeAction;
 
 class InsertDescriptionStep extends BaseStep
 {
+    public string $model_type;
+    public string $model_id;
+    public string $user_id;
+
     public function mount(): void
     {
         $this->form_data = app(GetStateDataAction::class)->execute($this->state());

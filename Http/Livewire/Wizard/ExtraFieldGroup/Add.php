@@ -42,6 +42,11 @@ class Add extends WizardComponent
                 'model_id' => $this->model_id,
                 'user_id' => $this->user_id,
             ],
+            'extrafield::wizard.extra-field-group.steps.insert-description-step' => [
+                'model_type' => $this->model_type,
+                'model_id' => $this->model_id,
+                'user_id' => $this->user_id,
+            ],
         ];
     }
 }
