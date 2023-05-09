@@ -21,7 +21,7 @@ class Create
      *
      * @return void
      */
-    public function execute(Model $model, string $extra_field_group_id, string $user_id, array $form_data)
+    public function execute(Model $model, string $extra_field_group_id, string $user_id, array $form_data, ?string $uuid = null)
     {
         $morph_map = [
             'extra_field' => 'Modules\ExtraField\Models\ExtraField',
@@ -32,7 +32,10 @@ class Create
         $model_type = Str::snake(class_basename($model));
         $model_id = ''.$model->getKey();
 
-        $uuid = Str::uuid();
+        if (null == $uuid) {
+            $uuid = Str::uuid();
+        }
+
         $extra_field_group = ExtraFieldGroup::findOrFail($extra_field_group_id);
 
         ExtraFieldGroupMorph::create([

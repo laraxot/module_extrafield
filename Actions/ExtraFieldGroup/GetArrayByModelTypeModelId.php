@@ -131,16 +131,7 @@ class GetArrayByModelTypeModelId
                 $field_arr = $field->toArray();
                 $field_arr['value'] = $value;
                 $field_data = FieldData::from($field_arr);
-                /* 4 debug
-                if (1 == $group->id) {
-                    dddx([
-                        'group' => $group,
-                        'model_value' => $model_value,
-                        'profile_value' => $profile_value,
-                        'field_data' => $field_data,
-                    ]);
-                }
-                */
+
                 return $field_data;
             }
         )->all();

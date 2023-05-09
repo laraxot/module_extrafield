@@ -145,8 +145,12 @@ class Category extends Component
         return $fields;
     }
 
-    public function delete(string $uuid)
+    public function delete(string $uuid): void
     {
-        dddx('a');
+        // prima di cancellare dovrei far uscire un modal
+        // dove mi avverte che tot servizi/consensi verranno modificati
+        // app(Actions\ExtraFieldGroup\DeleteByUuid::class)->execute($uuid);
+
+        // $this->emit('modal.open', 'modal.extra-field-group.edit', $parz);
     }
 }
