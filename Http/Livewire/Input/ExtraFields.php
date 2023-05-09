@@ -36,11 +36,14 @@ class ExtraFields extends Component
     }
 
     /**
-     * @return \Illuminate\Support\Collection<\Modules\ExtraField\Models\ExtraField>
+     * @return \Illuminate\Database\Eloquent\Collection
      */
     public function getGroups()
     {
-        return $this->model->extraFields()->wherePivot('user_id', null)->get()->groupBy('group.name');
+        return $this->model->extraFields()
+            ->wherePivot('user_id', null)
+            ->get()
+            ->groupBy('group.name');
     }
 
     public function render(): Renderable

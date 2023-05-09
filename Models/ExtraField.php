@@ -4,7 +4,6 @@ declare(strict_types=1);
 
 namespace Modules\ExtraField\Models;
 
-use Illuminate\Database\Eloquent\Relations\BelongsTo;
 use Illuminate\Database\Eloquent\Relations\HasOne;
 use Illuminate\Database\Eloquent\Relations\MorphToMany;
 use Modules\Blog\Models\Traits\HasCategory;
@@ -13,48 +12,43 @@ use Modules\UI\Datas\FieldData;
 /**
  * Modules\ExtraField\Models\ExtraField.
  *
- * @property int                                                          $id
- * @property string                                                       $name
- * @property \Illuminate\Support\Carbon|null                              $created_at
- * @property \Illuminate\Support\Carbon|null                              $updated_at
- * @property string                                                       $type
- * @property string|null                                                  $rules
- * @property string|null                                                  $created_by
- * @property string|null                                                  $updated_by
- * @property \Kalnoy\Nestedset\Collection|\Modules\Blog\Models\Category[] $categories
- * @property int|null                                                     $categories_count
- *
- * @method static \Modules\Blog\Database\Factories\ExtraFieldFactory factory(...$parameters)
- * @method static \Illuminate\Database\Eloquent\Builder|ExtraField   newModelQuery()
- * @method static \Illuminate\Database\Eloquent\Builder|ExtraField   newQuery()
- * @method static \Illuminate\Database\Eloquent\Builder|ExtraField   query()
- * @method static \Illuminate\Database\Eloquent\Builder|ExtraField   whereCreatedAt($value)
- * @method static \Illuminate\Database\Eloquent\Builder|ExtraField   whereCreatedBy($value)
- * @method static \Illuminate\Database\Eloquent\Builder|ExtraField   whereId($value)
- * @method static \Illuminate\Database\Eloquent\Builder|ExtraField   whereName($value)
- * @method static \Illuminate\Database\Eloquent\Builder|ExtraField   whereRules($value)
- * @method static \Illuminate\Database\Eloquent\Builder|ExtraField   whereType($value)
- * @method static \Illuminate\Database\Eloquent\Builder|ExtraField   whereUpdatedAt($value)
- * @method static \Illuminate\Database\Eloquent\Builder|ExtraField   whereUpdatedBy($value)
- * @method static \Illuminate\Database\Eloquent\Builder|ExtraField   withAllCategories($categories)
- * @method static \Illuminate\Database\Eloquent\Builder|ExtraField   withAnyCategories($categories)
- * @method static \Illuminate\Database\Eloquent\Builder|ExtraField   withCategories($categories)
- * @method static \Illuminate\Database\Eloquent\Builder|ExtraField   withoutAnyCategories()
- * @method static \Illuminate\Database\Eloquent\Builder|ExtraField   withoutCategories($categories)
- *
+ * @property int                                                                                       $id
+ * @property string                                                                                    $name
+ * @property \Illuminate\Support\Carbon|null                                                           $created_at
+ * @property \Illuminate\Support\Carbon|null                                                           $updated_at
+ * @property string                                                                                    $type
+ * @property array|null                                                                                $rules
+ * @property string|null                                                                               $created_by
+ * @property string|null                                                                               $updated_by
  * @property array|null                                                                                $options
  * @property string|null                                                                               $attributes
+ * @property \Kalnoy\Nestedset\Collection<int, \Modules\Blog\Models\Category>                          $categories
+ * @property int|null                                                                                  $categories_count
  * @property \Illuminate\Database\Eloquent\Collection<int, \Modules\ExtraField\Models\ExtraFieldGroup> $extraFieldGroups
  * @property int|null                                                                                  $extra_field_groups_count
  * @property \Modules\ExtraField\Models\ExtraFieldMorph|null                                           $extraFieldMorph
  * @property \Illuminate\Database\Eloquent\Collection<int, \Modules\ExtraField\Models\ExtraFieldGroup> $groups
  * @property int|null                                                                                  $groups_count
  *
- * @method static \Illuminate\Database\Eloquent\Builder|ExtraField whereAttributes($value)
- * @method static \Illuminate\Database\Eloquent\Builder|ExtraField whereOptions($value)
- *
- * @property \Illuminate\Database\Eloquent\Collection<int, \Modules\ExtraField\Models\ExtraFieldGroup> $extraFieldGroups
- * @property \Illuminate\Database\Eloquent\Collection<int, \Modules\ExtraField\Models\ExtraFieldGroup> $groups
+ * @method static \Modules\ExtraField\Database\Factories\ExtraFieldFactory factory($count = null, $state = [])
+ * @method static \Illuminate\Database\Eloquent\Builder|ExtraField         newModelQuery()
+ * @method static \Illuminate\Database\Eloquent\Builder|ExtraField         newQuery()
+ * @method static \Illuminate\Database\Eloquent\Builder|ExtraField         query()
+ * @method static \Illuminate\Database\Eloquent\Builder|ExtraField         whereAttributes($value)
+ * @method static \Illuminate\Database\Eloquent\Builder|ExtraField         whereCreatedAt($value)
+ * @method static \Illuminate\Database\Eloquent\Builder|ExtraField         whereCreatedBy($value)
+ * @method static \Illuminate\Database\Eloquent\Builder|ExtraField         whereId($value)
+ * @method static \Illuminate\Database\Eloquent\Builder|ExtraField         whereName($value)
+ * @method static \Illuminate\Database\Eloquent\Builder|ExtraField         whereOptions($value)
+ * @method static \Illuminate\Database\Eloquent\Builder|ExtraField         whereRules($value)
+ * @method static \Illuminate\Database\Eloquent\Builder|ExtraField         whereType($value)
+ * @method static \Illuminate\Database\Eloquent\Builder|ExtraField         whereUpdatedAt($value)
+ * @method static \Illuminate\Database\Eloquent\Builder|ExtraField         whereUpdatedBy($value)
+ * @method static \Illuminate\Database\Eloquent\Builder|ExtraField         withAllCategories($categories)
+ * @method static \Illuminate\Database\Eloquent\Builder|ExtraField         withAnyCategories($categories)
+ * @method static \Illuminate\Database\Eloquent\Builder|ExtraField         withCategories($categories)
+ * @method static \Illuminate\Database\Eloquent\Builder|ExtraField         withoutAnyCategories()
+ * @method static \Illuminate\Database\Eloquent\Builder|ExtraField         withoutCategories($categories)
  *
  * @mixin \Eloquent
  */
@@ -73,10 +67,6 @@ class ExtraField extends BaseModel
         'options' => 'array',
         'rules' => 'array',
     ];
-
-    // public function group(): BelongsTo {
-    //     return $this->belongsTo(ExtraFieldGroup::class);
-    // }
 
     public function extraFieldMorph(): HasOne
     {

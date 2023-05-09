@@ -5,6 +5,7 @@ declare(strict_types=1);
 namespace Modules\ExtraField\Http\Livewire\ExtraFieldGroups\By;
 
 use Illuminate\Contracts\Support\Renderable;
+use Illuminate\Database\Eloquent\Collection  as EloquentCollection;
 use Illuminate\Support\Collection;
 use Illuminate\Support\Facades\Auth;
 use Livewire\Component;
@@ -12,7 +13,8 @@ use Modules\Blog\Models\Category as CategoryModel;
 use Modules\Cms\Actions\GetViewAction;
 use Modules\ExtraField\Actions;
 use Modules\ExtraField\Actions\GetExtraFieldGroupCategoriesByModelTypeAction;
-use Modules\ExtraField\Models\Contracts\HasExtraFieldsContract;
+use Modules\ExtraField\Models\Contracts\HasExtraFieldGroupsContract;
+use Modules\ExtraField\Models\ExtraFieldGroup;
 use Modules\ExtraField\Models\ExtraFieldGroupMorph;
 use Modules\Xot\Actions\GetModelTypeByModelAction;
 use WireElements\Pro\Concerns\InteractsWithConfirmationModal;
@@ -24,7 +26,7 @@ class Category extends Component
     public string $user_id;
     public string $cat_id = '';
     public string $tpl;
-    public HasExtraFieldsContract $model;
+    public HasExtraFieldGroupsContract $model;
     public string $model_type;
     public string $model_id;
     public ?string $category_name;
@@ -35,7 +37,7 @@ class Category extends Component
      */
     protected $listeners = ['refresh' => '$refresh'];
 
-    public function mount(HasExtraFieldsContract $model, string $tpl = 'v1'): void
+    public function mount(HasExtraFieldGroupsContract $model, string $tpl = 'v1'): void
     {
         $this->model = $model;
         $this->model_id = strval($model->getKey());
@@ -69,10 +71,19 @@ class Category extends Component
         return view($view, $view_params);
     }
 
+    /**
+     * Undocumented function.
+     *
+     * @param Collection<CategoryModel> $categories
+     */
     public function getGroups(Collection $categories): Collection
     {
         if ('' == $this->cat_id) {
-            $this->cat_id = $categories->first()->id;
+            $category_first = $categories->first();
+            if (! $category_first instanceof CategoryModel) {
+                throw new \Exception('['.__LINE__.']['.__FILE__.']');
+            }
+            $this->cat_id = strval($category_first->getKey());
         }
 
         return app(Actions\ExtraFieldGroup\GetByModelUserIdCategoryId::class)
@@ -86,7 +97,7 @@ class Category extends Component
         if (null == $category) {
             return;
         }
-        $this->category_name = $category->name;
+        $this->category_name = strval($category->name);
     }
 
     public function toggleFavourite(string $uuid): void
@@ -94,7 +105,43 @@ class Category extends Component
         $row = ExtraFieldGroupMorph::firstWhere(['uuid' => $uuid]);
         if (null == $row) {
             dddx(['row' => $row, 'uuid' => $uuid]);
+            throw new \Exception('uuid ['.$uuid.'] is empty');
         }
         $row->update(['favourite' => ! $row->favourite]);
+    }
+
+    public function addGroup(): void
+    {
+        $parz = [
+            'cat_id' => $this->cat_id,
+            'model_type' => $this->model_type,
+            'model_id' => $this->model_id,
+        ];
+        $this->emit('modal.open', 'modal.extra-field-group.add', $parz);
+    }
+
+    public function edit(string $uuid): void
+    {
+        $parz = [
+            'uuid' => $uuid,
+            'model_type' => $this->model_type,
+            'model_id' => $this->model_id,
+        ];
+        $this->emit('modal.open', 'modal.extra-field-group.edit', $parz);
+    }
+
+    public function getFieldsByGroup(ExtraFieldGroup $group): EloquentCollection
+    {
+        $pivot = $group->getRelationValue('pivot');
+        if (! $pivot instanceof ExtraFieldGroupMorph) {
+            throw new \Exception('[][]');
+        }
+        $uuid = $pivot->uuid;
+        $fields = $this->model
+                ->extraFieldsByUserId($this->user_id)
+                ->wherePivot('uuid', $uuid)
+                ->get();
+
+        return $fields;
     }
 }

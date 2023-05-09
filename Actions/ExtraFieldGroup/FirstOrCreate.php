@@ -12,12 +12,14 @@ use Modules\ExtraField\Models\ExtraFieldGroupMorph;
 use Modules\ExtraField\Models\ExtraFieldMorph;
 use Spatie\QueueableAction\QueueableAction;
 
-class Create
+class FirstOrCreate
 {
     use QueueableAction;
 
     /**
-     * Undocumented function.
+     * DA FARE.
+     * E' per inserire i dati del servizio solo se non ce ne sono già associati allo stesso id di servizio,
+     * altrimenti deve sovrascrivere.
      *
      * @return void
      */

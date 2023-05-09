@@ -30,7 +30,7 @@ class ExtraFieldGroupPanel extends XotBasePanel
      */
     public function optionLabel($row): string
     {
-        return (string) $row->name;
+        return strval($row->name);
     }
 
     /**
@@ -116,7 +116,7 @@ class ExtraFieldGroupPanel extends XotBasePanel
      */
     public function tabs(): array
     {
-        $tabs_name = [];
+        $tabs_name = ['noUserExtraFieldGroupMorphs'];
 
         return $tabs_name;
     }

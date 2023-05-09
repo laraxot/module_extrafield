@@ -4,19 +4,22 @@ declare(strict_types=1);
 
 namespace Modules\ExtraField\Actions\ExtraFieldGroup;
 
-use Modules\ExtraField\Models\Contracts\HasExtraFieldsContract;
+use Illuminate\Database\Eloquent\Collection;
+use Modules\ExtraField\Models\Contracts\HasExtraFieldGroupsContract;
 use Spatie\QueueableAction\QueueableAction;
 
 class GetByModelUserIdCategoryId
 {
     use QueueableAction;
 
-    public function execute(HasExtraFieldsContract $model, string $user_id, string $cat_id)
+    public function execute(HasExtraFieldGroupsContract $model, string $user_id, string $cat_id): Collection
     {
+        // Call to an undefined method Illuminate\Database\Eloquent\Relations\MorphToMany::withAnyCategories().
         $res = $model->extraFieldGroups()
+            ->withAnyCategories($cat_id)
             ->wherePivot('user_id', $user_id)
             ->wherePivot('uuid', '!=', '')
-            ->withAnyCategories($cat_id)
+
             ->get();
 
         return $res;

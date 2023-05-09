@@ -13,6 +13,11 @@ class GetExtraFieldGroupCategoriesByModelTypeAction
 {
     use QueueableAction;
 
+    /**
+     * Undocumented function.
+     *
+     * @return Collection<Category>
+     */
     public function execute(string $model_type): Collection
     {
         $categories = Category::ofType($model_type)

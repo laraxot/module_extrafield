@@ -74,17 +74,28 @@ class Groups extends Component
         return ExtraFieldGroup::whereNotIn('id', $this->getAssignedGroupsKeys())->whereHas('fields')->orderBy('name')->get();
     }
 
-    public function getAssignedGroupsKeys(): array
+    /**
+     * Undocumented function.
+     *
+     * @return \Illuminate\Support\Collection<int, (int|string)>
+     */
+    public function getAssignedGroupsKeys()
     {
         return $this->model->extraFields()->wherePivot('user_id', null)->get()->groupBy('group.id')->keys();
     }
 
     public function getAssignedGroups(): Collection
     {
-        return $this->model->extraFields()->wherePivot('user_id', null)->get()->groupBy('group.name')->map(
-            function ($ef, $group) {
-                return $ef->first()->getAttribute('group_id');
-            });
+        return $this->model
+            ->extraFields()
+            ->wherePivot('user_id', null)
+            ->get()
+            ->groupBy('group.name')
+            ->map(
+                function ($ef, $group) {
+                    return $ef->first()?->getAttribute('group_id');
+                }
+            );
     }
 
     public function assign(): void
