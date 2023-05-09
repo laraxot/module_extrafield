@@ -7,6 +7,7 @@ namespace Modules\ExtraField\Actions\ExtraFieldGroup;
 use Illuminate\Database\Eloquent\Collection as EloquentCollection;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Str;
+use Modules\ExtraField\Datas\GroupData;
 use Modules\ExtraField\Models\Contracts\HasExtraFieldGroupsContract;
 use Modules\ExtraField\Models\ExtraFieldGroup;
 use Modules\ExtraField\Models\ExtraFieldMorph;
@@ -48,12 +49,14 @@ class GetArrayByModelTypeModelId
                 /** @var ExtraFieldGroup */
                 $i = $item;
 
+                $item = GroupData::from($item);
+
                 return [
                     'id' => $i->id,
                     'name' => $i->name,
                     'options' => $this->getOptions($i, $profile_extra_fields),
-                    'value' => $i->pivot->value,
-                    'uuid' => $i->pivot->uuid,
+                    'value' => $item->pivot->value,
+                    'uuid' => $item->pivot->uuid,
                 ];
             }
         );
