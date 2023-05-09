@@ -2,7 +2,7 @@
 
 declare(strict_types=1);
 
-namespace Modules\ExtraField\Http\Livewire\Wizard\ExtraFieldGroup\Steps;
+namespace Modules\ExtraField\Http\Livewire\Wizard\ExtraFieldGroup\Add;
 
 // use Modules\PFed\Models\Data;
 use Modules\ExtraField\Actions;

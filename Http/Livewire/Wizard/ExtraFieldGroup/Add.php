@@ -27,16 +27,16 @@ class Add extends WizardComponent
     public function steps(): array
     {
         return [
-            Steps\SelectGroupStep::class,
-            Steps\InsertDataStep::class,
-            Steps\InsertDescriptionStep::class,
+            Add\SelectGroupStep::class,
+            Add\InsertDataStep::class,
+            Add\InsertDescriptionStep::class,
         ];
     }
 
     public function initialState(): array
     {
         return [
-            'extrafield::wizard.extra-field-group.steps.select-group-step' => [
+            'extrafield::wizard.extra-field-group.add.select-group-step' => [
                 // 'cat_id' => $this->cat_id,
                 // 'model_type' => $this->model_type,
                 // 'model_id' => $this->model_id,

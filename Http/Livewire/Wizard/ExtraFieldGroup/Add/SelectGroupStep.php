@@ -2,7 +2,7 @@
 
 declare(strict_types=1);
 
-namespace Modules\ExtraField\Http\Livewire\Wizard\ExtraFieldGroup\Steps;
+namespace Modules\ExtraField\Http\Livewire\Wizard\ExtraFieldGroup\Add;
 
 use Modules\ExtraField\Actions;
 use Modules\UI\Actions\GetStateDataAction;
@@ -30,6 +30,6 @@ class SelectGroupStep extends BaseStep
 
     public static function getName(): string
     {
-        return 'wizard.extra-field-group.steps.select-group-step';
+        return 'wizard.extra-field-group.add.select-group-step';
     }
 }
