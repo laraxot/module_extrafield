@@ -25,8 +25,6 @@ class SelectGroupStep extends BaseStep
     {
         $this->form_data = app(GetStateDataAction::class)->execute($this->state());
 
-        // dddx($this->state()->currentStep());
-
         $this->groups = app(Actions\ExtraFieldGroup\GetOptionsByModelTypeModelIdCategoryIdUserId::class)->execute($this->model_type, null, $this->cat_id, $this->user_id);
     }
 
