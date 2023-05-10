@@ -7,7 +7,7 @@ namespace Modules\ExtraField\Http\Livewire\Modal\ExtraFields\Group;
 use Illuminate\Contracts\Support\Renderable;
 use Modules\Cms\Actions\GetViewAction;
 use Modules\ExtraField\Models\ExtraFieldGroup;
-use WireElements\Pro\Components\Modal\Modal;
+use Modules\Modal\View\Components\Modal\Modal;
 
 class AssignName extends Modal
 {

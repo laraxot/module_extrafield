@@ -7,7 +7,7 @@ namespace Modules\ExtraField\Http\Livewire\Modal\ExtraFields;
 use Illuminate\Contracts\Support\Renderable;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Support\Facades\Auth;
-use WireElements\Pro\Components\Modal\Modal;
+use Modules\Modal\View\Components\Modal\Modal;
 
 class AddData extends Modal {
     public string $title;

@@ -16,8 +16,8 @@ use Modules\ExtraField\Actions\GetExtraFieldGroupCategoriesByModelTypeAction;
 use Modules\ExtraField\Models\Contracts\HasExtraFieldGroupsContract;
 use Modules\ExtraField\Models\ExtraFieldGroup;
 use Modules\ExtraField\Models\ExtraFieldGroupMorph;
+use Modules\Modal\Concerns\InteractsWithConfirmationModal;
 use Modules\Xot\Actions\GetModelTypeByModelAction;
-use WireElements\Pro\Concerns\InteractsWithConfirmationModal;
 
 class Category extends Component
 {

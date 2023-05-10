@@ -8,10 +8,10 @@ use Illuminate\Contracts\Support\Renderable;
 use Illuminate\Support\Facades\Auth;
 use Modules\ExtraField\Actions;
 use Modules\ExtraField\Models\Contracts\HasExtraFieldGroupsContract;
+use Modules\Modal\View\Components\Modal\Modal;
 use Modules\UI\Actions\GetViewAction;
 use Modules\UI\Datas\FieldData;
 use Modules\Xot\Actions\GetModelByModelTypeAction;
-use WireElements\Pro\Components\Modal\Modal;
 
 class Edit extends Modal
 {

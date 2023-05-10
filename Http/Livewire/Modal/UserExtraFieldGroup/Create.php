@@ -7,9 +7,9 @@ namespace Modules\ExtraField\Http\Livewire\Modal\UserExtraFieldGroup;
 use Illuminate\Contracts\Support\Renderable;
 use Modules\Cms\Actions\GetViewAction;
 use Modules\ExtraField\Models\ExtraFieldGroup;
+use Modules\Modal\View\Components\Modal\Modal;
 use Modules\UI\Datas\FieldData;
 use Modules\Xot\Datas\XotData;
-use WireElements\Pro\Components\Modal\Modal;
 
 class Create extends Modal
 {
