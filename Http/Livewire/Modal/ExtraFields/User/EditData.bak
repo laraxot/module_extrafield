@@ -13,7 +13,7 @@ use Modules\Cms\Actions\GetViewAction;
 use Modules\ExtraField\Models\Contracts\HasExtraFieldsContract;
 use Modules\UI\Datas\FieldData;
 use Modules\Xot\Actions\GetModelByModelTypeAction;
-use Modules\Modal\View\Components\Modal\Modal;
+use Modules\Wire\View\Components\Modal\Modal;
 
 /**
  * ---.

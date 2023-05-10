@@ -6,9 +6,9 @@ namespace Modules\ExtraField\Http\Livewire\Modal\ExtraFieldGroup;
 
 use Illuminate\Contracts\Support\Renderable;
 use Illuminate\Support\Facades\Auth;
-use Modules\Modal\View\Components\Modal\Modal;
-// use Modules\Modal\View\Components\Modal\Modal;
 use Modules\UI\Actions\GetViewAction;
+// use Modules\Wire\View\Components\Modal\Modal;
+use Modules\Wire\View\Components\Modal\Modal;
 
 class Add extends Modal
 {

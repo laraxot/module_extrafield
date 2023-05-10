@@ -20,7 +20,7 @@ use Modules\ExtraField\Models\ExtraFieldMorph;
 use Modules\PFed\Actions\SendConsentsUpdateNotifyToCompanyAction;
 use Modules\PFed\Models\Service;
 use Modules\Xot\Actions\GetModelTypeByModelAction;
-use Modules\Modal\Concerns\InteractsWithConfirmationModal;
+use Modules\Wire\Concerns\InteractsWithConfirmationModal;
 
 // use Modules\PFed\Models\Profile as ProfileModel;
 

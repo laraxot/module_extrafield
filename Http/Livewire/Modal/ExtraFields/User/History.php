@@ -8,8 +8,8 @@ use Illuminate\Contracts\Support\Renderable;
 use Illuminate\Support\Facades\Auth;
 use Modules\Cms\Actions\GetViewAction;
 use Modules\ExtraField\Models\ExtraField;
-use Modules\Modal\View\Components\Modal\Modal;
 use Modules\PFed\Models\History as HistoryModel;
+use Modules\Wire\View\Components\Modal\Modal;
 
 class History extends Modal
 {

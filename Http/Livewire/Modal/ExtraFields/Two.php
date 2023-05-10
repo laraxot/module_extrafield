@@ -6,7 +6,7 @@ namespace Modules\ExtraField\Http\Livewire\Modal\ExtraFields;
 
 use Illuminate\Contracts\Support\Renderable;
 use Modules\Cms\Actions\GetViewAction;
-use Modules\Modal\View\Components\Modal\Modal;
+use Modules\Wire\View\Components\Modal\Modal;
 
 class Two extends Modal
 {

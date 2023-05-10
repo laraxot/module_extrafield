@@ -12,7 +12,7 @@ use Illuminate\Support\Facades\Auth;
 use Modules\Cms\Actions\GetViewAction;
 use Modules\UI\Datas\FieldData;
 use Modules\Xot\Actions\GetModelByModelTypeAction;
-use Modules\Modal\View\Components\Modal\Modal;
+use Modules\Wire\View\Components\Modal\Modal;
 
 class DeleteData extends Modal
 {
