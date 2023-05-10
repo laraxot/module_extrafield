@@ -149,7 +149,7 @@ class Category extends Component
     {
         // prima di cancellare dovrei far uscire un modal
         // dove mi avverte che tot servizi/consensi verranno modificati
-        // app(Actions\ExtraFieldGroup\DeleteByUuid::class)->execute($uuid);
+        app(Actions\ExtraFieldGroup\DeleteByUuid::class)->execute($uuid);
 
         // $this->emit('modal.open', 'modal.extra-field-group.edit', $parz);
     }

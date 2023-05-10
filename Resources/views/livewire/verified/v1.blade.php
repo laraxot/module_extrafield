@@ -2,7 +2,7 @@
 
 <div>
 
-    <input wire:model.lazy="form_data.value" type="text" class="form-control">
+    <input wire:model="form_data.{{ $field_name }}" type="text" class="form-control" wire:change="updateFormData">
 
     <x-flash-message />
 

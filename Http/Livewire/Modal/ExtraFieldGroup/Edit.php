@@ -26,8 +26,7 @@ class Edit extends Modal
     /**
      * @var array<string, string>
      */
-    protected $listeners = [
-    ];
+    protected $listeners = ['updateFormData' => 'updateFormData'];
 
     public function mount(string $uuid, string $model_type, string $model_id): void
     {
@@ -92,6 +91,11 @@ class Edit extends Modal
         $this->emit('refresh');
 
         $this->close();
+    }
+
+    public function updateFormData(array $data): void
+    {
+        $this->form_data = array_merge($this->form_data, $data);
     }
 
     public static function behavior(): array

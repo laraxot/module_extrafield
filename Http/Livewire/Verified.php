@@ -10,13 +10,15 @@ use Modules\Cms\Actions\GetViewAction;
 
 /**
  * @property array  $form_data
+ * @property string $field_name
  * @property string $tpl
  */
 class Verified extends Component
 {
-    public function mount(string $tpl = 'v1'): void
+    public function mount(string $field_name, string $tpl = 'v1'): void
     {
         $this->form_data = [];
+        $this->field_name = $field_name;
         $this->tpl = $tpl;
     }
 
@@ -33,6 +35,7 @@ class Verified extends Component
         $view = app(GetViewAction::class)->execute($this->tpl);
 
         $view_params = [
+            'field_name' => $this->field_name,
             'view' => $view,
         ];
 
