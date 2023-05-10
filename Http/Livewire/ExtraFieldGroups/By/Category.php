@@ -40,11 +40,28 @@ class Category extends Component
     public function mount(HasExtraFieldGroupsContract $model, string $tpl = 'v1'): void
     {
         $this->model = $model;
-        $this->model_id = strval($model->getKey());
+        /**
+         * @var string $model_key
+         */
+        $model_key = $model->getKey();
+        $this->model_id = strval($model_key);
         $this->model_type = app(GetModelTypeByModelAction::class)->execute($this->model);
         $this->user_id = strval(Auth::id());
         $this->tpl = $tpl;
-        $this->category_name = strval(app(GetExtraFieldGroupCategoriesByModelTypeAction::class)->execute($this->model_type)->first()->name);
+
+        $extra_field_groups = app(GetExtraFieldGroupCategoriesByModelTypeAction::class)->execute($this->model_type);
+
+        /**
+         * @var ExtraFieldGroup $extra_field_group
+         */
+        $extra_field_group = $extra_field_groups->first();
+
+        /**
+         * @var string $extra_field_group_name
+         */
+        $extra_field_group_name = $extra_field_group->name;
+
+        $this->category_name = strval($extra_field_group_name);
     }
 
     public static function getName(): string
@@ -84,7 +101,12 @@ class Category extends Component
             if (! $category_first instanceof CategoryModel) {
                 throw new \Exception('['.__LINE__.']['.__FILE__.']');
             }
-            $this->cat_id = strval($category_first->getKey());
+
+            /**
+             * @var string $first_category_key
+             */
+            $first_category_key = $category_first->getKey();
+            $this->cat_id = strval($first_category_key);
         }
 
         return app(Actions\ExtraFieldGroup\GetByModelUserIdCategoryId::class)
@@ -98,7 +120,12 @@ class Category extends Component
         if (null == $category) {
             return;
         }
-        $this->category_name = strval($category->name);
+
+        /**
+         * @var string $category_name
+         */
+        $category_name = $category->name;
+        $this->category_name = strval($category_name);
     }
 
     public function toggleFavourite(string $uuid): void

@@ -80,6 +80,9 @@ class Edit extends Modal
 
     public function save(): void
     {
+        /**
+         * @var string $group_id
+         */
         $group_id = $this->getModel()->extraFieldGroups()->wherePivot('uuid', $this->uuid)->first()?->getKey();
 
         $rules = app(Actions\ExtraFieldGroup\GetRulesByGroupId::class)->execute(strval($group_id), 'form_data.');
