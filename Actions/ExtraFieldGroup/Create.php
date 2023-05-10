@@ -21,7 +21,7 @@ class Create
      *
      * @return void
      */
-    public function execute(Model $model, string $extra_field_group_id, string $user_id, array $form_data, ?string $uuid = null)
+    public function execute(Model $model, string $extra_field_group_id, string $user_id, array $form_data, ?string $uuid = null, ?bool $verified = false)
     {
         $morph_map = [
             'extra_field' => 'Modules\ExtraField\Models\ExtraField',
@@ -46,6 +46,7 @@ class Create
             'value' => $form_data,
             'uuid' => $uuid,
             'note' => $form_data['note'] ?? '',
+            'is_verified' => $verified,
         ]);
 
         foreach ($extra_field_group->fields as $field) {

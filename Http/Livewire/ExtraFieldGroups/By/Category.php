@@ -44,6 +44,7 @@ class Category extends Component
         $this->model_type = app(GetModelTypeByModelAction::class)->execute($this->model);
         $this->user_id = strval(Auth::id());
         $this->tpl = $tpl;
+        $this->category_name = strval(app(GetExtraFieldGroupCategoriesByModelTypeAction::class)->execute($this->model_type)->first()->name);
     }
 
     public static function getName(): string
