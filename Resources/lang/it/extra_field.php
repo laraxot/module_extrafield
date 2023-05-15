@@ -1,9 +1,11 @@
-<?php return array (
-  'field' => 
-  array (
-    'type' => 
-    array (
-      'label' => 'Tipo del Dato',
-    ),
-  ),
-);
+<?php
+
+declare(strict_types=1);
+
+return [
+    'field' => [
+        'type' => [
+            'label' => 'Tipo del Dato',
+        ],
+    ],
+];
