@@ -16,6 +16,7 @@ use Modules\Xot\Contracts\ModelContract;
  * @property EloquentCollection<int, ExtraField>                                                       $extraFields
  * @property EloquentCollection<int, Consent>                                                          $consents
  * @property \Illuminate\Database\Eloquent\Collection<int, \Modules\ExtraField\Models\ExtraFieldGroup> $extraFieldGroups
+ * @property \Illuminate\Database\Eloquent\Collection<int, \Modules\ExtraField\Models\ExtraFieldGroup> $userExtraFieldGroups
  */
 interface HasExtraFieldGroupsContract extends ModelContract
 {

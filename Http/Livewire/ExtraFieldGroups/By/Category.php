@@ -56,12 +56,14 @@ class Category extends Component
          */
         $extra_field_group = $extra_field_groups->first();
 
-        /**
-         * @var string $extra_field_group_name
-         */
-        $extra_field_group_name = $extra_field_group->name;
+        if (null !== $extra_field_group) {
+            /**
+             * @var string $extra_field_group_name
+             */
+            $extra_field_group_name = $extra_field_group->name;
 
-        $this->category_name = strval($extra_field_group_name);
+            $this->category_name = strval($extra_field_group_name);
+        }
     }
 
     public static function getName(): string
@@ -98,6 +100,11 @@ class Category extends Component
     {
         if ('' == $this->cat_id) {
             $category_first = $categories->first();
+
+            if (null == $category_first) {
+                return collect([]);
+            }
+
             if (! $category_first instanceof CategoryModel) {
                 throw new \Exception('['.__LINE__.']['.__FILE__.']');
             }
