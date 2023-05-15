@@ -29,7 +29,7 @@ class GetByModelTypeModelId
         $this->model_id = $model_id;
         $this->model = $this->getModel();
 
-        return $this->model->userExtraFieldGroups;
+        return $this->model->extraFieldGroups;
     }
 
     public function getModel(): HasExtraFieldGroupsContract
