@@ -121,6 +121,16 @@ class ExtraFieldGroupMorphPanel extends XotBasePanel
                 'name' => 'cardinality',
                 'comment' => null,
             ],
+            (object) [
+                'type' => 'Boolean',
+                'name' => 'mandatory',
+                'comment' => null,
+            ],
+            (object) [
+                'type' => 'Boolean',
+                'name' => 'can_verified',
+                'comment' => null,
+            ],
         ];
     }
 
