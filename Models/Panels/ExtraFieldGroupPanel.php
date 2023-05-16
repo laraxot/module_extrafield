@@ -84,12 +84,6 @@ class ExtraFieldGroupPanel extends XotBasePanel
                 'comment' => 'not in Doctrine',
             ],
             (object) [
-                'type' => 'Integer',
-                'name' => 'extraFieldGroupMorph.cardinality',
-                'rules' => 'required',
-                'comment' => 'not in Doctrine',
-            ],
-            (object) [
                 'type' => 'Select2Sides',
                 'name' => 'noUserFields',
                 'comment' => 'not in Doctrine',
