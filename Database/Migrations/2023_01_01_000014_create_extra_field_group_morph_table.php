@@ -54,9 +54,15 @@ class CreateExtraFieldGroupMorphTable extends XotBaseMigration
                 if (! $this->hasColumn('cardinality')) {
                     $table->integer('cardinality')->nullable();
                 }
-                if (! $this->hasColumn('is_verified')) {
-                    $table->boolean('is_verified')->nullable();
+                if (! $this->hasColumn('token')) {
                     $table->string('token')->nullable();
+                }
+                if (! $this->hasColumn('verified_at')) {
+                    $table->timestamp('verified_at')->nullable();
+                    $table->string('verified_by')->nullable();
+                }
+                if (! $this->hasColumn('can_verified')) {
+                    $table->boolean('can_verified')->default(false);
                 }
             }
         );

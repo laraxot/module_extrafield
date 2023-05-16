@@ -51,6 +51,8 @@ class GetArrayByModelTypeModelId
 
                 $item = GroupData::from($item);
 
+                dddx($item);
+
                 return [
                     'id' => $i->id,
                     'name' => $i->name,
