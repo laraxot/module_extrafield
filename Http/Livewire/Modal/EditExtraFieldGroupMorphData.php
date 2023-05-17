@@ -22,7 +22,7 @@ class EditExtraFieldGroupMorphData extends Modal
     public function mount(): void
     {
         /**
-         * @var Collection<Service> $services
+         * @var Collection<int, Service> $services
          */
         $services = Service::with('noUserExtraFieldGroups')->get();
 
@@ -30,12 +30,16 @@ class EditExtraFieldGroupMorphData extends Modal
             $service->noUserExtraFieldGroups->map(function ($group) use ($service) {
                 $this->form_data['services'][$service->id][$group->id]['name'] = $group->name;
                 $this->form_data['services'][$service->id][$group->id]['service_name'] = $service->name;
+
                 $this->form_data['services'][$service->id][$group->id]['cardinality'] = $group->cardinality;
                 $this->form_data['services'][$service->id][$group->id]['mandatory'] = $group->mandatory;
                 $this->form_data['services'][$service->id][$group->id]['can_verified'] = $group->can_verified;
-                $this->form_data['services'][$service->id][$group->id]['pivot']['cardinality'] = $group->pivot->cardinality;
-                $this->form_data['services'][$service->id][$group->id]['pivot']['mandatory'] = $group->pivot->mandatory;
-                $this->form_data['services'][$service->id][$group->id]['pivot']['can_verified'] = $group->pivot->can_verified;
+
+                if (isset($group->pivot)) {
+                    $this->form_data['services'][$service->id][$group->id]['pivot']['cardinality'] = $group->pivot->cardinality;
+                    $this->form_data['services'][$service->id][$group->id]['pivot']['mandatory'] = $group->pivot->mandatory;
+                    $this->form_data['services'][$service->id][$group->id]['pivot']['can_verified'] = $group->pivot->can_verified;
+                }
             });
         });
     }
@@ -59,19 +63,22 @@ class EditExtraFieldGroupMorphData extends Modal
         return 'modal.edit-extra-field-group-morph-data';
     }
 
-    public function save(): void
+    public function save(string $service_id, string $group_id): void
     {
-        foreach ($this->form_data['services'] as $service_id => $service) {
-            foreach ($service as $group_id => $data) {
-                $service = Service::find($service_id)->noUserExtraFieldGroups()->find($group_id);
-                $service->update($data);
-                $service->pivot->update($data['pivot']);
-            }
-        }
+        $data = $this->form_data['services'][$service_id][$group_id];
+
+        /**
+         * @var Service $group
+         */
+        $group = Service::findOrFail($service_id)->noUserExtraFieldGroups()->findOrFail($group_id);
+
+        $group->update($data);
+
+        $group->pivot?->update($data['pivot']);
 
         $this->emit('refresh');
 
-        $this->close();
+        // $this->close();
     }
 
     public function updateFormData(array $data): void

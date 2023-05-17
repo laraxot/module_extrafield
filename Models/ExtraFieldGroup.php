@@ -39,6 +39,8 @@ use Spatie\Translatable\HasTranslations;
  * @property int|null                                                                                       $no_user_fields_count
  * @property \Illuminate\Database\Eloquent\Collection<int, \Modules\ExtraField\Models\ExtraField>           $userFields
  * @property int|null                                                                                       $user_fields_count
+ * @property bool                                                                                           $mandatory
+ * @property bool                                                                                           $can_verified
  *
  * @method static \Modules\ExtraField\Database\Factories\ExtraFieldGroupFactory factory($count = null, $state = [])
  * @method static \Illuminate\Database\Eloquent\Builder|ExtraFieldGroup         newModelQuery()

@@ -8,4 +8,8 @@ use Modules\Cms\Models\Panels\Policies\XotBasePanelPolicy;
 
 class ExtraFieldGroupPanelPolicy extends XotBasePanelPolicy
 {
+    public function manage(UserContract $user, PanelContract $panel): bool
+    {
+        return null != $panel->getParent();
+    }
 }

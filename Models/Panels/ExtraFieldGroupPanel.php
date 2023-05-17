@@ -9,6 +9,7 @@ use Illuminate\Http\Request;
 use Modules\Cms\Models\Panels\XotBasePanel;
 use Modules\ExtraField\Models\ExtraField;
 use Modules\ExtraField\Models\ExtraFieldGroup;
+use Modules\ExtraField\Models\Panels\Actions\ExtraFieldGroup\ManageAction;
 use Modules\Xot\Contracts\RowsContract;
 
 class ExtraFieldGroupPanel extends XotBasePanel
@@ -163,6 +164,8 @@ class ExtraFieldGroupPanel extends XotBasePanel
      */
     public function actions(): array
     {
-        return [];
+        return [
+            new ManageAction(),
+        ];
     }
 }
