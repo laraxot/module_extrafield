@@ -77,9 +77,15 @@ class ExtraFieldGroupPanel extends XotBasePanel
                 'rules' => 'required',
                 'comment' => null,
             ],
+            // (object) [
+            //     'type' => 'Integer',
+            //     'name' => 'cardinality',
+            //     'rules' => 'required',
+            //     'comment' => 'not in Doctrine',
+            // ],
             (object) [
                 'type' => 'Integer',
-                'name' => 'cardinality',
+                'name' => 'pivot.cardinality',
                 'rules' => 'required',
                 'comment' => 'not in Doctrine',
             ],
