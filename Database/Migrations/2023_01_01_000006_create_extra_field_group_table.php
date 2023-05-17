@@ -33,9 +33,15 @@ class CreateExtraFieldGroupTable extends XotBaseMigration
                 if (! $this->hasColumn('cardinality')) {
                     $table->integer('cardinality')->nullable();
                 }
-                if ($this->hasColumn('name')) {
+                /*if ($this->hasColumn('name')) {
                     $table->json('name')->nullable()->change();
                     $table->json('description')->nullable();
+                }*/
+                if (! $this->hasColumn('can_verified')) {
+                    $table->boolean('can_verified')->default(false);
+                }
+                if (! $this->hasColumn('mandatory')) {
+                    $table->boolean('mandatory')->default(false);
                 }
             }
         );
