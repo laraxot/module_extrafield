@@ -70,12 +70,13 @@ class ExtraFieldGroupMorph extends BaseMorphPivot
         'extra_field_group_id',
         'favourite',
         'note',
-        'cardinality',
         'is_verified',
         'token',
         'verified_at',
         'verified_by',
+        'cardinality',
         'can_verified',
+        'mandatory',
     ];
 
     protected $casts = [

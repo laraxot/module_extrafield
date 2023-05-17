@@ -65,7 +65,14 @@ class ExtraFieldGroup extends BaseModel
 {
     use HasCategory;
     // use HasTranslations;
-    protected $fillable = ['id', 'name', 'cardinality', 'description'];
+    protected $fillable = [
+        'id',
+        'name',
+        'description',
+        'cardinality',
+        'can_verified',
+        'mandatory',
+    ];
 
     protected $with = [
         'fields',

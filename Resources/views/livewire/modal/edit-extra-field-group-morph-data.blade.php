@@ -14,26 +14,26 @@
                 <h4>{{ $group['name'] }}</h4>
                 <h4>group_cardinality:
                     <input type="text" class="form-control"
-                        wire:model.lazy="form_data.services.{{ $service_id }}.{{ $group_id }}.cardinality">
+                        wire:model="form_data.services.{{ $service_id }}.{{ $group_id }}.cardinality">
                 </h4>
                 <h4>group_mandatory:
                     <input type="checkbox" class="form-check-input"
-                        wire:model.lazy="form_data.services.{{ $service_id }}.{{ $group_id }}.mandatory">
+                        wire:model="form_data.services.{{ $service_id }}.{{ $group_id }}.mandatory">
                 </h4>
                 <h4>group_can_verified:
                     <input type="checkbox" class="form-check-input"
-                        wire:model.lazy="form_data.services.{{ $service_id }}.{{ $group_id }}.can_verified">
+                        wire:model="form_data.services.{{ $service_id }}.{{ $group_id }}.can_verified">
                 </h4>
 
                 <br>
                 <h5>morph_cardinality: <input type="text" class="form-control"
-                        wire:model.lazy="form_data.services.{{ $service_id }}.{{ $group_id }}.pivot.cardinality">
+                        wire:model="form_data.services.{{ $service_id }}.{{ $group_id }}.pivot.cardinality">
                 </h5>
                 <h5>morph_mandatory: <input type="checkbox" class="form-check-input"
-                        wire:model.lazy="form_data.services.{{ $service_id }}.{{ $group_id }}.pivot.mandatory">
+                        wire:model="form_data.services.{{ $service_id }}.{{ $group_id }}.pivot.mandatory">
                 </h5>
                 <h5>morph_can_verified <input type="checkbox" class="form-check-input"
-                        wire:model.lazy="form_data.services.{{ $service_id }}.{{ $group_id }}.pivot.can_verified">
+                        wire:model="form_data.services.{{ $service_id }}.{{ $group_id }}.pivot.can_verified">
                 </h5>
                 <br>
             @endforeach

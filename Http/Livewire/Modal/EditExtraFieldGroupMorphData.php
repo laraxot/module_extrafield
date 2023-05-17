@@ -63,18 +63,9 @@ class EditExtraFieldGroupMorphData extends Modal
     {
         foreach ($this->form_data['services'] as $service_id => $service) {
             foreach ($service as $group_id => $data) {
-                /**
-                 * @var Service $service
-                 */
-                $service = Service::find($service_id);
-
-                /**
-                 * @var ExtraFieldGroup $group
-                 */
-                $group = $service->noUserExtraFieldGroups()->find($group_id);
-
-                $group->update($data);
-                $group->pivot->update($data['pivot']);
+                $service = Service::find($service_id)->noUserExtraFieldGroups()->find($group_id);
+                $service->update($data);
+                $service->pivot->update($data['pivot']);
             }
         }
 
