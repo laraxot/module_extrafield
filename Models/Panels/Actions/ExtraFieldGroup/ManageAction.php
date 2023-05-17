@@ -5,8 +5,8 @@ declare(strict_types=1);
 namespace Modules\ExtraField\Models\Panels\Actions\ExtraFieldGroup;
 
 // -------- services --------
-use Illuminate\Support\Str;
 use Modules\Cms\Models\Panels\Actions\XotBasePanelAction;
+use Modules\PFed\Models\CompanyService;
 
 // -------- bases -----------
 
@@ -25,13 +25,19 @@ class ManageAction extends XotBasePanelAction
 
     public function getOnClick(): ?string
     {
-        // $this->model_class = get_class($this->panel->row);
-        // $this->model_type = Str::snake(class_basename($this->model_class));
-        // dddx([
-        //     $this,
-        //     null != $this->panel->getParent(),
-        // ]);
-        $onclick = "Livewire.emit('modal.open', 'modal.extra_field_group_morph.manage', {'model_type':'service'})";
+        $parent_panel = $this->panel->getParent();
+        if (null == $parent_panel) {
+            throw new \Exception('['.__LINE__.']['.__FILE__.']');
+        }
+        /**
+         * @var CompanyService
+         */
+        $company_service = $parent_panel->row;
+        // dddx($this->panel->getParent()->row);
+
+        $model_id = $company_service->id;
+
+        $onclick = "Livewire.emit('modal.open', 'modal.extra-field-group.manage', {'model_type':'service', 'model_id':'".$model_id."'})";
 
         return $onclick;
     }
