@@ -9,6 +9,7 @@
             <th>Name</th>
             <th>Cardinality</th>
             <th>Can Verified</th>
+            <th>verified_by</th>
             <th>Mandatory</th>
         </tr>
         @foreach ($extra_field_group_morphs as $group_morph)
@@ -16,6 +17,7 @@
                 <td>{{ $group_morph->extraFieldGroup->name }}</td>
                 <td class="text-center">{{ $group_morph->extraFieldGroup->cardinaliy }}</td>
                 <td class="text-center">{{ $group_morph->extraFieldGroup->can_verified }}</td>
+                <td class="text-center">{{ $group_morph->extraFieldGroup->verified_by }}</td>
                 <td class="text-center">{{ $group_morph->extraFieldGroup->mandatory }}</td>
             </tr>
         @endforeach

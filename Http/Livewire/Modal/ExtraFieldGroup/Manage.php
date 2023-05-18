@@ -18,15 +18,36 @@ class Manage extends Modal
     public string $tpl;
     public Collection $extra_field_group_morphs;
     public array $form_data = [];
+    public string $model_type;
+    public string $model_id;
 
     public function mount(string $model_type, string $model_id, string $tpl = 'v1'): void
     {
+        $this->model_type = $model_type;
+        $this->model_id = $model_id;
         $this->tpl = $tpl;
-        $this->extra_field_group_morphs = ExtraFieldGroupMorph::where('model_type', $model_type)
-                                        ->where('model_id', $model_id)
-                                        ->where('user_id', null)
-                                        ->with('extraFieldGroup')
-                                        ->get();
+        // $this->extra_field_group_morphs = ExtraFieldGroupMorph::where('model_type', $model_type)
+        //                                 ->where('model_id', $model_id)
+        //                                 ->where('user_id', null)
+        //                                 // ->with('extraFieldGroup')
+        //                                 ->get();
+        $this->extra_field_group_morphs = $this->getExtraFieldGroupMorphsProperty();
+        // dddx($this->extra_field_group_morphs);
+    }
+
+    public function getExtraFieldGroupMorphsProperty(): Collection
+    {
+        $model_id = $this->model_id;
+        if ('' == $model_id) {
+            $model_id = null;
+        }
+
+        $rows = ExtraFieldGroupMorph::where('model_type', $this->model_type)
+            ->where('model_id', $model_id)
+            ->where('user_id', null)
+            ->get();
+
+        return $rows;
     }
 
     public static function getName(): string

@@ -122,13 +122,23 @@ class ExtraFieldGroupMorphPanel extends XotBasePanel
                 'comment' => null,
             ],
             (object) [
-                'type' => 'Boolean',
+                'type' => 'CheckboxBoolean',
                 'name' => 'mandatory',
                 'comment' => null,
             ],
             (object) [
-                'type' => 'Boolean',
+                'type' => 'CheckboxBoolean',
                 'name' => 'can_verified',
+                'comment' => null,
+            ],
+            (object) [
+                'type' => 'Text',
+                'name' => 'note',
+                'comment' => null,
+            ],
+            (object) [
+                'type' => 'Text',
+                'name' => 'verified_by',
                 'comment' => null,
             ],
         ];

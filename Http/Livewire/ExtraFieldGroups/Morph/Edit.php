@@ -9,6 +9,7 @@ use Illuminate\Database\Eloquent\Collection;
 use Livewire\Component;
 use Modules\Blog\Models\Category;
 use Modules\Cms\Actions\GetViewAction;
+use Modules\Cms\Services\PanelService;
 use Modules\ExtraField\Models\ExtraFieldGroup;
 use Modules\ExtraField\Models\ExtraFieldGroupMorph;
 use Modules\UI\Datas\FieldData;
@@ -22,6 +23,14 @@ class Edit extends Component
     public string $tpl;
     public string $model_type;
     public string $model_id;
+
+    public array $fields = [
+        'note',
+        'cardinality',
+        'verified_by',
+        'can_verified',
+        'mandatory',
+    ];
 
     public array $form_data = [];
     /**
@@ -37,6 +46,7 @@ class Edit extends Component
         $this->model_type = $model_type;
         $this->tpl = $tpl;
 
+        // --- il profilo e' attaccato ai gruppi passando per la categoria
         if ('profile' == $model_type) {
             $categories = Category::ofType($model_type)
                 ->ofType('extra_field_group')
@@ -57,8 +67,7 @@ class Edit extends Component
         }
 
         $data = $this->rows->keyBy('id')->toArray();
-        // $this->form_data = array_merge($this->form_data, $data);
-        $this->form_data = $data;
+        $this->form_data['ids'] = $data;
     }
 
     public function getRowsProperty(): Collection
@@ -97,24 +106,34 @@ class Edit extends Component
 
     public function getFieldsByRow(ExtraFieldGroupMorph $row): DataCollection
     {
-        $fields = [
-            'note',
-            'cardinality',
-            'verified_by',
-            'can_verified',
-            'mandatory',
-        ];
+        $fields = $this->fields;
 
-        $fields = collect($fields)
-            ->map(function ($field) use ($row) {
-                return [
-                    'name' => $row->id.'.'.$field,
-                    'type' => 'text',
-                    'col_size' => 4,
-                ];
+        $panel = PanelService::make()->get($row);
+
+        $panel_fields = collect($panel->fields())->filter(
+            function ($item) use ($fields) {
+                return in_array($item->name, $fields);
             }
-            )->all();
+        )->map(function ($item) use ($row, $panel) {
+            return [
+                'label' => trans($panel->getTradMod().'.field.'.$item->name.'.label'),
+                'name' => 'ids.'.$row->id.'.'.$item->name,
+                'type' => $item->type,
+                'col_size' => $item->col_size ?? 4,
+            ];
+        });
 
-        return FieldData::collection($fields);
+        $res = FieldData::collection($panel_fields->toArray());
+
+        return $res;
+    }
+
+    public function save()
+    {
+        foreach ($this->form_data['ids'] as $id => $data) {
+            $up = collect($data)->only($this->fields)->all();
+            $res = ExtraFieldGroupMorph::find($id)?->update($up);
+        }
+        session()->flash('message', 'successfully updated.['.now().']');
     }
 }

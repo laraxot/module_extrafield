@@ -1,9 +1,11 @@
 <div class="row">
     @foreach ($this->rows as $row)
         <hr />
+        <h3> {{ $row->extraFieldGroup->name }}</h3>
         @foreach ($this->getFieldsByRow($row) as $field)
             <x-input.field :field="$field" />
         @endforeach
     @endforeach
-    <pre>{{ print_r($form_data, true) }}</pre>
+    <x-flash-message />
+    <x-button wire:click="save()">Save</x-button>
 </div>
