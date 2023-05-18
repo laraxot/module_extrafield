@@ -6,9 +6,7 @@ namespace Modules\ExtraField\Models\Panels;
 
 use Illuminate\Contracts\Support\Renderable;
 use Illuminate\Http\Request;
-use Modules\Blog\Models\Category;
 use Modules\Cms\Models\Panels\XotBasePanel;
-use Modules\ExtraField\Models\ExtraFieldGroup;
 use Modules\UI\Actions\GetRulesWithParamsAction;
 use Modules\Xot\Contracts\RowsContract;
 
@@ -120,29 +118,13 @@ class ExtraFieldPanel extends XotBasePanel
                 'comment' => null,
                 'col_size' => 6,
             ],
-            /* (object) [
-                'type' => 'Select',
-                'name' => 'group',
-                'rules' => 'required',
-                'comment' => null,
-                'col_size' => 6,
-                'options' => $this->optionsModelClass(ExtraFieldGroup::class),
-            ], */
-            // le categorie vanno in extrafieldgroup e non in extrafield, come da richiesta
-            // (object) [
-            //     'type' => 'Select',
-            //     'name' => 'categories',
-            //     'rules' => 'required',
-            //     'comment' => null,
-            //     'col_size' => 6,
-            //     'options' => $this->optionsModelClass(Category::class),
-            // ],
             (object) [
-                'type' => 'Rule',
+                // 'type' => 'Rule',
+                'type' => 'String',
                 'name' => 'rules',
                 'comment' => 'not in Doctrine',
                 'col_size' => 4,
-                'options' => app(GetRulesWithParamsAction::class)->execute(),
+                // 'options' => app(GetRulesWithParamsAction::class)->execute(),
                 'except' => ['index'],
             ],
         ];
