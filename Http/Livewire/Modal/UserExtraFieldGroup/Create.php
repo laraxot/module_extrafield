@@ -16,14 +16,16 @@ class Create extends Modal
     public string $tpl = 'v1';
     public string $extra_field_group_id;
     public string $user_id;
+    public bool $can_verified;
 
     public array $form_data = [];
     public array $fields_arr;
 
-    public function mount(string $extra_field_group_id, string $user_id): void
+    public function mount(string $extra_field_group_id, string $user_id, bool $can_verified): void
     {
         $this->extra_field_group_id = $extra_field_group_id;
         $this->user_id = $user_id;
+        $this->can_verified = $can_verified;
         $extra_field_group = ExtraFieldGroup::findOrFail($this->extra_field_group_id);
 
         $rows = $extra_field_group->fields;
@@ -59,7 +61,7 @@ class Create extends Modal
      */
     public function save()
     {
-        $xot = XotData::from(config('xra'));
+        $xot = XotData::make();
         $profile = $xot->getProfileModelByUserId($this->user_id);
         app(\Modules\ExtraField\Actions\ExtraFieldGroup\Create::class)
             ->execute($profile, $this->extra_field_group_id, $this->user_id, $this->form_data);

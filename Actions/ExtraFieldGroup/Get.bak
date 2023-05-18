@@ -14,7 +14,7 @@ class Get
 
     public function execute(HasExtraFieldGroupsContract $model, string $user_id, ?string $uuid = null): array
     {
-        $xot = XotData::from(config('xra'));
+        $xot = XotData::make();
 
         $model_fields = $model->extraFields->where('pivot.user_id', $user_id);
         // $fav_groups = $model->getFavouriteGroups();
