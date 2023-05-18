@@ -22,8 +22,14 @@ trait HasExtraFieldGroups
 
     public function userExtraFieldGroups(?string $user_id = null): MorphToMany
     {
+        /*
         if (null == $user_id) {
             $user_id = Auth::id();
+        }
+        */
+
+        if ('' === $user_id) {
+            $user_id = null;
         }
 
         return $this->extraFieldGroups()->wherePivot('user_id', $user_id);

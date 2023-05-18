@@ -42,7 +42,8 @@ class GetArrayByModelTypeModelId
         $profile_extra_fields = $profile->extraFieldsByUserId($user_id)->get();
 
         /** @var EloquentCollection */
-        $extra_field_groups = app(GetByModelTypeModelId::class)->execute($model_type, $model_id);
+        // $extra_field_groups = app(GetByModelTypeModelId::class)->execute($model_type, $model_id);
+        $extra_field_groups = app(GetByModelTypeModelIdUserId::class)->execute($model_type, $model_id, '');
 
         $res = $extra_field_groups->map(
             function ($item) use ($profile_extra_fields) {
@@ -51,14 +52,13 @@ class GetArrayByModelTypeModelId
 
                 $item = GroupData::from($item);
 
-                dddx($item);
-
                 return [
                     'id' => $i->id,
                     'name' => $i->name,
                     'options' => $this->getOptions($i, $profile_extra_fields),
                     'value' => $item->pivot->value,
                     'uuid' => $item->pivot->uuid,
+                    'can_verified' => $item->pivot->can_verified,
                 ];
             }
         );
