@@ -165,7 +165,7 @@ class ExtraFieldGroupPanel extends XotBasePanel
     public function actions(): array
     {
         return [
-            new ManageAction(),
+            // new ManageAction(),
         ];
     }
 }
