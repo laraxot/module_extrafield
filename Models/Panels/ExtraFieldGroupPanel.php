@@ -67,11 +67,6 @@ class ExtraFieldGroupPanel extends XotBasePanel
     public function fields(): array
     {
         return [
-            // (object) [
-            //     'type' => 'Id',
-            //     'name' => 'id',
-            //     'comment' => null,
-            // ],
             (object) [
                 'type' => 'String',
                 'name' => 'name',
@@ -80,16 +75,10 @@ class ExtraFieldGroupPanel extends XotBasePanel
             ],
             // (object) [
             //     'type' => 'Integer',
-            //     'name' => 'cardinality',
-            //     'rules' => 'required',
+            //     'name' => 'pivot.cardinality',
+            //     // 'rules' => 'required',
             //     'comment' => 'not in Doctrine',
             // ],
-            (object) [
-                'type' => 'Integer',
-                'name' => 'pivot.cardinality',
-                'rules' => 'required',
-                'comment' => 'not in Doctrine',
-            ],
             (object) [
                 'type' => 'Select2Sides',
                 'name' => 'noUserFields',
@@ -102,12 +91,6 @@ class ExtraFieldGroupPanel extends XotBasePanel
                 'name' => 'categories',
                 'fields' => $this->infoCategories(),
             ],
-            // (object) [
-            //     'type' => 'SelectCategories',
-            //     'name' => 'categories',
-            //     'comment' => 'not in Doctrine',
-            //     'col_size' => 4,
-            // ],
         ];
     }
 
@@ -128,7 +111,8 @@ class ExtraFieldGroupPanel extends XotBasePanel
      */
     public function tabs(): array
     {
-        $tabs_name = ['noUserExtraFieldGroupMorphs'];
+        // $tabs_name = ['noUserExtraFieldGroupMorphs'];
+        $tabs_name = [];
 
         return $tabs_name;
     }

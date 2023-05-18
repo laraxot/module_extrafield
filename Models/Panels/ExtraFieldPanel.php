@@ -107,8 +107,10 @@ class ExtraFieldPanel extends XotBasePanel
                     'string' => 'string',
                     'checkbox.options' => 'checkbox.options',
                     'radio.options' => 'radio.options',
-                    'email.verified' => 'email.verified',
-                    'sms.verified' => 'sms.verified',
+                    'email' => 'email',
+                    'sms' => 'sms',
+                    // 'email.verified' => 'email.verified',
+                    // 'sms.verified' => 'sms.verified',
                 ],
             ],
             (object) [
@@ -119,12 +121,12 @@ class ExtraFieldPanel extends XotBasePanel
                 'col_size' => 6,
             ],
             (object) [
-                // 'type' => 'Rule',
-                'type' => 'String',
+                'type' => 'Rule',
+                // 'type' => 'String',
                 'name' => 'rules',
                 'comment' => 'not in Doctrine',
                 'col_size' => 4,
-                // 'options' => app(GetRulesWithParamsAction::class)->execute(),
+                'options' => app(GetRulesWithParamsAction::class)->execute(),
                 'except' => ['index'],
             ],
         ];

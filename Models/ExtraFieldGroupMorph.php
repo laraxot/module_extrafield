@@ -77,6 +77,7 @@ class ExtraFieldGroupMorph extends BaseMorphPivot
         'cardinality',
         'can_verified',
         'mandatory',
+        'cardinality',
     ];
 
     protected $casts = [

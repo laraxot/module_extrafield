@@ -81,11 +81,11 @@ class ExtraFieldGroupMorphPanel extends XotBasePanel
     public function fields(): array
     {
         return [
-            (object) [
-                'type' => 'Id',
-                'name' => 'id',
-                'comment' => null,
-            ],
+            // (object) [
+            //     'type' => 'Id',
+            //     'name' => 'id',
+            //     'comment' => null,
+            // ],
             (object) [
                 'type' => 'Bigint',
                 'name' => 'model_id',
@@ -96,26 +96,26 @@ class ExtraFieldGroupMorphPanel extends XotBasePanel
                 'name' => 'model_type',
                 'comment' => null,
             ],
-            (object) [
-                'type' => 'Integer',
-                'name' => 'user_id',
-                'comment' => null,
-            ],
-            (object) [
-                'type' => 'Text',
-                'name' => 'value',
-                'comment' => null,
-            ],
-            (object) [
-                'type' => 'String',
-                'name' => 'value_class',
-                'comment' => null,
-            ],
-            (object) [
-                'type' => 'String',
-                'name' => 'uuid',
-                'comment' => null,
-            ],
+            // (object) [
+            //     'type' => 'Integer',
+            //     'name' => 'user_id',
+            //     'comment' => null,
+            // ],
+            // (object) [
+            //     'type' => 'Text',
+            //     'name' => 'value',
+            //     'comment' => null,
+            // ],
+            // (object) [
+            //     'type' => 'String',
+            //     'name' => 'value_class',
+            //     'comment' => null,
+            // ],
+            // (object) [
+            //     'type' => 'String',
+            //     'name' => 'uuid',
+            //     'comment' => null,
+            // ],
             (object) [
                 'type' => 'Integer',
                 'name' => 'cardinality',
