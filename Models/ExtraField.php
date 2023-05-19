@@ -29,7 +29,6 @@ use Modules\UI\Datas\FieldData;
  * @property \Modules\ExtraField\Models\ExtraFieldMorph|null                                           $extraFieldMorph
  * @property \Illuminate\Database\Eloquent\Collection<int, \Modules\ExtraField\Models\ExtraFieldGroup> $groups
  * @property int|null                                                                                  $groups_count
- *
  * @method static \Modules\ExtraField\Database\Factories\ExtraFieldFactory factory($count = null, $state = [])
  * @method static \Illuminate\Database\Eloquent\Builder|ExtraField         newModelQuery()
  * @method static \Illuminate\Database\Eloquent\Builder|ExtraField         newQuery()
@@ -49,7 +48,9 @@ use Modules\UI\Datas\FieldData;
  * @method static \Illuminate\Database\Eloquent\Builder|ExtraField         withCategories($categories)
  * @method static \Illuminate\Database\Eloquent\Builder|ExtraField         withoutAnyCategories()
  * @method static \Illuminate\Database\Eloquent\Builder|ExtraField         withoutCategories($categories)
- *
+ * @property \Kalnoy\Nestedset\Collection<int, \Modules\Blog\Models\Category> $categories
+ * @property-read \Illuminate\Database\Eloquent\Collection<int, \Modules\ExtraField\Models\ExtraFieldGroup> $extraFieldGroups
+ * @property-read \Illuminate\Database\Eloquent\Collection<int, \Modules\ExtraField\Models\ExtraFieldGroup> $groups
  * @mixin \Eloquent
  */
 class ExtraField extends BaseModel

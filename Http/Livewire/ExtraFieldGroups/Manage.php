@@ -75,12 +75,12 @@ class Manage extends Component
 
         $categories = app(GetExtraFieldGroupCategoriesByModelTypeAction::class)->execute($this->model_type);
 
-        $groups = $this->getGroups($categories);
+        // $groups = $this->getGroups($categories);
 
         $view_params = [
             'view' => $view,
             'categories' => $categories,
-            'groups' => $groups,
+            // 'groups' => $groups,
         ];
 
         return view($view, $view_params);

@@ -22,7 +22,7 @@ class GetByModelTypeModelIdUserId
     /**
      * Undocumented function.
      *
-     * @return EloquentCollection<ExtraFieldGroup>
+     * @return EloquentCollection<int, ExtraFieldGroup>
      */
     public function execute(string $model_type, string $model_id, string $user_id): EloquentCollection
     {

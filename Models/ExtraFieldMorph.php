@@ -32,7 +32,6 @@ use Spatie\Activitylog\Traits\LogsActivity;
  * @property \Illuminate\Database\Eloquent\Collection<int, \Modules\Activity\Models\Activity> $activities
  * @property int|null                                                                         $activities_count
  * @property \Modules\ExtraField\Models\ExtraField|null                                       $extraField
- *
  * @method static \Illuminate\Database\Eloquent\Builder|ExtraFieldMorph newModelQuery()
  * @method static \Illuminate\Database\Eloquent\Builder|ExtraFieldMorph newQuery()
  * @method static \Illuminate\Database\Eloquent\Builder|ExtraFieldMorph query()
@@ -51,7 +50,7 @@ use Spatie\Activitylog\Traits\LogsActivity;
  * @method static \Illuminate\Database\Eloquent\Builder|ExtraFieldMorph whereUuid($value)
  * @method static \Illuminate\Database\Eloquent\Builder|ExtraFieldMorph whereValue($value)
  * @method static \Illuminate\Database\Eloquent\Builder|ExtraFieldMorph whereValueClass($value)
- *
+ * @property-read \Illuminate\Database\Eloquent\Collection<int, \Modules\Activity\Models\Activity> $activities
  * @mixin \Eloquent
  */
 class ExtraFieldMorph extends BaseMorphPivot
