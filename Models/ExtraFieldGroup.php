@@ -41,6 +41,7 @@ use Spatie\Translatable\HasTranslations;
  * @property int|null                                                                                       $user_fields_count
  * @property bool                                                                                           $mandatory
  * @property bool                                                                                           $can_verified
+ *
  * @method static \Modules\ExtraField\Database\Factories\ExtraFieldGroupFactory factory($count = null, $state = [])
  * @method static \Illuminate\Database\Eloquent\Builder|ExtraFieldGroup         newModelQuery()
  * @method static \Illuminate\Database\Eloquent\Builder|ExtraFieldGroup         newQuery()
@@ -59,15 +60,18 @@ use Spatie\Translatable\HasTranslations;
  * @method static \Illuminate\Database\Eloquent\Builder|ExtraFieldGroup         withPivotFields($model_type, $model_id)
  * @method static \Illuminate\Database\Eloquent\Builder|ExtraFieldGroup         withoutAnyCategories()
  * @method static \Illuminate\Database\Eloquent\Builder|ExtraFieldGroup         withoutCategories($categories)
- * @property \Kalnoy\Nestedset\Collection<int, \Modules\Blog\Models\Category> $categories
- * @property-read \Illuminate\Database\Eloquent\Collection<int, \Modules\ExtraField\Models\ExtraFieldGroupMorph> $extraFieldGroupMorphs
- * @property-read \Illuminate\Database\Eloquent\Collection<int, \Modules\ExtraField\Models\ExtraField> $extraFields
- * @property-read \Illuminate\Database\Eloquent\Collection<int, \Modules\ExtraField\Models\ExtraField> $fields
- * @property-read \Illuminate\Database\Eloquent\Collection<int, \Modules\ExtraField\Models\ExtraFieldGroupMorph> $noUserExtraFieldGroupMorphs
- * @property-read \Illuminate\Database\Eloquent\Collection<int, \Modules\ExtraField\Models\ExtraField> $noUserFields
- * @property-read \Illuminate\Database\Eloquent\Collection<int, \Modules\ExtraField\Models\ExtraField> $userFields
+ *
+ * @property \Kalnoy\Nestedset\Collection<int, \Modules\Blog\Models\Category>                               $categories
+ * @property \Illuminate\Database\Eloquent\Collection<int, \Modules\ExtraField\Models\ExtraFieldGroupMorph> $extraFieldGroupMorphs
+ * @property \Illuminate\Database\Eloquent\Collection<int, \Modules\ExtraField\Models\ExtraField>           $extraFields
+ * @property \Illuminate\Database\Eloquent\Collection<int, \Modules\ExtraField\Models\ExtraField>           $fields
+ * @property \Illuminate\Database\Eloquent\Collection<int, \Modules\ExtraField\Models\ExtraFieldGroupMorph> $noUserExtraFieldGroupMorphs
+ * @property \Illuminate\Database\Eloquent\Collection<int, \Modules\ExtraField\Models\ExtraField>           $noUserFields
+ * @property \Illuminate\Database\Eloquent\Collection<int, \Modules\ExtraField\Models\ExtraField>           $userFields
+ *
  * @method static \Illuminate\Database\Eloquent\Builder|ExtraFieldGroup whereCanVerified($value)
  * @method static \Illuminate\Database\Eloquent\Builder|ExtraFieldGroup whereMandatory($value)
+ *
  * @mixin \Eloquent
  */
 class ExtraFieldGroup extends BaseModel

@@ -31,6 +31,7 @@ use Illuminate\Support\Facades\Auth;
  * @property string|null                                     $token
  * @property \Modules\ExtraField\Models\ExtraFieldGroup|null $extraFieldGroup
  * @property bool                                            $can_verified
+ *
  * @method static \Illuminate\Database\Eloquent\Builder|ExtraFieldGroupMorph newModelQuery()
  * @method static \Illuminate\Database\Eloquent\Builder|ExtraFieldGroupMorph newQuery()
  * @method static \Illuminate\Database\Eloquent\Builder|ExtraFieldGroupMorph query()
@@ -51,13 +52,16 @@ use Illuminate\Support\Facades\Auth;
  * @method static \Illuminate\Database\Eloquent\Builder|ExtraFieldGroupMorph whereUuid($value)
  * @method static \Illuminate\Database\Eloquent\Builder|ExtraFieldGroupMorph whereValue($value)
  * @method static \Illuminate\Database\Eloquent\Builder|ExtraFieldGroupMorph whereValueClass($value)
+ *
  * @property string|null $verified_at
  * @property string|null $verified_by
- * @property int $mandatory
+ * @property int         $mandatory
+ *
  * @method static \Illuminate\Database\Eloquent\Builder|ExtraFieldGroupMorph whereCanVerified($value)
  * @method static \Illuminate\Database\Eloquent\Builder|ExtraFieldGroupMorph whereMandatory($value)
  * @method static \Illuminate\Database\Eloquent\Builder|ExtraFieldGroupMorph whereVerifiedAt($value)
  * @method static \Illuminate\Database\Eloquent\Builder|ExtraFieldGroupMorph whereVerifiedBy($value)
+ *
  * @mixin \Eloquent
  */
 class ExtraFieldGroupMorph extends BaseMorphPivot
