@@ -16,7 +16,7 @@ class GetByModelTypeModelIdUserId
 
     public string $model_type;
     public string $model_id;
-    public string $user_id;
+    public ?string $user_id;
     public HasExtraFieldGroupsContract $model;
 
     /**
@@ -26,6 +26,10 @@ class GetByModelTypeModelIdUserId
      */
     public function execute(string $model_type, string $model_id, string $user_id): EloquentCollection
     {
+        if ('' === $user_id) {
+            $user_id = null;
+        }
+
         $this->model_type = $model_type;
         $this->model_id = $model_id;
         $this->user_id = $user_id;

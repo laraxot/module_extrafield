@@ -32,6 +32,17 @@ class Create
         $model_type = Str::snake(class_basename($model));
         $model_id = ''.$model->getKey();
 
+        /*dd([
+            'model_type' => $model_type,
+            'model_id' => $model_id,
+            'user_id' => $user_id,
+            'extra_field_group_id' => $extra_field_group_id,
+            'value' => $form_data,
+            'uuid' => $uuid,
+            'note' => $form_data['note'] ?? '',
+            'is_verified' => $verified,
+        ]);*/
+
         if (null == $uuid) {
             $uuid = Str::uuid();
         }

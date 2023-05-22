@@ -17,7 +17,7 @@ class GroupData extends Data implements Wireable
 
     public string $id;
     public string $name;
-    public string $cardinality;
+    public ?string $cardinality;
     public ?string $description = null;
     /**
      * @var DataCollection<FieldData>

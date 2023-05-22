@@ -28,28 +28,32 @@ class GetArrayByModelTypeModelId
     /**
      * Undocumented function.
      */
-    public function execute(string $model_type, string $model_id): array
+    public function execute(string $model_type, string $model_id, ?string $user_id = ''): array
     {
-        $user_id = strval(Auth::id());
         $this->model_type = $model_type;
         $this->model_id = $model_id;
         $this->user_id = $user_id;
 
-        $model = $this->getModel();
-        $model_extra_fields = $model->extraFieldsByUserId($user_id)->get();
-        $profile = $this->getProfile();
+        // non è più extra field il core dell'applicazione ma extra field groups
+        // $model = $this->getModel();
+        // $model_extra_fields = $model->extraFieldsByUserId($user_id)->get();
+        $profile = $this->getProfile((string) Auth::id());
 
-        $profile_extra_fields = $profile->extraFieldsByUserId($user_id)->get();
+        // l'id dell'utente qui dev'esserci sempre nei campi del profile
+        $profile_extra_fields = $profile->extraFieldsByUserId((string) Auth::id())->get();
 
         /** @var EloquentCollection */
-        // $extra_field_groups = app(GetByModelTypeModelId::class)->execute($model_type, $model_id);
-        $extra_field_groups = app(GetByModelTypeModelIdUserId::class)->execute($model_type, $model_id, '');
 
+        // se non mettiamo lo user_id allora non fa modificare il campo in edit, ma se lo mettiamo non funziona bene l'add
+        // probabilmente servono due azioni separate oppure un parametro. ho optato per il parametro. da davide
+
+        // NB non esistono extra_field_groups con user_id se il service è appena stato creato quindi non vedi le opzioni nei campi
+        // ma solo select vuote
+        $extra_field_groups = app(GetByModelTypeModelIdUserId::class)->execute($model_type, $model_id, $user_id);
         $res = $extra_field_groups->map(
             function ($item) use ($profile_extra_fields) {
                 /** @var ExtraFieldGroup */
                 $i = $item;
-
                 $item = GroupData::from($item);
 
                 return [
@@ -62,14 +66,16 @@ class GetArrayByModelTypeModelId
                 ];
             }
         );
+        // dd([$extra_field_groups, $profile_extra_fields, $user_id, $res->all()]);
 
         return $res->all();
     }
 
-    public function getProfile(): HasExtraFieldGroupsContract
+    public function getProfile(string $user_id): HasExtraFieldGroupsContract
     {
         $xot = XotData::make();
-        $profile = $xot->getProfileModelByUserId($this->user_id);
+        $profile = $xot->getProfileModelByUserId($user_id);
+
         if (! $profile instanceof HasExtraFieldGroupsContract) {
             throw new \Exception('[][]');
         }

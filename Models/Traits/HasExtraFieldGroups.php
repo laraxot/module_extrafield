@@ -22,12 +22,6 @@ trait HasExtraFieldGroups
 
     public function userExtraFieldGroups(?string $user_id = null): MorphToMany
     {
-        /*
-        if (null == $user_id) {
-            $user_id = Auth::id();
-        }
-        */
-
         if ('' === $user_id) {
             $user_id = null;
         }
@@ -63,18 +57,13 @@ trait HasExtraFieldGroups
         ;
     }
 
-    /*-- deprecated --
-    public function userExtraFields(?string $user_id = null): MorphToMany
-    {
-        return $this->extraFieldsByUserId($user_id);
-    }
-    -*/
-
     public function extraFieldsByUserId(?string $user_id = null): MorphToMany
     {
         if (null == $user_id) {
             $user_id = strval(Auth::id());
         }
+        /*dd(rowsToSql($this->extraFields()
+        ->wherePivot('user_id', $user_id)));*/
 
         return $this->extraFields()
             ->wherePivot('user_id', $user_id);
