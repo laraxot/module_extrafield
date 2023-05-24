@@ -4,17 +4,47 @@ declare(strict_types=1);
 
 namespace Modules\ExtraField\Actions;
 
-use Modules\ExtraField\Models\ExtraFieldGroup;
+use Illuminate\Database\Eloquent\Collection;
+use Modules\ExtraField\Models\ExtraFieldGroupMorph;
+use Modules\ExtraField\Models\ExtraFieldMorph;
 use Spatie\QueueableAction\QueueableAction;
 
 class GetUserExtraFieldsDataByGroupId
 {
     use QueueableAction;
 
-    public function execute(string $group_id, string $user_id, ?string $uuid = null): array
+    public function execute(string $group_id, ?string $user_id, ?string $model_type = null, ?string $uuid = null): Collection
     {
-        $group = ExtraFieldGroup::find($group_id);
-        // ---
-        return [];
+        $query = ExtraFieldGroupMorph::where(['extra_field_group_id' => $group_id, 'user_id' => $user_id]);
+
+        if (null !== $model_type) {
+            $query = $query->where('model_type', $model_type);
+        } else {
+            $query = $query->where('value', '!=', '[]');
+        }
+
+        if (null !== $uuid) {
+            $query = $query->where('uuid', $uuid);
+        }
+
+        $coll = $query->get();
+
+        /*$query = ExtraFieldMorph::where(['user_id' => $user_id]);
+
+        if (null !== $model_type) {
+            $query = $query->where('model_type', $model_type);
+        } else {
+            $query = $query->where('value', '!=', '[]');
+        }
+
+        if (null !== $uuid) {
+            $query = $query->where('uuid', $uuid);
+        }
+
+        $coll = $query->get();
+
+        dd($coll);*/
+
+        return $coll;
     }
 }

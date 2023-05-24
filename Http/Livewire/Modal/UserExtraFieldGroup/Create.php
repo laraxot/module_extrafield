@@ -29,7 +29,6 @@ class Create extends Modal
         $extra_field_group = ExtraFieldGroup::findOrFail($this->extra_field_group_id);
 
         $rows = $extra_field_group->fields;
-
         $fields = FieldData::collection($rows->all())->toArray();
         $this->fields_arr = $fields;
     }
@@ -41,6 +40,8 @@ class Create extends Modal
 
     public function render(): Renderable
     {
+        $fields = FieldData::collection($this->fields_arr);
+
         /**
          * @phpstan-var view-string
          */
@@ -48,10 +49,15 @@ class Create extends Modal
 
         $view_params = [
             'view' => $view,
-            'fields' => FieldData::collection($this->fields_arr),
+            'fields' => $fields,
         ];
 
         return view($view, $view_params);
+    }
+
+    public function updated($name, $value)
+    {
+        $this->emit('updatedFormDataVerified', $this->form_data);
     }
 
     /**

@@ -43,6 +43,9 @@ class CreateExtraFieldGroupTable extends XotBaseMigration
                 if (! $this->hasColumn('mandatory')) {
                     $table->boolean('mandatory')->default(false);
                 }
+                if (! $this->hasColumn('verified_by')) {
+                    $table->string('verified_by')->nullable();
+                }
             }
         );
     }

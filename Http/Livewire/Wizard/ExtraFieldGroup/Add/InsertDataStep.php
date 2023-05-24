@@ -6,6 +6,7 @@ namespace Modules\ExtraField\Http\Livewire\Wizard\ExtraFieldGroup\Add;
 
 // use Modules\PFed\Models\Data;
 use Modules\ExtraField\Actions;
+use Modules\ExtraField\Models\ExtraFieldGroup;
 use Modules\UI\Actions\GetStateDataAction;
 use Modules\UI\Http\Wizard\BaseStep;
 
@@ -17,12 +18,20 @@ class InsertDataStep extends BaseStep
     protected $listeners = ['updateFormData' => 'updateFormData'];
 
     public array $fields;
+    public bool $can_verified;
+    public string $extra_field_group_id;
 
     public function mount(): void
     {
         $this->form_data = app(GetStateDataAction::class)->execute($this->state());
 
-        $this->fields = app(Actions\ExtraFieldGroup\GetFieldsArrayByGroupId::class)->execute($this->form_data['group_id']);
+        $this->extra_field_group_id = $this->form_data['group_id'];
+
+        $group = ExtraFieldGroup::find($this->extra_field_group_id);
+
+        $this->can_verified = (bool) $group->can_verified;
+
+        $this->fields = app(Actions\ExtraFieldGroup\GetFieldsArrayByGroupId::class)->execute($this->extra_field_group_id);
 
         $this->initFormData();
     }
@@ -44,5 +53,10 @@ class InsertDataStep extends BaseStep
     public function updateFormData(array $data): void
     {
         $this->form_data = array_merge($this->form_data, $data);
+    }
+
+    public function updated($name, $value)
+    {
+        $this->emit('updatedFormDataVerified', $this->form_data);
     }
 }

@@ -82,6 +82,7 @@ class ExtraFieldGroupMorph extends BaseMorphPivot
         'note',
         'is_verified',
         'token',
+        'token_sent_at',
         'verified_at',
         'verified_by',
         'cardinality',

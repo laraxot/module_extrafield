@@ -10,6 +10,7 @@ use Illuminate\Support\Str;
 use Modules\ExtraField\Datas\GroupData;
 use Modules\ExtraField\Models\Contracts\HasExtraFieldGroupsContract;
 use Modules\ExtraField\Models\ExtraFieldGroup;
+use Modules\ExtraField\Models\ExtraFieldGroupMorph;
 use Modules\ExtraField\Models\ExtraFieldMorph;
 use Modules\UI\Datas\FieldData;
 use Modules\Xot\Actions\GetModelByModelTypeAction;
@@ -93,14 +94,42 @@ class GetArrayByModelTypeModelId
         return $model;
     }
 
+    // TO-DO: fare meglio perchè così fa un po schifo, anche se credo che sia meglio prendere i dati dai group morph che da field morph
     public function getOptions(ExtraFieldGroup $group, EloquentCollection $profile_extra_fields): array
     {
-        $extra_fields = $group->fields;
+        $name = [];
+
+        $xot = XotData::make();
+        $profile = $xot->getProfileModelByUserId((string) Auth::id());
+        // $model_extra_field_groups = ExtraFieldGroupMorph::where(['model_type' => $this->model_type, 'model_id' => $this->model_id, 'user_id' => (string) Auth::id(), 'extra_field_group_id' => $group->id]);
+        $profile_extra_field_groups = ExtraFieldGroupMorph::where(['model_type' => 'profile', 'model_id' => (string) $profile->id, 'user_id' => (string) Auth::id(), 'extra_field_group_id' => $group->id]);
+        $group_morph = ExtraFieldGroupMorph::firstWhere(['model_type' => $this->model_type, 'model_id' => $this->model_id, 'user_id' => null, 'extra_field_group_id' => $group->id]);
+
+        // prima scelta sul morph
+        // seconda scelta sul gruppo
+        $can_verified = $group_morph->can_verified ?? $group->can_verified;
+
+        if (true == $can_verified) {
+            // $model_extra_field_groups->where('verified_at', '!=', null);
+            $profile_extra_field_groups = $profile_extra_field_groups->where('verified_at', '!=', null);
+        }
+
+        // $model_extra_field_groups = $model_extra_field_groups->get();
+        $profile_extra_field_groups = $profile_extra_field_groups->get();
+
+        // dd([$model_extra_field_groups, $profile_extra_field_groups]);
+
+        $profile_extra_field_groups->each(function ($group, $index) use (&$name) {
+            $name[$group->uuid] = join(' - ', $group->value);
+        });
+
+        /*$extra_fields = $group->fields;
         $data = $extra_fields->map(
             function ($field) use ($profile_extra_fields) {
                 return $profile_extra_fields->where('id', $field->id);
             }
         );
+
         $name = [];
         foreach ($data as $v) {
             foreach ($v as $v1) {
@@ -114,7 +143,7 @@ class GetArrayByModelTypeModelId
                 }
                 $name[$k] .= $v.' ';
             }
-        }
+        }*/
 
         return $name;
     }

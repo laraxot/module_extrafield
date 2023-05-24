@@ -68,6 +68,10 @@ class CreateExtraFieldGroupMorphTable extends XotBaseMigration
                 if (! $this->hasColumn('mandatory')) {
                     $table->boolean('mandatory')->default(false);
                 }
+
+                if (! $this->hasColumn('token_sent_at')) {
+                    $table->timestamp('token_sent_at')->nullable();
+                }
             }
         );
     }
