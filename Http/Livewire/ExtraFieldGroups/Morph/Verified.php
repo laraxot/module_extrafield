@@ -50,9 +50,9 @@ class Verified extends Component
         // dddx([$this->extra_field_group_id, $user_id, $this->model_type, $this->model_id]);
 
         // TO-DO: dopo service andrà modificato con profile a seconda di a che cosa sono collegato come relazione
-        // $l = app(GetUserExtraFieldsDataByGroupId::class)->execute($this->extra_field_group_id, $user_id, $this->model_type, $this->model_id);
+        $l = app(GetUserExtraFieldsDataByGroupId::class)->execute($this->extra_field_group_id, $user_id, $this->model_type);
 
-        $l = app(GetArrayByModelTypeModelId::class)->execute($this->model_type, $this->model_id, $user_id);
+        // $l = app(GetArrayByModelTypeModelId::class)->execute($this->model_type, $this->model_id, $user_id);
 
         return $l;
     }

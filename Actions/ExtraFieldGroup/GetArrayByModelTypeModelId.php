@@ -54,16 +54,16 @@ class GetArrayByModelTypeModelId
         $res = $extra_field_groups->map(
             function ($item) use ($profile_extra_fields) {
                 /** @var ExtraFieldGroup */
-                $i = $item;
+                $group = $item;
                 $item = GroupData::from($item);
 
                 return [
-                    'id' => $i->id,
-                    'name' => $i->name,
-                    'options' => $this->getOptions($i, $profile_extra_fields),
-                    'value' => $item->pivot->value,
-                    'uuid' => $item->pivot->uuid,
-                    'can_verified' => $item->pivot->can_verified,
+                    'id' => $group->id,
+                    'name' => $group->name,
+                    'options' => $this->getOptions($group, $profile_extra_fields),
+                    'value' => $group->pivot->value,
+                    'uuid' => $group->pivot->uuid,
+                    'can_verified' => $group->pivot->can_verified ?? $group->can_verified,
                 ];
             }
         );
@@ -99,38 +99,17 @@ class GetArrayByModelTypeModelId
     {
         $name = [];
 
-        /*$xot = XotData::make();
-        $profile = $xot->getProfileModelByUserId((string) Auth::id());
-        // $model_extra_field_groups = ExtraFieldGroupMorph::where(['model_type' => $this->model_type, 'model_id' => $this->model_id, 'user_id' => (string) Auth::id(), 'extra_field_group_id' => $group->id]);
-        $profile_extra_field_groups = ExtraFieldGroupMorph::where(['model_type' => 'profile', 'model_id' => (string) $profile->id, 'user_id' => (string) Auth::id(), 'extra_field_group_id' => $group->id]);
-        $group_morph = ExtraFieldGroupMorph::firstWhere(['model_type' => $this->model_type, 'model_id' => $this->model_id, 'user_id' => null, 'extra_field_group_id' => $group->id]);
-
-        $can_verified = $group_morph->can_verified ?? $group->can_verified;
-
-        if (true == $can_verified) {
-            $profile_extra_field_groups = $profile_extra_field_groups->where('verified_at', '!=', null);
-        }
-
-        $profile_extra_field_groups = $profile_extra_field_groups->get();
-        $profile_extra_field_groups->each(function ($group, $index) use (&$name) {
-            $name[$group->uuid] = join(' - ', $group->value);
-        });*/
-
-        $extra_fields = $group->fields;
+        /*$extra_fields = $group->fields;
         $data = $extra_fields->map(
             function ($field) use ($profile_extra_fields) {
                 return $profile_extra_fields->where('id', $field->id);
             }
         );
 
-        $name = [];
         foreach ($data as $v) {
             foreach ($v as $v1) {
                 $field_uuid = $v1->pivot->uuid;
 
-                $group_morph = ExtraFieldGroupMorph::firstWhere(['model_type' => $this->model_type, 'model_id' => $this->model_id, 'user_id' => (string) auth()->id(), 'extra_field_group_id' => $group->id]);
-
-                $can_verified = $group_morph->can_verified ?? $group->can_verified;
                 if (strlen(strval($field_uuid)) < 2) {
                     $v1->pivot->update(['uuid' => Str::uuid()]);
                 }
@@ -140,7 +119,33 @@ class GetArrayByModelTypeModelId
                 }
                 $name[$field_uuid] .= $v.' ';
             }
+        }*/
+
+        $name = [];
+
+        $xot = XotData::make();
+        $profile = $xot->getProfileModelByUserId((string) Auth::id());
+        // $model_extra_field_groups = ExtraFieldGroupMorph::where(['model_type' => $this->model_type, 'model_id' => $this->model_id, 'user_id' => (string) Auth::id(), 'extra_field_group_id' => $group->id]);
+        $profile_extra_field_groups = ExtraFieldGroupMorph::where(['model_type' => 'profile', 'model_id' => (string) $profile->id, 'user_id' => (string) Auth::id(), 'extra_field_group_id' => $group->id]);
+        $group_morph = ExtraFieldGroupMorph::firstWhere(['model_type' => $this->model_type, 'model_id' => $this->model_id, 'user_id' => null, 'extra_field_group_id' => $group->id]);
+
+        // prima scelta sul morph
+        // seconda scelta sul gruppo
+        $can_verified = $group_morph->can_verified ?? $group->can_verified;
+
+        if (true == $can_verified) {
+            // $model_extra_field_groups->where('verified_at', '!=', null);
+            $profile_extra_field_groups = $profile_extra_field_groups->where('verified_at', '!=', null);
         }
+
+        // $model_extra_field_groups = $model_extra_field_groups->get();
+        $profile_extra_field_groups = $profile_extra_field_groups->get();
+
+        // dd([$model_extra_field_groups, $profile_extra_field_groups]);
+
+        $profile_extra_field_groups->each(function ($group, $index) use (&$name) {
+            $name[$group->uuid] = join(' - ', $group->value);
+        });
 
         return $name;
     }

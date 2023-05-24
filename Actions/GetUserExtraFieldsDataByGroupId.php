@@ -6,7 +6,6 @@ namespace Modules\ExtraField\Actions;
 
 use Illuminate\Database\Eloquent\Collection;
 use Modules\ExtraField\Models\ExtraFieldGroupMorph;
-use Modules\ExtraField\Models\ExtraFieldMorph;
 use Spatie\QueueableAction\QueueableAction;
 
 class GetUserExtraFieldsDataByGroupId
@@ -28,22 +27,6 @@ class GetUserExtraFieldsDataByGroupId
         }
 
         $coll = $query->get();
-
-        /*$query = ExtraFieldMorph::where(['user_id' => $user_id]);
-
-        if (null !== $model_type) {
-            $query = $query->where('model_type', $model_type);
-        } else {
-            $query = $query->where('value', '!=', '[]');
-        }
-
-        if (null !== $uuid) {
-            $query = $query->where('uuid', $uuid);
-        }
-
-        $coll = $query->get();
-
-        dd($coll);*/
 
         return $coll;
     }
