@@ -3,7 +3,7 @@
 
     @foreach ($fields as $field)
         <x-input.field :field="$field" />
-        @livewire('extra-field-groups.morph.verified', ['can_verified' => $can_verified, 'extra_field_group_id' => $extra_field_group_id], key('item-' . $loop->iteration))
+        @livewire('extra-field-groups.morph.verified', ['model_type' => $model_type, 'model_id' => $model_id, 'can_verified' => $can_verified, 'extra_field_group_id' => $extra_field_group_id], key('item-' . $loop->iteration))
     @endforeach
 
     <x-flash-message />

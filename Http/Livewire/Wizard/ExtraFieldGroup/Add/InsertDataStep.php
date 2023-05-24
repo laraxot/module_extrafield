@@ -20,10 +20,15 @@ class InsertDataStep extends BaseStep
     public array $fields;
     public bool $can_verified;
     public string $extra_field_group_id;
+    public string $model_type;
+    public string $model_id;
 
     public function mount(): void
     {
         $this->form_data = app(GetStateDataAction::class)->execute($this->state());
+
+        $this->model_type = $this->form_data['model_type'];
+        $this->model_id = $this->form_data['model_id'];
 
         $this->extra_field_group_id = $this->form_data['group_id'];
 

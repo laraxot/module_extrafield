@@ -11,6 +11,7 @@ use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Notification;
 use Livewire\Component;
 use Modules\Cms\Actions\GetViewAction;
+use Modules\ExtraField\Actions\ExtraFieldGroup\GetArrayByModelTypeModelId;
 use Modules\ExtraField\Actions\GetUserExtraFieldsDataByGroupId;
 use Modules\ExtraField\Models\ExtraFieldGroup;
 use Modules\ExtraField\Models\ExtraFieldGroupMorph;
@@ -26,24 +27,32 @@ class Verified extends Component
     public string $extra_field_group_id;
     public array $form_data = [];
     public string $user_id;
+    public string $model_type;
+    public string $model_id;
 
     protected $listeners = [
         'refreshComponent' => '$refresh',
         'updatedFormDataVerified' => 'updatedFormData',
     ];
 
-    public function mount(bool $can_verified, string $extra_field_group_id, string $tpl = 'v1'): void
+    public function mount(string $model_type, string $model_id, bool $can_verified, string $extra_field_group_id, string $tpl = 'v1'): void
     {
         $this->can_verified = $can_verified;
         $this->extra_field_group_id = $extra_field_group_id;
         $this->tpl = $tpl;
+        $this->model_type = $model_type;
+        $this->model_id = $model_id;
         $this->user_id = (string) Auth::id();
     }
 
-    public function getUnverifieds(?string $user_id = null, ?string $model_type = null)
+    public function getUnverifieds(?string $user_id = null)
     {
+        // dddx([$this->extra_field_group_id, $user_id, $this->model_type, $this->model_id]);
+
         // TO-DO: dopo service andrà modificato con profile a seconda di a che cosa sono collegato come relazione
-        $l = app(GetUserExtraFieldsDataByGroupId::class)->execute($this->extra_field_group_id, $user_id, $model_type);
+        // $l = app(GetUserExtraFieldsDataByGroupId::class)->execute($this->extra_field_group_id, $user_id, $this->model_type, $this->model_id);
+
+        $l = app(GetArrayByModelTypeModelId::class)->execute($this->model_type, $this->model_id, $user_id);
 
         return $l;
     }
