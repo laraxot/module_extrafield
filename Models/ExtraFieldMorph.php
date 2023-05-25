@@ -97,8 +97,6 @@ class ExtraFieldMorph extends BaseMorphPivot
 
     /**
      * Undocumented function.
-     *
-     * @return mixed
      */
     public function userValue(string $user_id)
     {
@@ -123,8 +121,6 @@ class ExtraFieldMorph extends BaseMorphPivot
 
     /**
      * Undocumented function.
-     *
-     * @param mixed $value
      */
     public function updateUserValue(string $user_id, $value): self
     {
@@ -143,10 +139,8 @@ class ExtraFieldMorph extends BaseMorphPivot
 
     /**
      * Undocumented function.
-     *
-     * @param mixed $value
      */
-    public function createUserValue(string $user_id, $value, ?string $uuid = null): self
+    public function createUserValue(string $user_id, $value, string $uuid = null): self
     {
         $row = ExtraFieldMorph::create([
             'user_id' => (string) $user_id,

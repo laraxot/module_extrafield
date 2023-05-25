@@ -16,16 +16,11 @@ class ExtraFields extends Component
     public string $tpl = 'v1';
     public string $name;
     public array $groups;
-    /**
-     * @var mixed
-     */
+
     public $value;
 
     public HasExtraFieldsContract $model;
 
-    /**
-     * @param mixed $value
-     */
     public function mount(string $name, HasExtraFieldsContract $model, $value): void
     {
         $this->name = $name;

@@ -16,16 +16,11 @@ class ExtraFields extends Component
     public string $tpl = 'v1';
     public string $name;
     public array $groups;
-    /**
-     * @var mixed
-     */
+
     public $value;
 
     public Model $model;
 
-    /**
-     * @param mixed $group
-     */
     public function mount($group): void
     {
         dddx($group);

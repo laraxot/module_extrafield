@@ -20,7 +20,7 @@ trait HasExtraFieldGroups
 {
     use \Staudenmeir\EloquentHasManyDeep\HasRelationships;
 
-    public function userExtraFieldGroups(?string $user_id = null): MorphToMany
+    public function userExtraFieldGroups(string $user_id = null): MorphToMany
     {
         if ('' === $user_id) {
             $user_id = null;
@@ -57,7 +57,7 @@ trait HasExtraFieldGroups
         ;
     }
 
-    public function extraFieldsByUserId(?string $user_id = null): MorphToMany
+    public function extraFieldsByUserId(string $user_id = null): MorphToMany
     {
         if (null == $user_id) {
             $user_id = strval(Auth::id());

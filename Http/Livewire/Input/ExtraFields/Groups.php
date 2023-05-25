@@ -37,9 +37,7 @@ class Groups extends Component
     public string $name;
     public array $groups;
     public array $form_data = [];
-    /**
-     * @var mixed
-     */
+
     public $value;
 
     public HasExtraFieldsContract $model;
@@ -47,9 +45,6 @@ class Groups extends Component
     // verificare o cambiare
     // public $rows;
 
-    /**
-     * @param mixed $value
-     */
     public function mount(string $name, HasExtraFieldsContract $model, $value, string $tpl = 'v1'): void
     {
         // dddx([$name, $model, $value]);

@@ -21,7 +21,7 @@ class Create
      *
      * @return void
      */
-    public function execute(Model $model, string $extra_field_group_id, string $user_id, array $form_data, ?string $uuid = null, ?bool $verified = false)
+    public function execute(Model $model, string $extra_field_group_id, string $user_id, array $form_data, string $uuid = null, ?bool $verified = false)
     {
         $morph_map = [
             'extra_field' => 'Modules\ExtraField\Models\ExtraField',

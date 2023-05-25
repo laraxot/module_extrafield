@@ -36,35 +36,35 @@ interface HasExtraFieldsContract extends ModelContract
 
     public function extraFieldGroups(): MorphToMany;
 
-    public function getFavouriteGroups(?string $cat_id = null): Collection;
+    public function getFavouriteGroups(string $cat_id = null): Collection;
 
     public function setFavouriteGroup(string $group_id, string $uuid): void;
 
-    public function updateUserExtraField(array $data, string $user_id, ?string $uuid = null): void;
+    public function updateUserExtraField(array $data, string $user_id, string $uuid = null): void;
 
     public function addExtraField(array $data, string $user_id, string $group_id, ?string $note = ''): void;
 
-    public function getProfileExtraFieldOptions(string $user_id, ?string $uuid = null): array;
+    public function getProfileExtraFieldOptions(string $user_id, string $uuid = null): array;
 
-    public function getProfileExtraFieldGroupsOptions(string $user_id, ?string $uuid = null): array;
+    public function getProfileExtraFieldGroupsOptions(string $user_id, string $uuid = null): array;
 
-    public function getUserExtraFieldValue(string $user_id, ?string $uuid = null): array;
+    public function getUserExtraFieldValue(string $user_id, string $uuid = null): array;
 
     public function getExtraFieldValue(): EloquentCollection;
 
     public function getExtraFieldRules(array $form_data): array;
 
-    public function getUserExtraFieldGroupsFormData(string $user_id, ?string $uuid = null): array;
+    public function getUserExtraFieldGroupsFormData(string $user_id, string $uuid = null): array;
 
-    public function getUserExtraFieldFormData(string $user_id, ?string $uuid = null): array;
+    public function getUserExtraFieldFormData(string $user_id, string $uuid = null): array;
 
-    public function addExtraFieldByGroup(array $data, string $user_id, ?string $uuid = null): void;
+    public function addExtraFieldByGroup(array $data, string $user_id, string $uuid = null): void;
 
     public function updateUserExtraFieldByGroupAndProfileFieldUuid(array $uuid_data, string $user_id): void;
 
-    public function updateUserExtraFieldByGroup(array $data, string $user_id, ?string $uuid = null): void;
+    public function updateUserExtraFieldByGroup(array $data, string $user_id, string $uuid = null): void;
 
-    public function updateUserExtraFieldByGroupTest(array $data, string $user_id, ?string $uuid = null): void;
+    public function updateUserExtraFieldByGroupTest(array $data, string $user_id, string $uuid = null): void;
 
     // public function consents(): HasMany;
 

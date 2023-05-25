@@ -44,7 +44,7 @@ class Verified extends Component
         $this->user_id = (string) Auth::id();
     }
 
-    public function getValuesList(?string $user_id = null)
+    public function getValuesList(string $user_id = null)
     {
         $l = app(GetUserExtraFieldsDataByGroupId::class)->execute($this->extra_field_group_id, $user_id, 'profile');
 

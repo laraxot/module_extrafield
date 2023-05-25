@@ -12,7 +12,7 @@ class GetUserExtraFieldsDataByGroupId
 {
     use QueueableAction;
 
-    public function execute(string $group_id, ?string $user_id, ?string $model_type = null, ?string $uuid = null): Collection
+    public function execute(string $group_id, ?string $user_id, string $model_type = null, string $uuid = null): Collection
     {
         $query = ExtraFieldGroupMorph::where(['extra_field_group_id' => $group_id, 'user_id' => $user_id])->with('fieldMorph');
 
