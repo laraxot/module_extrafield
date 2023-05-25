@@ -18,6 +18,9 @@
                                 @if ($group->pivot->favourite)
                                     <i class="bi bi-suit-heart-fill"></i>
                                 @else
+                                    @if ($group->pivot->verified_at != null)
+                                        <i class="bi bi-shield mr-4"></i>
+                                    @endif
                                     <i class="bi bi-suit-heart"></i>
                                 @endif
                             </a>
@@ -48,7 +51,8 @@
             </div>
         @endforeach
 
-        <x-button wire:click="edit('{{ $group->pivot->uuid }}')">Edit</x-button>
+        <x-button wire:click="edit('{{ $group->pivot->uuid }}','{{ $group->can_verified }}','{{ $group->id }}')">Edit
+        </x-button>
         <x-button wire:click="delete('{{ $group->pivot->uuid }}')" class="btn btn-danger">Delete</x-button>
     </x-slot>
 </x-std>

@@ -11,7 +11,6 @@ use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Notification;
 use Livewire\Component;
 use Modules\Cms\Actions\GetViewAction;
-use Modules\ExtraField\Actions\ExtraFieldGroup\GetArrayByModelTypeModelId;
 use Modules\ExtraField\Actions\GetUserExtraFieldsDataByGroupId;
 use Modules\ExtraField\Models\ExtraFieldGroup;
 use Modules\ExtraField\Models\ExtraFieldGroupMorph;
@@ -32,7 +31,7 @@ class Verified extends Component
 
     protected $listeners = [
         'refreshComponent' => '$refresh',
-        'updatedFormDataVerified' => 'updatedFormData',
+        'updatedFormDataVerified' => 'updateFormData',
     ];
 
     public function mount(string $model_type, string $model_id, bool $can_verified, string $extra_field_group_id, string $tpl = 'v1'): void
@@ -45,14 +44,9 @@ class Verified extends Component
         $this->user_id = (string) Auth::id();
     }
 
-    public function getUnverifieds(?string $user_id = null)
+    public function getValuesList(?string $user_id = null)
     {
-        // dddx([$this->extra_field_group_id, $user_id, $this->model_type, $this->model_id]);
-
-        // TO-DO: dopo service andrà modificato con profile a seconda di a che cosa sono collegato come relazione
-        $l = app(GetUserExtraFieldsDataByGroupId::class)->execute($this->extra_field_group_id, $user_id, $this->model_type);
-
-        // $l = app(GetArrayByModelTypeModelId::class)->execute($this->model_type, $this->model_id, $user_id);
+        $l = app(GetUserExtraFieldsDataByGroupId::class)->execute($this->extra_field_group_id, $user_id, 'profile');
 
         return $l;
     }
@@ -66,8 +60,11 @@ class Verified extends Component
     {
         $group = ExtraFieldGroup::find($this->extra_field_group_id);
         $group_morph = ExtraFieldGroupMorph::find($group_morph_id);
-        $group_morph_null = $this->getUnverifieds(null, 'service')->first();
-        $notification_channel = $group_morph_null->verified_by ?? $group->verified_by;
+        $group_morph_null = $this->getValuesList(null, 'service')->first();
+        $notification_channel = $group_morph_null->verified_by;
+        if (empty($notification_channel)) {
+            $notification_channel = $group->verified_by;
+        }
         $address = $group_morph->value[$group->name];
 
         $token = strval(rand(10000, 99999));
@@ -76,6 +73,7 @@ class Verified extends Component
             Notification::route($notification_channel, $address)->notify(new SmsNotification('', 'Verify Sms', 'Verification Code: '.$token));
         } else {
             $from = config('mail.from.address');
+            // dd([$notification_channel, $address, $from, $token, $group_morph_null, $group]);
             Notification::route($notification_channel, $address)->notify(new HtmlNotification($from, 'Verifica Account', '<h1>Verification Code</h1><h3>'.$token.'</h3>'));
         }
 
@@ -105,8 +103,11 @@ class Verified extends Component
         $this->emit('refreshComponent');
     }
 
-    public function updatedFormData($data)
+    public function updateFormData($data)
     {
+        if (! is_array($data)) {
+            dd($data);
+        }
         $this->form_data = array_merge($this->form_data, $data);
 
         // dddx($this->form_data);

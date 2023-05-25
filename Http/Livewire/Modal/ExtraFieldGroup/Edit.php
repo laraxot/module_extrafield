@@ -22,17 +22,21 @@ class Edit extends Modal
     public string $user_id;
     public array $fields = [];
     public HasExtraFieldGroupsContract $model;
+    public bool $can_verified;
+    public string $extra_field_group_id;
 
     /**
      * @var array<string, string>
      */
     protected $listeners = ['updateFormData' => 'updateFormData'];
 
-    public function mount(string $uuid, string $model_type, string $model_id): void
+    public function mount(string $uuid, string $model_type, string $model_id, bool $can_verified, string $extra_field_group_id): void
     {
         $this->uuid = $uuid;
         $this->model_type = $model_type;
         $this->model_id = $model_id;
+        $this->can_verified = $can_verified;
+        $this->extra_field_group_id = $extra_field_group_id;
         $this->user_id = strval(Auth::id());
         $fields_data = app(Actions\ExtraFieldGroup\GetFieldCollByUuidModelTypeModelId::class)->execute($uuid, $model_type, $model_id);
 
@@ -99,6 +103,17 @@ class Edit extends Modal
     public function updateFormData(array $data): void
     {
         $this->form_data = array_merge($this->form_data, $data);
+    }
+
+    public function updated($name, $value)
+    {
+        $this->emit('updatedFormDataVerified', $this->form_data);
+    }
+
+    public function refresher()
+    {
+        $this->emit('refresh');
+        $this->close();
     }
 
     public static function behavior(): array

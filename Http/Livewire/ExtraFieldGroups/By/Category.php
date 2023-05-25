@@ -85,7 +85,7 @@ class Category extends Component
         $view_params = [
             'view' => $view,
             'categories' => $categories,
-            'groups' => $groups,
+            'groups' => $groups->sortBy('name'),
         ];
 
         return view($view, $view_params);
@@ -155,14 +155,16 @@ class Category extends Component
         $this->emit('modal.open', 'modal.extra-field-group.add', $parz);
     }
 
-    public function edit(string $uuid): void
+    public function edit(string $uuid, bool $can_verified, string $extra_field_group_id): void
     {
-        $parz = [
+        $params = [
             'uuid' => $uuid,
             'model_type' => $this->model_type,
             'model_id' => $this->model_id,
+            'can_verified' => $can_verified,
+            'extra_field_group_id' => $extra_field_group_id,
         ];
-        $this->emit('modal.open', 'modal.extra-field-group.edit', $parz);
+        $this->emit('modal.open', 'modal.extra-field-group.edit', $params);
     }
 
     public function getFieldsByGroup(ExtraFieldGroup $group): EloquentCollection

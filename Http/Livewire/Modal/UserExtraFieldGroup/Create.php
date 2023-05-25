@@ -21,7 +21,10 @@ class Create extends Modal
     public array $form_data = [];
     public array $fields_arr;
 
-    public function mount(string $extra_field_group_id, string $user_id, bool $can_verified): void
+    public string $model_type;
+    public string $model_id;
+
+    public function mount(string $extra_field_group_id, string $user_id, bool $can_verified, string $model_type, string $model_id): void
     {
         $this->extra_field_group_id = $extra_field_group_id;
         $this->user_id = $user_id;
@@ -31,6 +34,9 @@ class Create extends Modal
         $rows = $extra_field_group->fields;
         $fields = FieldData::collection($rows->all())->toArray();
         $this->fields_arr = $fields;
+
+        $this->model_type = $model_type;
+        $this->model_id = $model_id;
     }
 
     public static function getName(): string

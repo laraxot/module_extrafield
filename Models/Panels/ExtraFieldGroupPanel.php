@@ -91,6 +91,26 @@ class ExtraFieldGroupPanel extends XotBasePanel
                 'name' => 'categories',
                 'fields' => $this->infoCategories(),
             ],
+
+            // TO-DO: per aggiunta campi profilo. ne abbiamo parlato al telefono.
+            // se lo fai con la morph  avresti un settaggio diverso per ogni profile_id
+            // by davide
+            (object) [
+                'type' => 'CheckboxBoolean',
+                'name' => 'can_verified',
+                'comment' => null,
+            ],
+            (object) [
+                'type' => 'CheckboxBoolean',
+                'name' => 'cardinality',
+                'comment' => null,
+            ],
+            (object) [
+                'type' => 'Select',
+                'name' => 'verified_by',
+                'comment' => null,
+                'options' => ['mail' => 'mail', 'sms' => 'sms'],
+            ],
         ];
     }
 

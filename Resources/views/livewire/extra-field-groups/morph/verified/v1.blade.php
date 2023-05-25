@@ -13,13 +13,13 @@
             </tr>
 
 
-            @foreach ($this->getUnverifieds($this->user_id) as $unverified)
+            @foreach ($this->getValuesList($this->user_id) as $unverified)
                 {{-- <tr>
                     <td> {{ var_export($unverified->value, true) }} </td>
                 </tr> --}}
 
                 <tr>
-                    <td>{{ join(' ', $unverified->value) }}</td>
+                    <td>{{ $unverified->fieldMorph->value }}</td>
                     <td>
                         @if ($unverified->verified_at != null)
                             <i class="fa-solid fa-shield"></i>
@@ -27,6 +27,8 @@
                             <button wire:click="sendToken('{{ $unverified->id }}')" type="button"
                                 class="btn btn-success mt-3">Verifica</button>
                         @elseif ($unverified->token_sent_at != null && $this->diffDaysToNow($unverified->token_sent_at) < 1)
+                            {{-- <buttonwire:click="sendToken('$unverified->id')" type="button"
+                                class="btn btn-success mt-3">Re-invia</button> --}}
                             <div class="input-group mb-3">
                                 <input wire:model.lazy="form_data.token" type="text" class="form-control"
                                     placeholder="Inserisci Token" aria-label="Inserisci Token"

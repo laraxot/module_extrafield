@@ -4,14 +4,10 @@ declare(strict_types=1);
 
 namespace Modules\ExtraField\Models;
 
-use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\HasMany;
 use Illuminate\Database\Eloquent\Relations\MorphToMany;
 use Illuminate\Support\Facades\Auth;
 use Modules\Blog\Models\Traits\HasCategory;
-use Modules\LU\Services\ProfileService;
-use Modules\UI\Datas\FieldData;
-use Spatie\LaravelData\DataCollection;
 use Spatie\Translatable\HasTranslations;
 
 /**
@@ -85,6 +81,7 @@ class ExtraFieldGroup extends BaseModel
         'cardinality',
         'can_verified',
         'mandatory',
+        'verified_by',
     ];
 
     protected $with = [
@@ -136,32 +133,6 @@ class ExtraFieldGroup extends BaseModel
         ->where('user_id', $user_id);
     }
 
-    /* -- DEPRECATED
-     * @return DataCollection <FieldData>
-
-    public function fieldDataCollection(string $user_id, Model $model)
-    {
-        $profile = ProfileService::make()->setUserId($user_id)->getProfile();
-
-        $fields = $this->noUserFields
-            ->map(
-                function ($item) use ($profile, $model, $user_id) {
-                    $service_value = $model
-                        ->extraFieldsByUserId((string) $user_id)
-                        ->wherePivot('extra_field_id', $item->getKey())
-                        ->first();
-
-                    $profile_value = $profile->extraFieldsByUserId((string) $user_id)
-                        ->wherePivot('extra_field_id', $item->getKey())
-                        ->first();
-
-                    return $service_value ?? $profile_value ?? $item;
-                });
-
-        return $fields;
-    }
-    */
-
      /**
       * @param \Illuminate\Database\Eloquent\Builder $query
       * @param string                                $model_type
@@ -175,13 +146,4 @@ class ExtraFieldGroup extends BaseModel
              $q->where('model_type', $model_type)->where('model_id', null);
          }]);
      }
-
-     /*
-      * @return mixed
-      */
-     // public function userValue(string $user_id)
-    // {
-         // dddx(['a' => $this, 'pivot' => $this->pivot]);
-         // dddx(['fields' => $this->fields->first()->userValue($user_id)]);
-     // }
 }

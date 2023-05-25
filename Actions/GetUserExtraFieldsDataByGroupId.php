@@ -14,7 +14,7 @@ class GetUserExtraFieldsDataByGroupId
 
     public function execute(string $group_id, ?string $user_id, ?string $model_type = null, ?string $uuid = null): Collection
     {
-        $query = ExtraFieldGroupMorph::where(['extra_field_group_id' => $group_id, 'user_id' => $user_id]);
+        $query = ExtraFieldGroupMorph::where(['extra_field_group_id' => $group_id, 'user_id' => $user_id])->with('fieldMorph');
 
         if (null !== $model_type) {
             $query = $query->where('model_type', $model_type);

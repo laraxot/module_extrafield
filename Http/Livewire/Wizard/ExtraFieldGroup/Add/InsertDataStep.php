@@ -64,4 +64,17 @@ class InsertDataStep extends BaseStep
     {
         $this->emit('updatedFormDataVerified', $this->form_data);
     }
+
+    public function goNextStep(): void
+    {
+        if (true == $this->can_verified) {
+            $this->emit('refresh');
+            $this->emit('modal.close');
+
+            return;
+        }
+
+        $this->validate();
+        $this->nextStep();
+    }
 }

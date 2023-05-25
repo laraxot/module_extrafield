@@ -157,4 +157,9 @@ class ExtraFieldGroupMorph extends BaseMorphPivot
     {
         return $this->belongsTo(ExtraFieldGroup::class);
     }
+
+    public function fieldMorph(): BelongsTo
+    {
+        return $this->belongsTo(ExtraFieldMorph::class, 'uuid', 'uuid');
+    }
 }
