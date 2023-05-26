@@ -56,6 +56,11 @@ class GetArrayByModelTypeModelId
                 $group = $item;
                 $item = GroupData::from($item);
 
+                $can_verified = $group->pivot->can_verified;
+                if (empty($can_verified)) {
+                    $can_verified = $group->can_verified;
+                }
+
                 return [
                     'id' => $group->id,
                     'name' => $group->name,
@@ -63,7 +68,7 @@ class GetArrayByModelTypeModelId
                     'value' => $group->pivot->value,
                     'uuid' => $group->pivot->uuid,
                     // gruppo con user_id null per i settaggi
-                    'can_verified' => $group->pivot->can_verified ?? $group->can_verified,
+                    'can_verified' => $can_verified,
                 ];
             }
         );
@@ -109,7 +114,10 @@ class GetArrayByModelTypeModelId
             foreach ($profile_fields as $field) {
                 $field_uuid = $field->pivot->uuid;
 
-                $can_verified = $group->pivot->can_verified ?? $group->can_verified;
+                $can_verified = $group->pivot->can_verified;
+                if (empty($can_verified)) {
+                    $can_verified = $group->can_verified;
+                }
 
                 if (
                     true != $can_verified || (true == $can_verified && null != $field->pivot->groupMorph && null != $field->pivot->groupMorph->verified_at)

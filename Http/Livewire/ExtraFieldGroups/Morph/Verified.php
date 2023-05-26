@@ -118,6 +118,8 @@ class Verified extends Component
         $xot = XotData::make();
         $profile = $xot->getProfileModelByUserId($this->user_id);
 
+        // TO-DO: se non è verificato controlla nel proprio user id. se è verificato controlla in tutti gli utenti.
+        // se verifichi la cancelli agli account altrui
         $existing = ExtraFieldGroupMorph::where(['user_id' => $this->user_id, 'value' => json_encode($this->form_data)])->get();
         if (true == $existing->isEmpty()) {
             app(\Modules\ExtraField\Actions\ExtraFieldGroup\Create::class)

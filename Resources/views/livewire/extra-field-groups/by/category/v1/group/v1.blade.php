@@ -15,12 +15,13 @@
                     <div class="row">
                         <div class="col-6">
                             <a href="#" wire:click="toggleFavourite('{{ $group->pivot->uuid }}')">
+                                @if ($group->pivot->verified_at != null)
+                                    <i class="bi bi-shield mr-4"></i>
+                                @endif
+
                                 @if ($group->pivot->favourite)
                                     <i class="bi bi-suit-heart-fill"></i>
                                 @else
-                                    @if ($group->pivot->verified_at != null)
-                                        <i class="bi bi-shield mr-4"></i>
-                                    @endif
                                     <i class="bi bi-suit-heart"></i>
                                 @endif
                             </a>
@@ -42,7 +43,7 @@
         @foreach ($fields ?? [] as $field)
             <div class="row">
                 <div class="col-md-9 mb-2">
-                    <p>{{ $field->name }} : {{ $field->pivot->value }}
+                    <p>{{ $field->name }}: {{ $field->pivot->value }}
                     </p>
                 </div>
 
