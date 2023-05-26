@@ -98,7 +98,6 @@ class GetArrayByModelTypeModelId
         return $model;
     }
 
-    // TO-DO: fare meglio perchè così fa un po schifo, anche se credo che sia meglio prendere i dati dai group morph che da field morph
     public function getOptions(ExtraFieldGroup $group, EloquentCollection $profile_extra_fields): array
     {
         $values = [];
