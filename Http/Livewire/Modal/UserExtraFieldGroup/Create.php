@@ -80,7 +80,11 @@ class Create extends Modal
 
         session()->flash('message', 'saved !');
 
+        $this->emit('refreshComponent');
+
         $this->emit('modal.close');
+
+        dddx('refreshed');
         // qui bisognerebbe ricaricare/richiamare lo step InsertData
         // $this->showStep('insert-data');
     }
