@@ -9,8 +9,7 @@ use Modules\Blog\Models\Category;
 use Modules\ExtraField\Models\ExtraFieldGroup;
 use Spatie\QueueableAction\QueueableAction;
 
-class GetExtraFieldGroupCategoriesByModelTypeAction
-{
+class GetExtraFieldGroupCategoriesByModelTypeAction {
     use QueueableAction;
 
     /**
@@ -18,13 +17,14 @@ class GetExtraFieldGroupCategoriesByModelTypeAction
      *
      * @return Collection<Category>
      */
-    public function execute(string $model_type): Collection
-    {
+    public function execute(string $model_type): Collection {
         $categories = Category::ofType($model_type)
             ->ofType('extra_field_group')
-            // ->defaultOrder() //kelnoy ma non fa quello che vogliamo noi
+            // ->defaultOrder() //TO-DO: sarebbe da fare con kelnoy ma non fa quello che vogliamo noi
             ->ordered()
             ->get();
+
+        dddx($categories);
 
         $categories = $categories->map(
             function ($item) {
