@@ -19,7 +19,8 @@ use Modules\ExtraField\Models\ExtraFieldGroupMorph;
 use Modules\Wire\Concerns\InteractsWithConfirmationModal;
 use Modules\Xot\Actions\GetModelTypeByModelAction;
 
-class Category extends Component {
+class Category extends Component
+{
     use InteractsWithConfirmationModal;
 
     public string $user_id;
@@ -36,7 +37,8 @@ class Category extends Component {
      */
     protected $listeners = ['refresh' => '$refresh'];
 
-    public function mount(HasExtraFieldGroupsContract $model, string $tpl = 'v1'): void {
+    public function mount(HasExtraFieldGroupsContract $model, string $tpl = 'v1'): void
+    {
         $this->model = $model;
         /**
          * @var string $model_key
@@ -64,11 +66,13 @@ class Category extends Component {
         }
     }
 
-    public static function getName(): string {
+    public static function getName(): string
+    {
         return 'extra-field-groups.by.category';
     }
 
-    public function render(): Renderable {
+    public function render(): Renderable
+    {
         /**
          * @phpstan-var view-string
          */
@@ -92,7 +96,8 @@ class Category extends Component {
      *
      * @param Collection<CategoryModel> $categories
      */
-    public function getGroups(Collection $categories): Collection {
+    public function getGroups(Collection $categories): Collection
+    {
         if ('' == $this->cat_id) {
             $category_first = $categories->first();
 
@@ -115,7 +120,8 @@ class Category extends Component {
             ->execute($this->model, $this->user_id, $this->cat_id);
     }
 
-    public function showCat(string $cat_id): void {
+    public function showCat(string $cat_id): void
+    {
         $this->cat_id = $cat_id;
         $category = CategoryModel::find($cat_id);
         if (null == $category) {
@@ -129,7 +135,8 @@ class Category extends Component {
         $this->category_name = strval($category_name);
     }
 
-    public function toggleFavourite(string $uuid): void {
+    public function toggleFavourite(string $uuid): void
+    {
         $row = ExtraFieldGroupMorph::firstWhere(['uuid' => $uuid]);
         if (null == $row) {
             dddx(['row' => $row, 'uuid' => $uuid]);
@@ -138,7 +145,8 @@ class Category extends Component {
         $row->update(['favourite' => ! $row->favourite]);
     }
 
-    public function addGroup(): void {
+    public function addGroup(): void
+    {
         $parz = [
             'cat_id' => $this->cat_id,
             'model_type' => $this->model_type,
@@ -147,7 +155,8 @@ class Category extends Component {
         $this->emit('modal.open', 'modal.extra-field-group.add', $parz);
     }
 
-    public function edit(string $uuid, bool $can_verified, string $extra_field_group_id): void {
+    public function edit(string $uuid, bool $can_verified, string $extra_field_group_id): void
+    {
         $params = [
             'uuid' => $uuid,
             'model_type' => $this->model_type,
@@ -158,7 +167,8 @@ class Category extends Component {
         $this->emit('modal.open', 'modal.extra-field-group.edit', $params);
     }
 
-    public function getFieldsByGroup(ExtraFieldGroup $group): EloquentCollection {
+    public function getFieldsByGroup(ExtraFieldGroup $group): EloquentCollection
+    {
         $pivot = $group->getRelationValue('pivot');
         if (! $pivot instanceof ExtraFieldGroupMorph) {
             throw new \Exception('[][]');
@@ -172,7 +182,8 @@ class Category extends Component {
         return $fields;
     }
 
-    public function delete(string $uuid): void {
+    public function delete(string $uuid): void
+    {
         // prima di cancellare dovrei far uscire un modal
         // dove mi avverte che tot servizi/consensi verranno modificati
         app(Actions\ExtraFieldGroup\DeleteByUuid::class)->execute($uuid);
