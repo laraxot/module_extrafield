@@ -22,6 +22,9 @@ class GetByModelUserIdCategoryId
             ->wherePivot('uuid', '!=', '')
             ->get();
 
+        dddx(rowsToSql($model
+        ->extraFieldGroups()));
+
         return $res;
     }
 }
