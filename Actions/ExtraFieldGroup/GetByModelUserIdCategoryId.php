@@ -20,10 +20,10 @@ class GetByModelUserIdCategoryId {
             ->wherePivot('uuid', '!=', '')
             ->get();
 
-        dddx([$model, $model
+        /*dddx([$model, $model
         ->extraFieldGroups()
         ->wherePivot('user_id', $user_id)
-        ->get()]);
+        ->get()]);*/
 
         return $res;
     }

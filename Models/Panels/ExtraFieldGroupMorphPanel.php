@@ -89,26 +89,26 @@ class ExtraFieldGroupMorphPanel extends XotBasePanel {
                 'name' => 'model_type',
                 'comment' => null,
             ],
-            /* (object) [
-                 'type' => 'Integer',
-                 'name' => 'user_id',
-                 'comment' => null,
-            ],
-         (object) [
-                 'type' => 'Text',
-                 'name' => 'value',
+            (object) [
+                'type' => 'Integer',
+                'name' => 'user_id',
                 'comment' => null,
             ],
-         (object) [
-                 'type' => 'String',
+            (object) [
+                'type' => 'Text',
+                'name' => 'value',
+                'comment' => null,
+            ],
+            (object) [
+                'type' => 'String',
                 'name' => 'value_class',
-             'comment' => null,
-             ],
-             (object) [
-                 'type' => 'String',
-                 'name' => 'uuid',
                 'comment' => null,
-             ], */
+            ],
+            (object) [
+                'type' => 'String',
+                'name' => 'uuid',
+                'comment' => null,
+            ],
             (object) [
                 'type' => 'Integer',
                 'name' => 'cardinality',
