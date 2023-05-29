@@ -10,8 +10,7 @@ use Modules\ExtraField\Models\ExtraFieldGroup;
 use Modules\UI\Actions\GetStateDataAction;
 use Modules\UI\Http\Wizard\BaseStep;
 
-class InsertDataStep extends BaseStep
-{
+class InsertDataStep extends BaseStep {
     /**
      * @var array<string, string>
      */
@@ -23,8 +22,7 @@ class InsertDataStep extends BaseStep
     public string $model_type;
     public string $model_id;
 
-    public function mount(): void
-    {
+    public function mount(): void {
         $this->form_data = app(GetStateDataAction::class)->execute($this->state());
 
         $this->model_type = $this->form_data['model_type'];
@@ -41,32 +39,27 @@ class InsertDataStep extends BaseStep
         $this->initFormData();
     }
 
-    public function rules(): array
-    {
+    public function rules(): array {
         $rules = app(Actions\ExtraFieldGroup\GetRulesByGroupId::class)->execute($this->form_data['group_id'], 'form_data.');
 
         return $rules;
     }
 
-    public function initFormData(): void
-    {
+    public function initFormData(): void {
         foreach ($this->fields as $field) {
             $this->form_data[$field['name']] = $field['value'] ?? '';
         }
     }
 
-    public function updateFormData(array $data): void
-    {
+    public function updateFormData(array $data): void {
         $this->form_data = array_merge($this->form_data, $data);
     }
 
-    public function updated($name, $value)
-    {
+    public function updated($name, $value) {
         $this->emit('updatedFormDataVerified', $this->form_data);
     }
 
-    public function goNextStep(): void
-    {
+    public function goNextStep(): void {
         if (true == $this->can_verified) {
             $this->emit('refresh');
             $this->emit('modal.close');

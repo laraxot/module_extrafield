@@ -1,3 +1,4 @@
+<x-flash-message />
 <x-std tpl="accordion.container">
     <x-slot name="id">{{ $group->pivot->uuid }}</x-slot>
     <x-slot name="header">

@@ -11,6 +11,7 @@ use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Notification;
 use Livewire\Component;
 use Modules\Cms\Actions\GetViewAction;
+use Modules\ExtraField\Actions\ExtraFieldGroup\GetRulesByGroupId;
 use Modules\ExtraField\Actions\GetUserExtraFieldsDataByGroupId;
 use Modules\ExtraField\Models\ExtraFieldGroup;
 use Modules\ExtraField\Models\ExtraFieldGroupMorph;
@@ -18,8 +19,7 @@ use Modules\Notify\Notifications\HtmlNotification;
 use Modules\Notify\Notifications\SmsNotification;
 use Modules\Xot\Datas\XotData;
 
-class Verified extends Component
-{
+class Verified extends Component {
     public string $tpl;
     public bool $can_verified;
     public Collection $unverifieds;
@@ -34,8 +34,7 @@ class Verified extends Component
         'updatedFormDataVerified' => 'updateFormData',
     ];
 
-    public function mount(string $model_type, string $model_id, bool $can_verified, string $extra_field_group_id, string $tpl = 'v1'): void
-    {
+    public function mount(string $model_type, string $model_id, bool $can_verified, string $extra_field_group_id, string $tpl = 'v1'): void {
         $this->can_verified = $can_verified;
         $this->extra_field_group_id = $extra_field_group_id;
         $this->tpl = $tpl;
@@ -44,28 +43,28 @@ class Verified extends Component
         $this->user_id = (string) Auth::id();
     }
 
-    public function getValuesList(string $user_id = null)
-    {
+    public function getValuesList(string $user_id = null) {
         $l = app(GetUserExtraFieldsDataByGroupId::class)->execute($this->extra_field_group_id, $user_id, 'profile');
 
         return $l;
     }
 
-    public static function getName(): string
-    {
+    public static function getName(): string {
         return 'extra-field-groups.morph.verified';
     }
 
-    public function sendToken(string $group_morph_id)
-    {
+    public function sendToken(string $group_morph_id) {
         $group = ExtraFieldGroup::find($this->extra_field_group_id);
         $group_morph = ExtraFieldGroupMorph::find($group_morph_id);
-        $group_morph_null = $this->getValuesList(null, 'service')->first();
-        $notification_channel = $group_morph_null->verified_by;
+        $group_morph_null = $this->getValuesList(null)->first();
+        $notification_channel = null;
+        if (! empty($group_morph_null)) {
+            $notification_channel = $group_morph_null->verified_by;
+        }
         if (empty($notification_channel)) {
             $notification_channel = $group->verified_by;
         }
-        $address = $group_morph->value[$group->name];
+        $address = $group_morph->fieldMorph->value;
 
         $token = strval(rand(10000, 99999));
 
@@ -84,8 +83,7 @@ class Verified extends Component
         $this->emit('refreshComponent');
     }
 
-    public function verifyToken(string $group_morph_id)
-    {
+    public function verifyToken(string $group_morph_id) {
         $group_morph = ExtraFieldGroupMorph::find($group_morph_id);
 
         if ($group_morph->token == $this->form_data['token']) {
@@ -103,18 +101,24 @@ class Verified extends Component
         $this->emit('refreshComponent');
     }
 
-    public function updateFormData($data)
-    {
+    public function updateFormData($data) {
         if (! is_array($data)) {
             dd($data);
         }
         $this->form_data = array_merge($this->form_data, $data);
-
-        // dddx($this->form_data);
     }
 
-    public function addToList()
-    {
+    public function rules(): array {
+        $rules = app(GetRulesByGroupId::class)->execute($this->extra_field_group_id, 'form_data.');
+
+        $convertedRules = app(GetRulesByGroupId::class)->convert($rules);
+
+        return $convertedRules;
+    }
+
+    public function addToList() {
+        $this->validate($this->rules());
+
         $xot = XotData::make();
         $profile = $xot->getProfileModelByUserId($this->user_id);
 
@@ -124,20 +128,20 @@ class Verified extends Component
         if (true == $existing->isEmpty()) {
             app(\Modules\ExtraField\Actions\ExtraFieldGroup\Create::class)
                 ->execute($profile, $this->extra_field_group_id, $this->user_id, $this->form_data);
+        } else {
+            dd([json_encode($this->form_data), 'value is still existing']);
         }
         $this->form_data = [];
     }
 
-    public function diffDaysToNow(string $date)
-    {
+    public function diffDaysToNow(string $date) {
         $date = Carbon::parse($date);
         $now = Carbon::now();
 
         return $date->diffInDays($now);
     }
 
-    public function render(): Renderable
-    {
+    public function render(): Renderable {
         /**
          * @phpstan-var view-string
          */

@@ -27,8 +27,6 @@
                             <button wire:click="sendToken('{{ $unverified->id }}')" type="button"
                                 class="btn btn-success mt-3">Verifica</button>
                         @elseif ($unverified->token_sent_at != null && $this->diffDaysToNow($unverified->token_sent_at) < 1)
-                            {{-- <buttonwire:click="sendToken('$unverified->id')" type="button"
-                                class="btn btn-success mt-3">Re-invia</button> --}}
                             <div class="input-group mb-3">
                                 <input wire:model.lazy="form_data.token" type="text" class="form-control"
                                     placeholder="Inserisci Token" aria-label="Inserisci Token"

@@ -11,8 +11,7 @@ use Modules\UI\Datas\FieldData;
 use Modules\Wire\View\Components\Modal\Modal;
 use Modules\Xot\Datas\XotData;
 
-class Create extends Modal
-{
+class Create extends Modal {
     public string $tpl = 'v1';
     public string $extra_field_group_id;
     public string $user_id;
@@ -24,8 +23,7 @@ class Create extends Modal
     public string $model_type;
     public string $model_id;
 
-    public function mount(string $extra_field_group_id, string $user_id, bool $can_verified, string $model_type, string $model_id): void
-    {
+    public function mount(string $extra_field_group_id, string $user_id, bool $can_verified, string $model_type, string $model_id): void {
         $this->extra_field_group_id = $extra_field_group_id;
         $this->user_id = $user_id;
         $this->can_verified = $can_verified;
@@ -39,13 +37,11 @@ class Create extends Modal
         $this->model_id = $model_id;
     }
 
-    public static function getName(): string
-    {
+    public static function getName(): string {
         return 'modal.user-extra-field-group.create';
     }
 
-    public function render(): Renderable
-    {
+    public function render(): Renderable {
         $fields = FieldData::collection($this->fields_arr);
 
         /**
@@ -61,8 +57,7 @@ class Create extends Modal
         return view($view, $view_params);
     }
 
-    public function updated($name, $value)
-    {
+    public function updated($name, $value) {
         $this->emit('updatedFormDataVerified', $this->form_data);
     }
 
@@ -71,8 +66,7 @@ class Create extends Modal
      *
      * @return void
      */
-    public function save()
-    {
+    public function save() {
         $xot = XotData::make();
         $profile = $xot->getProfileModelByUserId($this->user_id);
         app(\Modules\ExtraField\Actions\ExtraFieldGroup\Create::class)
@@ -89,8 +83,7 @@ class Create extends Modal
         // $this->showStep('insert-data');
     }
 
-    public static function behavior(): array
-    {
+    public static function behavior(): array {
         return [
             // Close the modal if the escape key is pressed
             'close-on-escape' => true,
@@ -103,8 +96,7 @@ class Create extends Modal
         ];
     }
 
-    public static function attributes(): array
-    {
+    public static function attributes(): array {
         return [
             // Set the modal size to 2xl, you can choose between:
             // xs, sm, md, lg, xl, 2xl, 3xl, 4xl, 5xl, 6xl, 7xl

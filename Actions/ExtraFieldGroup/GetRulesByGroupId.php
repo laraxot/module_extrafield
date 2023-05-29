@@ -9,15 +9,13 @@ use Illuminate\Support\Arr;
 use Modules\ExtraField\Models\ExtraFieldGroup;
 use Spatie\QueueableAction\QueueableAction;
 
-class GetRulesByGroupId
-{
+class GetRulesByGroupId {
     use QueueableAction;
 
     /**
      * Undocumented function.
      */
-    public function execute(string $group_id, string $prefix = ''): array
-    {
+    public function execute(string $group_id, string $prefix = ''): array {
         $morph_map = [
             'extra_field' => 'Modules\ExtraField\Models\ExtraField',
         ];
@@ -42,5 +40,20 @@ class GetRulesByGroupId
         $rules = Arr::prependKeysWith($rules, $prefix);
 
         return $rules;
+    }
+
+    public function convert(array $executed) {
+        $r = [];
+        foreach ($executed as $field_name => $rules) {
+            foreach ($rules as $name => $rule) {
+                if (isset($rule['checked']) && true == $rule['checked']) {
+                    $r[$field_name][] = $name;
+                }
+            }
+            $r[$field_name] = join('|', $r[$field_name]);
+        }
+        // dddx($r);
+
+        return $r;
     }
 }
