@@ -19,7 +19,8 @@ use Modules\Notify\Notifications\HtmlNotification;
 use Modules\Notify\Notifications\SmsNotification;
 use Modules\Xot\Datas\XotData;
 
-class Verified extends Component {
+class Verified extends Component
+{
     public string $tpl;
     public bool $can_verified;
     public Collection $unverifieds;
@@ -34,7 +35,8 @@ class Verified extends Component {
         'updatedFormDataVerified' => 'updateFormData',
     ];
 
-    public function mount(string $model_type, string $model_id, bool $can_verified, string $extra_field_group_id, string $tpl = 'v1'): void {
+    public function mount(string $model_type, string $model_id, bool $can_verified, string $extra_field_group_id, string $tpl = 'v1'): void
+    {
         $this->can_verified = $can_verified;
         $this->extra_field_group_id = $extra_field_group_id;
         $this->tpl = $tpl;
@@ -43,17 +45,20 @@ class Verified extends Component {
         $this->user_id = (string) Auth::id();
     }
 
-    public function getValuesList(string $user_id = null) {
+    public function getValuesList(string $user_id = null)
+    {
         $l = app(GetUserExtraFieldsDataByGroupId::class)->execute($this->extra_field_group_id, $user_id, 'profile');
 
         return $l;
     }
 
-    public static function getName(): string {
+    public static function getName(): string
+    {
         return 'extra-field-groups.morph.verified';
     }
 
-    public function sendToken(string $group_morph_id) {
+    public function sendToken(string $group_morph_id)
+    {
         $group = ExtraFieldGroup::find($this->extra_field_group_id);
         $group_morph = ExtraFieldGroupMorph::find($group_morph_id);
         $group_morph_null = $this->getValuesList(null)->first();
@@ -83,7 +88,8 @@ class Verified extends Component {
         $this->emit('refresh');
     }
 
-    public function verifyToken(string $group_morph_id) {
+    public function verifyToken(string $group_morph_id)
+    {
         $group_morph = ExtraFieldGroupMorph::find($group_morph_id);
 
         if ($group_morph->token == $this->form_data['token']) {
@@ -101,14 +107,16 @@ class Verified extends Component {
         $this->emit('refresh');
     }
 
-    public function updateFormData($data) {
+    public function updateFormData($data)
+    {
         if (! is_array($data)) {
             dd($data);
         }
         $this->form_data = array_merge($this->form_data, $data);
     }
 
-    public function rules(): array {
+    public function rules(): array
+    {
         $rules = app(GetRulesByGroupId::class)->execute($this->extra_field_group_id, 'form_data.');
 
         $convertedRules = app(GetRulesByGroupId::class)->convert($rules);
@@ -116,7 +124,8 @@ class Verified extends Component {
         return $convertedRules;
     }
 
-    public function addToList() {
+    public function addToList()
+    {
         // TO-DO: controllare. non deve validare se le rules sono vuote
         if (! empty($this->rules())) {
             $this->validate($this->rules());
@@ -137,14 +146,16 @@ class Verified extends Component {
         $this->form_data = [];
     }
 
-    public function diffDaysToNow(string $date) {
+    public function diffDaysToNow(string $date)
+    {
         $date = Carbon::parse($date);
         $now = Carbon::now();
 
         return $date->diffInDays($now);
     }
 
-    public function render(): Renderable {
+    public function render(): Renderable
+    {
         /**
          * @phpstan-var view-string
          */

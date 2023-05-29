@@ -14,7 +14,8 @@ use Modules\UI\Datas\FieldData;
 use Modules\Wire\View\Components\Modal\Modal;
 use Modules\Xot\Actions\GetModelByModelTypeAction;
 
-class Edit extends Modal {
+class Edit extends Modal
+{
     public array $form_data = [];
     public string $uuid;
     public string $model_type;
@@ -30,7 +31,8 @@ class Edit extends Modal {
      */
     protected $listeners = ['updateFormData' => 'updateFormData'];
 
-    public function mount(string $uuid, string $model_type, string $model_id, bool $can_verified, string $extra_field_group_id): void {
+    public function mount(string $uuid, string $model_type, string $model_id, bool $can_verified, string $extra_field_group_id): void
+    {
         $this->uuid = $uuid;
         $this->model_type = $model_type;
         $this->model_id = $model_id;
@@ -47,7 +49,8 @@ class Edit extends Modal {
         $this->fields = $fields_data->toArray();
     }
 
-    public function getModel(): HasExtraFieldGroupsContract {
+    public function getModel(): HasExtraFieldGroupsContract
+    {
         $model = app(GetModelByModelTypeAction::class)->execute($this->model_type, $this->model_id);
         if (! $model instanceof HasExtraFieldGroupsContract) {
             throw new \Exception('add on class ['.get_class($model).'] implements HasExtraFieldGroupsContract');
@@ -56,11 +59,13 @@ class Edit extends Modal {
         return $model;
     }
 
-    public function toFieldData(array $field): FieldData {
+    public function toFieldData(array $field): FieldData
+    {
         return FieldData::from($field);
     }
 
-    public function render(): Renderable {
+    public function render(): Renderable
+    {
         /**
          * @phpstan-var view-string
          */
@@ -73,11 +78,13 @@ class Edit extends Modal {
         return view($view, $view_params);
     }
 
-    public static function getName(): string {
+    public static function getName(): string
+    {
         return 'modal.extra-field-group.edit';
     }
 
-    public function rules(): array {
+    public function rules(): array
+    {
         $rules = app(GetRulesByGroupId::class)->execute($this->extra_field_group_id, 'form_data.');
 
         $convertedRules = app(GetRulesByGroupId::class)->convert($rules);
@@ -85,7 +92,8 @@ class Edit extends Modal {
         return $convertedRules;
     }
 
-    public function save(): void {
+    public function save(): void
+    {
         /**
          * @var string $group_id
          */
@@ -103,20 +111,24 @@ class Edit extends Modal {
         $this->close();
     }
 
-    public function updateFormData(array $data): void {
+    public function updateFormData(array $data): void
+    {
         $this->form_data = array_merge($this->form_data, $data);
     }
 
-    public function updated($name, $value) {
+    public function updated($name, $value)
+    {
         $this->emit('updatedFormDataVerified', $this->form_data);
     }
 
-    public function refresher() {
+    public function refresher()
+    {
         $this->emit('refresh');
         $this->close();
     }
 
-    public static function behavior(): array {
+    public static function behavior(): array
+    {
         return [
             // Close the modal if the escape key is pressed
             'close-on-escape' => true,
@@ -129,7 +141,8 @@ class Edit extends Modal {
         ];
     }
 
-    public static function attributes(): array {
+    public static function attributes(): array
+    {
         return [
             // Set the modal size to 2xl, you can choose between:
             // xs, sm, md, lg, xl, 2xl, 3xl, 4xl, 5xl, 6xl, 7xl
