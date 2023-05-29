@@ -30,7 +30,7 @@ class Verified extends Component {
     public string $model_id;
 
     protected $listeners = [
-        'refreshComponent' => '$refresh',
+        'refresh' => '$refresh',
         'updatedFormDataVerified' => 'updateFormData',
     ];
 
@@ -80,7 +80,7 @@ class Verified extends Component {
 
         session()->flash('Token Inviato');
 
-        $this->emit('refreshComponent');
+        $this->emit('refresh');
     }
 
     public function verifyToken(string $group_morph_id) {
@@ -98,7 +98,7 @@ class Verified extends Component {
             session()->flash('Token Errato');
         }
 
-        $this->emit('refreshComponent');
+        $this->emit('refresh');
     }
 
     public function updateFormData($data) {

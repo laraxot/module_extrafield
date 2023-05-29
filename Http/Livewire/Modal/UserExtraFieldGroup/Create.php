@@ -74,7 +74,7 @@ class Create extends Modal {
 
         session()->flash('message', 'saved !');
 
-        $this->emit('refreshComponent');
+        $this->emit('refresh');
 
         $this->emit('modal.close');
 
