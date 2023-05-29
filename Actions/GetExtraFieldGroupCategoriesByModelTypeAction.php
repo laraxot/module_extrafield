@@ -26,8 +26,6 @@ class GetExtraFieldGroupCategoriesByModelTypeAction
             ->ordered()
             ->get();
 
-        dddx($categories);
-
         $categories = $categories->map(
             function ($item) {
                 $item->setAttribute('e_counts', $item->entries(ExtraFieldGroup::class)->count());
