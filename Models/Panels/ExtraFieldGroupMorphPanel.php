@@ -89,7 +89,7 @@ class ExtraFieldGroupMorphPanel extends XotBasePanel {
                 'name' => 'model_type',
                 'comment' => null,
             ],
-            (object) [
+            /*(object) [
                 'type' => 'Integer',
                 'name' => 'user_id',
                 'comment' => null,
@@ -108,7 +108,7 @@ class ExtraFieldGroupMorphPanel extends XotBasePanel {
                 'type' => 'String',
                 'name' => 'uuid',
                 'comment' => null,
-            ],
+            ],*/
             (object) [
                 'type' => 'Integer',
                 'name' => 'cardinality',
