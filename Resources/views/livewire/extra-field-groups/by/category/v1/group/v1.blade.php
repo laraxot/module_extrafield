@@ -6,9 +6,10 @@
             <div class="row">
                 <div class="col-10">
                     <h5>
-                        {{ Str::ucfirst($group->name) }}
                         @if ($group->pivot->note !== null && $group->pivot->note !== '')
-                            - {{ Str::ucfirst($group->pivot->note) }}
+                            {{ Str::ucfirst($group->pivot->note) }}
+                        @else
+                            {{ Str::ucfirst($group->name) }}
                         @endif
                     </h5>
                 </div>
