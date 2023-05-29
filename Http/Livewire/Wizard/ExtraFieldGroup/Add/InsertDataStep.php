@@ -6,6 +6,7 @@ namespace Modules\ExtraField\Http\Livewire\Wizard\ExtraFieldGroup\Add;
 
 // use Modules\PFed\Models\Data;
 use Modules\ExtraField\Actions;
+use Modules\ExtraField\Actions\ExtraFieldGroup\GetRulesByGroupId;
 use Modules\ExtraField\Models\ExtraFieldGroup;
 use Modules\UI\Actions\GetStateDataAction;
 use Modules\UI\Http\Wizard\BaseStep;
@@ -40,9 +41,11 @@ class InsertDataStep extends BaseStep {
     }
 
     public function rules(): array {
-        $rules = app(Actions\ExtraFieldGroup\GetRulesByGroupId::class)->execute($this->form_data['group_id'], 'form_data.');
+        $rules = app(GetRulesByGroupId::class)->execute($this->extra_field_group_id, 'form_data.');
 
-        return $rules;
+        $convertedRules = app(GetRulesByGroupId::class)->convert($rules);
+
+        return $convertedRules;
     }
 
     public function initFormData(): void {
@@ -67,7 +70,11 @@ class InsertDataStep extends BaseStep {
             return;
         }
 
-        $this->validate();
+        // TO-DO: controllare. non deve validare se le rules sono vuote
+        if (! empty($this->rules())) {
+            $this->validate($this->rules());
+        }
+
         $this->nextStep();
     }
 }

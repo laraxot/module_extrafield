@@ -78,7 +78,7 @@ class Create extends Modal {
 
         $this->emit('modal.close');
 
-        dddx('refreshed');
+       
         // qui bisognerebbe ricaricare/richiamare lo step InsertData
         // $this->showStep('insert-data');
     }

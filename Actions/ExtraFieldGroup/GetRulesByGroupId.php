@@ -48,10 +48,46 @@ class GetRulesByGroupId {
             foreach ($rules as $name => $rule) {
                 if (isset($rule['checked']) && true == $rule['checked']) {
                     $r[$field_name][] = $name;
+                    continue;
+                }
+                if (! empty($rule['value'])) {
+                    $r[$field_name][] = $name.':'.$rule['value'];
+                    continue;
+                }
+                if (! empty($rule['charset'])) {
+                    $r[$field_name][] = $name.':'.$rule['charset'];
+                    continue;
+                }
+                if (! empty($rule['date'])) {
+                    $r[$field_name][] = $name.':'.$rule['date'];
+                    continue;
+                }
+                if (! empty($rule['pattern'])) {
+                    $r[$field_name][] = $name.':'.$rule['pattern'];
+                    continue;
+                }
+                if (! empty($rule['field'])) {
+                    $r[$field_name][] = $name.':'.$rule['field'];
+                    continue;
+                }
+                if (! empty($rule['values'])) {
+                    $r[$field_name][] = $name.':'.$rule['values'];
+                    continue;
+                }
+                if (! empty($rule['min']) && ! empty($rule['max'])) {
+                    $r[$field_name][] = $name.':'.$rule['min'].','.$rule['max'];
+                    continue;
+                }
+                if (! empty($rule['table']) && ! empty($rule['column'])) {
+                    $r[$field_name][] = $name.':'.$rule['table'].','.$rule['column'];
+                    continue;
                 }
             }
-            $r[$field_name] = join('|', $r[$field_name]);
+            if (isset($r[$field_name])) {
+                $r[$field_name] = join('|', $r[$field_name]);
+            }
         }
+
         // dddx($r);
 
         return $r;

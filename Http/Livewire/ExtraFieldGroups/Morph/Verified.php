@@ -117,7 +117,10 @@ class Verified extends Component {
     }
 
     public function addToList() {
-        $this->validate($this->rules());
+        // TO-DO: controllare. non deve validare se le rules sono vuote
+        if (! empty($this->rules())) {
+            $this->validate($this->rules());
+        }
 
         $xot = XotData::make();
         $profile = $xot->getProfileModelByUserId($this->user_id);
