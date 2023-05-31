@@ -6,6 +6,7 @@ namespace Modules\ExtraField\Http\Livewire\ExtraFieldGroups\Morph;
 
 use Carbon\Carbon;
 use Illuminate\Contracts\Support\Renderable;
+use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Database\Eloquent\Collection;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Notification;
@@ -15,6 +16,7 @@ use Modules\ExtraField\Actions\ExtraFieldGroup\GetRulesByGroupId;
 use Modules\ExtraField\Actions\GetUserExtraFieldsDataByGroupId;
 use Modules\ExtraField\Models\ExtraFieldGroup;
 use Modules\ExtraField\Models\ExtraFieldGroupMorph;
+use Modules\ExtraField\Models\ExtraFieldMorph;
 use Modules\Notify\Notifications\HtmlNotification;
 use Modules\Notify\Notifications\SmsNotification;
 use Modules\Xot\Datas\XotData;
@@ -43,13 +45,24 @@ class Verified extends Component
         $this->model_type = $model_type;
         $this->model_id = $model_id;
         $this->user_id = (string) Auth::id();
+
+        $this->refreshFormDataByList();
+    }
+
+    public function refreshFormDataByList()
+    {
+        $list = $this->getValuesList($this->user_id);
+
+        $list->each(function ($morph) {
+            $this->form_data[$morph->id]['note'] = $morph->note;
+        });
     }
 
     public function getValuesList(string $user_id = null)
     {
-        $l = app(GetUserExtraFieldsDataByGroupId::class)->execute($this->extra_field_group_id, $user_id, 'profile');
+        $list = app(GetUserExtraFieldsDataByGroupId::class)->execute($this->extra_field_group_id, $user_id, 'profile');
 
-        return $l;
+        return $list;
     }
 
     public static function getName(): string
@@ -93,6 +106,19 @@ class Verified extends Component
         $group_morph = ExtraFieldGroupMorph::find($group_morph_id);
 
         if ($group_morph->token == $this->form_data['token']) {
+            $group = ExtraFieldGroup::find($this->extra_field_group_id);
+            $field = $group->fields->first();
+
+            // Se ce n'è una verificata su altri profili OPPURE se ce n'è una con lo stesso mio userid non si può aggiungere alla lista
+            // TO-DO: trovare metodo migliore perchè non dovrebbe usare il gruppo ma i sottocampi per la verifica. Così è a rischio rottura
+            $g = ExtraFieldGroupMorph::where('user_id', '!=', $this->user_id)->where('value->'.$field->name, $group_morph->value[$field->name]);
+            $f = ExtraFieldMorph::where('user_id', '!=', $this->user_id)->where('extra_field_id', $field->id)->where('value', $group_morph->value[$field->name]);
+
+            dd([rowsToSql($g), $g->get(), rowsToSql($f), $f->get()]);
+
+            $g->delete();
+            $f->delete();
+
             $group_morph->update(['verified_at' => now()]);
 
             $this->form_data = [];
@@ -103,6 +129,21 @@ class Verified extends Component
 
             session()->flash('Token Errato');
         }
+
+        $this->emit('refresh');
+    }
+
+    public function changeNote(string $group_morph_id)
+    {
+        $group_morph = ExtraFieldGroupMorph::find($group_morph_id);
+
+        $group_morph->update(['note' => $this->form_data[$group_morph_id]['note']]);
+
+        $this->form_data = [];
+
+        $this->refreshFormDataByList();
+
+        session()->flash('Nota Modificata');
 
         $this->emit('refresh');
     }
@@ -134,14 +175,20 @@ class Verified extends Component
         $xot = XotData::make();
         $profile = $xot->getProfileModelByUserId($this->user_id);
 
-        // TO-DO: se non è verificato controlla nel proprio user id. se è verificato controlla in tutti gli utenti.
-        // se verifichi la cancelli agli account altrui
-        $existing = ExtraFieldGroupMorph::where(['user_id' => $this->user_id, 'value' => json_encode($this->form_data)])->get();
+        $group = ExtraFieldGroup::find($this->extra_field_group_id);
+        $field_name = $group->fields->first()->name;
+        // Se ce n'è una verificata su altri profili OPPURE se ce n'è una con lo stesso mio userid non si può aggiungere alla lista
+        // TO-DO: trovare metodo migliore perchè non dovrebbe usare il gruppo ma i sottocampi per la verifica. Così è a rischio rottura
+        $query = ExtraFieldGroupMorph::where('value->'.$field_name, $this->form_data[$field_name])->where(function (Builder $subquery) {
+            $subquery->where('user_id', $this->user_id)->orWhere('verified_at', '!=', null);
+        });
+        $existing = $query->get();
+
         if (true == $existing->isEmpty()) {
             app(\Modules\ExtraField\Actions\ExtraFieldGroup\Create::class)
                 ->execute($profile, $this->extra_field_group_id, $this->user_id, $this->form_data);
         } else {
-            dd([json_encode($this->form_data), 'value is still existing']);
+            session()->flash('status_error', 'Non puoi aggiungere questo valore');
         }
         $this->form_data = [];
     }

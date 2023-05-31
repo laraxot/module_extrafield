@@ -4,12 +4,13 @@ declare(strict_types=1);
 
 namespace Modules\ExtraField\Models;
 
-use Illuminate\Database\Eloquent\Relations\BelongsTo;
-use Illuminate\Database\Eloquent\Relations\HasMany;
-use Illuminate\Database\Eloquent\Relations\HasOne;
-use Illuminate\Support\Facades\Auth;
 use Spatie\Activitylog\LogOptions;
+use Illuminate\Support\Facades\Auth;
 use Spatie\Activitylog\Traits\LogsActivity;
+use Illuminate\Database\Eloquent\SoftDeletes;
+use Illuminate\Database\Eloquent\Relations\HasOne;
+use Illuminate\Database\Eloquent\Relations\HasMany;
+use Illuminate\Database\Eloquent\Relations\BelongsTo;
 
 /**
  * Modules\ExtraField\Models\ExtraFieldMorph.
@@ -59,6 +60,7 @@ use Spatie\Activitylog\Traits\LogsActivity;
 class ExtraFieldMorph extends BaseMorphPivot
 {
     use LogsActivity;
+    use SoftDeletes;
     /**
      * @var string[]
      */

@@ -5,7 +5,7 @@ declare(strict_types=1);
 use Illuminate\Database\Schema\Blueprint;
 use Modules\Xot\Database\Migrations\XotBaseMigration;
 
-class CreateExtraFieldGroupMorphTable extends XotBaseMigration
+class CreateExtraFieldMorphTable extends XotBaseMigration
 {
     /**
      * db up.
@@ -29,8 +29,8 @@ class CreateExtraFieldGroupMorphTable extends XotBaseMigration
         // -- UPDATE --
         $this->tableUpdate(
             function (Blueprint $table) {
-                if (! $this->hasColumn('extra_field_group_id')) {
-                    $table->integer('extra_field_group_id')->nullable()->index();
+                if (! $this->hasColumn('extra_field_id')) {
+                    $table->integer('extra_field_id')->nullable()->index();
                 }
                 if (! $this->hasColumn('value')) {
                     $table->text('value')->nullable();
@@ -41,36 +41,17 @@ class CreateExtraFieldGroupMorphTable extends XotBaseMigration
                 if (! $this->hasColumn('uuid')) {
                     $table->string('uuid')->nullable();
                 }
-                if ($this->hasColumn('extra_field_id')) {
-                    // $table->integer('extra_field_id')->nullable()->index();
-                    $table->dropColumn('extra_field_id');
-                }
                 if (! $this->hasColumn('favourite')) {
                     $table->boolean('favourite')->default(false);
                 }
                 if (! $this->hasColumn('note')) {
                     $table->string('note')->nullable();
                 }
-                if (! $this->hasColumn('cardinality')) {
-                    $table->integer('cardinality')->nullable();
+                if (! $this->hasColumn('rules')) {
+                    $table->json('rules')->nullable();
                 }
-
-                if (! $this->hasColumn('token')) {
-                    $table->string('token')->nullable();
-                }
-                if (! $this->hasColumn('verified_at')) {
-                    $table->timestamp('verified_at')->nullable();
-                    $table->string('verified_by')->nullable();
-                }
-                if (! $this->hasColumn('can_verified')) {
-                    $table->boolean('can_verified')->default(false);
-                }
-                if (! $this->hasColumn('mandatory')) {
-                    $table->boolean('mandatory')->default(false);
-                }
-
-                if (! $this->hasColumn('token_sent_at')) {
-                    $table->timestamp('token_sent_at')->nullable();
+                if (! $this->hasColumn('deleted_at')) {
+                    $table->softDeletes();
                 }
             }
         );

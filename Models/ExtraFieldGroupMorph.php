@@ -7,6 +7,7 @@ namespace Modules\ExtraField\Models;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
 use Illuminate\Database\Eloquent\Relations\HasMany;
 use Illuminate\Database\Eloquent\Relations\HasOne;
+use Illuminate\Database\Eloquent\SoftDeletes;
 use Illuminate\Support\Facades\Auth;
 
 /**
@@ -66,6 +67,8 @@ use Illuminate\Support\Facades\Auth;
  */
 class ExtraFieldGroupMorph extends BaseMorphPivot
 {
+    use SoftDeletes;
+
     /**
      * @var string[]
      */
