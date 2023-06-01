@@ -94,11 +94,6 @@ class Edit extends Modal
 
     public function save(): void
     {
-        /**
-         * @var string $group_id
-         */
-        $group_id = $this->getModel()->extraFieldGroups()->wherePivot('uuid', $this->uuid)->first()?->getKey();
-
         // TO-DO: controllare. non deve validare se le rules sono vuote
         if (! empty($this->rules())) {
             $this->validate($this->rules());
