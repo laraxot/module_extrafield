@@ -101,7 +101,7 @@ class ExtraFieldGroupPanel extends XotBasePanel
                 'comment' => null,
             ],
             (object) [
-                'type' => 'CheckboxBoolean',
+                'type' => 'Integer',
                 'name' => 'cardinality',
                 'comment' => null,
             ],
