@@ -82,6 +82,8 @@ class Create extends Modal
 
         $this->emit('refresh');
 
+        $this->emit('refreshServiceModal');
+
         $this->emit('modal.close');
 
         // qui bisognerebbe ricaricare/richiamare lo step InsertData

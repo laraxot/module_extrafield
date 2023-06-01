@@ -14,13 +14,14 @@ class DeleteByUuid
 
     public function execute(string $uuid): void
     {
-        $extra_field_group_morphs = ExtraFieldGroupMorph::where(['uuid' => $uuid])->firstOrFail();
-
-        $extra_field_group_morphs->delete();
-        // dddx($extra_field_group_morphs);
-
+        $extra_field_group_morphs = ExtraFieldGroupMorph::where(['uuid' => $uuid])->get();
         $extra_field_morphs = ExtraFieldMorph::where(['uuid' => $uuid])->get();
-        // dddx($extra_field_morphs);
+
+        // dddx([$uuid, $extra_field_morphs, $extra_field_group_morphs]);
+
+        foreach ($extra_field_group_morphs as $item) {
+            $item->delete();
+        }
 
         foreach ($extra_field_morphs as $item) {
             $item->delete();

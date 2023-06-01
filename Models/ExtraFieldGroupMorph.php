@@ -67,7 +67,8 @@ use Illuminate\Support\Facades\Auth;
  */
 class ExtraFieldGroupMorph extends BaseMorphPivot
 {
-    use SoftDeletes;
+    // TO-DO: rompe i coglioni quando cancello il gruppo dal profilo. capire perchè
+    // use SoftDeletes;
 
     /**
      * @var string[]

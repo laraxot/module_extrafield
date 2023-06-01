@@ -4,13 +4,13 @@ declare(strict_types=1);
 
 namespace Modules\ExtraField\Models;
 
-use Spatie\Activitylog\LogOptions;
-use Illuminate\Support\Facades\Auth;
-use Spatie\Activitylog\Traits\LogsActivity;
-use Illuminate\Database\Eloquent\SoftDeletes;
-use Illuminate\Database\Eloquent\Relations\HasOne;
-use Illuminate\Database\Eloquent\Relations\HasMany;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
+use Illuminate\Database\Eloquent\Relations\HasMany;
+use Illuminate\Database\Eloquent\Relations\HasOne;
+use Illuminate\Database\Eloquent\SoftDeletes;
+use Illuminate\Support\Facades\Auth;
+use Spatie\Activitylog\LogOptions;
+use Spatie\Activitylog\Traits\LogsActivity;
 
 /**
  * Modules\ExtraField\Models\ExtraFieldMorph.
@@ -60,7 +60,8 @@ use Illuminate\Database\Eloquent\Relations\BelongsTo;
 class ExtraFieldMorph extends BaseMorphPivot
 {
     use LogsActivity;
-    use SoftDeletes;
+    // TO-DO: rompe i coglioni quando cancello il gruppo dal profilo. capire perchè
+    // use SoftDeletes;
     /**
      * @var string[]
      */

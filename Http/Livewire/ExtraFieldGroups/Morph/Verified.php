@@ -114,7 +114,7 @@ class Verified extends Component
             $g = ExtraFieldGroupMorph::where('user_id', '!=', $this->user_id)->where('value->'.$field->name, $group_morph->value[$field->name]);
             $f = ExtraFieldMorph::where('user_id', '!=', $this->user_id)->where('extra_field_id', $field->id)->where('value', $group_morph->value[$field->name]);
 
-            dd([rowsToSql($g), $g->get(), rowsToSql($f), $f->get()]);
+            // dd([rowsToSql($g), $g->get(), rowsToSql($f), $f->get()]);
 
             $g->delete();
             $f->delete();
