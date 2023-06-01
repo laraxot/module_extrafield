@@ -11,11 +11,14 @@ use Modules\ExtraField\Actions\ExtraFieldGroup\GetRulesByGroupId;
 use Modules\ExtraField\Models\Contracts\HasExtraFieldGroupsContract;
 use Modules\UI\Actions\GetViewAction;
 use Modules\UI\Datas\FieldData;
+use Modules\Wire\Concerns\InteractsWithConfirmationModal;
 use Modules\Wire\View\Components\Modal\Modal;
 use Modules\Xot\Actions\GetModelByModelTypeAction;
 
 class Edit extends Modal
 {
+    use InteractsWithConfirmationModal;
+
     public array $form_data = [];
     public string $uuid;
     public string $model_type;
@@ -92,7 +95,50 @@ class Edit extends Modal
         return $convertedRules;
     }
 
-    public function save(): void
+    public function preSave(): void
+    {
+        $compatibleServices = app(Actions\ExtraFieldGroup\GetServicesByUserIdUuid::class)->execute($this->user_id, $this->uuid);
+
+        $this->askForConfirmation(
+            callback: function () {
+                $this->confirmSave();
+            },
+
+            prompt: [
+                'title' => __('Attenzione: Questi servizi verranno modificati'),
+
+                'message' => __('Sei sicuro di voler effettuare il cambiamento?'),
+
+                'confirm' => __('Si, sicuro!'),
+
+                'cancel' => __('No. Torna indietro'),
+            ],
+
+            tableHeaders: ['Nome Servizio'],
+
+            tableData: [$compatibleServices->pluck('name', 'id')->toArray()],
+
+            theme: 'warning',
+
+            metaData: [
+                'custom' => 'meta data',
+            ],
+
+            modalBehavior: [
+                'close-on-escape' => false,
+
+                'close-on-backdrop-click' => false,
+
+                'trap-focus' => true,
+            ],
+
+            modalAttributes: [
+                'size' => '2xl',
+            ]
+        );
+    }
+
+    public function confirmSave()
     {
         // TO-DO: controllare. non deve validare se le rules sono vuote
         if (! empty($this->rules())) {

@@ -1,4 +1,4 @@
-<x-modal.skin on-submit="save" :content-padding="false">
+<x-modal.skin :content-padding="false">
     <x-slot name="title">Modifica Campo</x-slot>
 
     @foreach ($fields as $field)
@@ -12,7 +12,7 @@
     <x-slot name="buttons">
 
         @if ($can_verified != true)
-            <x-button wire:click="save()" class="btn btn-primary rounded-5">
+            <x-button wire:click="preSave()" class="btn btn-primary rounded-5">
                 Modifica
             </x-button>
         @else
