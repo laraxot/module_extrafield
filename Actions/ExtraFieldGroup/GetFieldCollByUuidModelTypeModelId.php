@@ -34,22 +34,29 @@ class GetFieldCollByUuidModelTypeModelId
             throw new \Exception('[][]');
         }
         $model = $this->getModel();
+        // ok
         $model_fields = $model->extraFields()->wherePivot('uuid', $uuid)->get();
         $fields = $row->extraFieldGroup?->fields;
         if (null == $fields) {
             $fields = collect([]);
         }
         $fields = $fields->map(
-            function ($field) use ($model_fields, $uuid) {
+            function ($field) {
                 $field_arr = $field->toArray();
                 $field_data = FieldData::from($field_arr);
-                $pivot = $model_fields->where('id', $field->id)
+
+                // TO-DO: verificare sta roba che secondo me non serve a niente, complica e anche funziona malissimo dando eccezioni per niente.
+                // by Davide.
+                /*$pivot = $model_fields->where('id', $field->id)
                     ->where('pivot.uuid', $uuid)
                     ->first()
                     ?->getRelationValue('pivot');
                 if (! $pivot instanceof ExtraFieldMorph) {
-                    throw new \Exception('[][]');
-                }
+                    dddx($model_fields);
+                    throw new \Exception('['.$uuid.'][]');
+                }*/
+
+                $pivot = $field->pivot;
                 $value = $pivot->value;
                 $field_data->value = $value;
 
