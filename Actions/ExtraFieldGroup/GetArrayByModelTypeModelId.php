@@ -69,6 +69,7 @@ class GetArrayByModelTypeModelId
                     'uuid' => $group->pivot->uuid,
                     // gruppo con user_id null per i settaggi
                     'can_verified' => $can_verified,
+                    'mandatory' => $group->pivot->mandatory ?? false,
                 ];
             }
         );
@@ -124,14 +125,37 @@ class GetArrayByModelTypeModelId
                     if (strlen(strval($field_uuid)) < 2) {
                         $field->pivot->update(['uuid' => Str::uuid()]);
                     }
+
                     $v = $field->pivot->value;
-                    if (! isset($values[$field_uuid])) {
-                        $values[$field_uuid] = '';
+
+                    $found_key = array_search($field_uuid, array_column($values, 'id'));
+
+                    // TO-DO in questi casi che è false attenzione all'operatore logico. E' differente false e 0. da Davide
+                    // NB. E' molto meglio fare l'array così perchè così si può ordinare per preferiti e comunque in modo più semplice
+                    // visto che già la select prevede già gli array associativi
+                    if (false === $found_key) {
+                        $values[] = [
+                            'id' => $field_uuid,
+                            'favourite' => $field->pivot->groupMorph->favourite,
+                            'value' => $field_uuid,
+                            'name' => '',
+                            'disabled' => '',
+                        ];
+
+                        $found_key = array_key_last($values);
                     }
-                    $values[$field_uuid] .= $v.' ';
+
+                    // echo 'Found Key: '.$found_key.' on Id:'.$field_uuid.'<br>';
+
+                    // TO-TO: se favourite = 1 porta a primo campo.
+                    // difficile farlo su un array con indice uuid però
+                    // mi sa che dovrò farlo come collection
+                    $values[$found_key]['name'] .= $v.' ';
                 }
             }
         }
+
+        array_multisort(array_column($values, 'favourite'), SORT_DESC, $values);
 
         return $values;
     }
