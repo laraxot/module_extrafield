@@ -189,7 +189,7 @@ class Category extends Component
         dddx($compatibleServices);
 
         $this->askForConfirmation(
-            callback: function () use($uuid) {
+            callback: function () use ($uuid) {
                 $this->confirmDelete($uuid);
             },
 
