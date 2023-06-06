@@ -34,29 +34,29 @@ class GetFieldCollByUuidModelTypeModelId
             throw new \Exception('[][]');
         }
         $model = $this->getModel();
-        // ok
         $model_fields = $model->extraFields()->wherePivot('uuid', $uuid)->get();
+
         $fields = $row->extraFieldGroup?->fields;
         if (null == $fields) {
             $fields = collect([]);
         }
         $fields = $fields->map(
-            function ($field) {
+            function ($field) use ($model_fields, $uuid) {
                 $field_arr = $field->toArray();
                 $field_data = FieldData::from($field_arr);
 
-                // TO-DO: verificare sta roba che secondo me non serve a niente, complica e anche funziona malissimo dando eccezioni per niente.
-                // by Davide.
-                /*$pivot = $model_fields->where('id', $field->id)
+                // TO-DO: così su Edit va bene, e su modifica servizio anche con tendina vuota su campi non obbligatori va bene
+                // però mi sembra troppo arzigogolata. Controllare
+                $pivot = $model_fields->where('id', $field->id)
                     ->where('pivot.uuid', $uuid)
                     ->first()
-                    ?->getRelationValue('pivot');
-                if (! $pivot instanceof ExtraFieldMorph) {
-                    dddx($model_fields);
-                    throw new \Exception('['.$uuid.'][]');
-                }*/
+                    ?->getRelationValue('pivot') ?? $field->pivot;
 
-                $pivot = $field->pivot;
+                if (! $pivot instanceof ExtraFieldMorph) {
+                    throw new \Exception('['.$uuid.'][]');
+                }
+
+                // $pivot = $field->pivot;
                 $value = $pivot->value;
                 $field_data->value = $value;
 

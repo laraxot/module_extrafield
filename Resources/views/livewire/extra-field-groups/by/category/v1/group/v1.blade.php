@@ -56,6 +56,6 @@
 
         <x-button wire:click="edit('{{ $group->pivot->uuid }}','{{ $group->can_verified }}','{{ $group->id }}')">Edit
         </x-button>
-        <x-button wire:click="delete('{{ $group->pivot->uuid }}')" class="btn btn-danger">Delete</x-button>
+        <x-button wire:click="preDelete('{{ $group->pivot->uuid }}')" class="btn btn-danger">Delete</x-button>
     </x-slot>
 </x-std>

@@ -183,12 +183,52 @@ class Category extends Component
         return $fields;
     }
 
-    public function delete(string $uuid): void
+    public function preDelete($uuid): void
     {
-        // prima di cancellare dovrei far uscire un modal
-        // dove mi avverte che tot servizi/consensi verranno modificati
-        app(Actions\ExtraFieldGroup\DeleteByUuid::class)->execute($uuid);
+        $compatibleServices = app(Actions\ExtraFieldGroup\GetServicesByUserIdUuid::class)->execute($this->user_id, $uuid);
+        dddx($compatibleServices);
 
-        // $this->emit('modal.open', 'modal.extra-field-group.edit', $parz);
+        $this->askForConfirmation(
+            callback: function () use($uuid) {
+                $this->confirmDelete($uuid);
+            },
+
+            prompt: [
+                'title' => __('Attenzione: Questi servizi verranno modificati.'),
+
+                'message' => __('Sei sicuro di voler effettuare il cambiamento?'),
+
+                'confirm' => __('Si, sicuro!'),
+
+                'cancel' => __('No. Torna indietro'),
+            ],
+
+            tableHeaders: ['Nome Servizio', 'Tipo Modifica'],
+
+            tableData: [$compatibleServices->pluck('name', 'id')->toArray()],
+
+            theme: 'warning',
+
+            metaData: [
+                'custom' => 'meta data',
+            ],
+
+            modalBehavior: [
+                'close-on-escape' => false,
+
+                'close-on-backdrop-click' => false,
+
+                'trap-focus' => true,
+            ],
+
+            modalAttributes: [
+                'size' => '2xl',
+            ]
+        );
+    }
+
+    public function confirmDelete(string $uuid): void
+    {
+        app(Actions\ExtraFieldGroup\DeleteByUuid::class)->execute($uuid);
     }
 }
