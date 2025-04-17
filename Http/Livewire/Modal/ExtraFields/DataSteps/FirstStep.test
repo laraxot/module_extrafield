@@ -1,0 +1,61 @@
+<?php
+
+declare(strict_types=1);
+
+namespace Modules\ExtraField\Http\Livewire\Modal\ExtraFields\DataSteps;
+
+use Illuminate\Contracts\Support\Renderable;
+use Illuminate\Database\Eloquent\Relations\Relation;
+use Illuminate\Support\Facades\Auth;
+use Modules\ExtraField\Models\ExtraFieldGroup;
+use Spatie\LivewireWizard\Components\StepComponent;
+
+class FirstStep extends StepComponent {
+    public array $form_data = [];
+    public array $group_opts = [];
+
+    public bool $is_first = true;
+    public bool $is_last = false;
+
+    public function mount(string $model_type, string $model_id): void {
+        $this->form_data['user_id'] = (string) Auth::id();
+        $this->form_data['model_type'] = $model_type;
+        $this->form_data['model_id'] = $model_id;
+
+        $morph_map = [
+            'extra_field' => 'Modules\ExtraField\Models\ExtraField',
+        ];
+
+        Relation::morphMap($morph_map);
+
+        $groups = ExtraFieldGroup::whereHas('fields');
+
+        $group_opts = $groups->pluck('name', 'id')->all();
+
+        $this->group_opts = $group_opts;
+    }
+
+    public function render(): Renderable {
+        /**
+         * @phpstan-var view-string
+         */
+        $view = app(GetViewAction::class)->execute();
+
+        $view_params = [
+            'view' => $view,
+        ];
+
+        return view($view, $view_params);
+    }
+
+    public function stepInfo(): array {
+        return [
+            'label' => trans('pfed::data-steps.select_data'),
+            'icon' => 'fa-shopping-cart',
+        ];
+    }
+
+    public function goNextStep(): void {
+        $this->nextStep();
+    }
+}

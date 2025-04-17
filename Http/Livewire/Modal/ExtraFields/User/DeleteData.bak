@@ -1,0 +1,108 @@
+<?php
+
+declare(strict_types=1);
+
+namespace Modules\ExtraField\Http\Livewire\Modal\ExtraFields\User;
+
+use Illuminate\Contracts\Support\Renderable;
+use Illuminate\Database\Eloquent\Collection as EloquentCollection;
+use Illuminate\Database\Eloquent\Model;
+use Illuminate\Support\Collection;
+use Illuminate\Support\Facades\Auth;
+use Modules\Cms\Actions\GetViewAction;
+use Modules\UI\Datas\FieldData;
+use Modules\Xot\Actions\GetModelByModelTypeAction;
+use Modules\Wire\View\Components\Modal\Modal;
+
+class DeleteData extends Modal
+{
+    public string $title;
+    public array $form_data = [];
+    public string $user_id;
+    public string $uuid;
+    public string $model_type;
+    public string $model_id;
+    public Model $model;
+
+    // verificare o cambiare
+    public Collection $rows;
+
+    public function mount(string $uuid, string $model_type, string $model_id): void
+    {
+        $this->model_type = $model_type;
+        $this->model_id = $model_id;
+        $this->model = app(GetModelByModelTypeAction::class)->execute($this->model_type, $this->model_id);
+        $this->user_id = (string) Auth::id();
+        $this->uuid = $uuid;
+
+        $data = $this->rows->map(
+            function ($item) {
+                return [
+                    'name' => $item->name,
+                    'value' => $item->pivot->userValue($this->user_id),
+                ];
+            }
+        )->pluck('value', 'name')
+        ->all();
+
+        $this->form_data = $data;
+    }
+
+    public function getModelProperty(): Model
+    {
+        return $this->model::where('user_id', $this->user_id)->first();
+    }
+
+    public function getRowsProperty(): EloquentCollection
+    {
+        if (! method_exists($this->model, 'extraFields')) {
+            throw new \Exception('['.__LINE__.']['.__FILE__.']');
+        }
+        $rows = $this->model
+        ->extraFields()
+        // ->wherePivot('user_id', $this->user_id)
+        ->wherePivot('uuid', $this->uuid)
+        ->wherePivot('user_id', null)
+        ->get();
+
+        return $rows;
+    }
+
+    public function render(): Renderable
+    {
+        /**
+         * @phpstan-var view-string
+         */
+        $view = app(GetViewAction::class)->execute();
+
+        $view_params = [
+            'view' => $view,
+            'fields' => FieldData::collection($this->rows),
+        ];
+
+        return view($view, $view_params);
+    }
+
+    public static function attributes(): array
+    {
+        return [
+            // Set the modal size to 2xl, you can choose between:
+            // xs, sm, md, lg, xl, 2xl, 3xl, 4xl, 5xl, 6xl, 7xl
+            'size' => 'xl',
+        ];
+    }
+
+    public function delete(): void
+    {
+        $rows = $this->rows;
+        // dddx($rows);
+        foreach ($rows as $row) {
+            $value = collect($this->form_data)->get($row->name);
+            $row->pivot->delete();
+        }
+
+        $this->close();
+        $this->emit('refreshExtraFields');
+        session()->flash('message', 'Post successfully updated.');
+    }
+}
