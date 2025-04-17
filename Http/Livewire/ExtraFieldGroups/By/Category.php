@@ -5,7 +5,7 @@ declare(strict_types=1);
 namespace Modules\ExtraField\Http\Livewire\ExtraFieldGroups\By;
 
 use Illuminate\Contracts\Support\Renderable;
-use Illuminate\Database\Eloquent\Collection  as EloquentCollection;
+use Illuminate\Database\Eloquent\Collection as EloquentCollection;
 use Illuminate\Support\Collection;
 use Illuminate\Support\Facades\Auth;
 use Livewire\Component;

@@ -12,23 +12,23 @@ use Modules\UI\Datas\FieldData;
 /**
  * Modules\ExtraField\Models\ExtraField.
  *
- * @property int                                                                                       $id
- * @property string                                                                                    $name
- * @property \Illuminate\Support\Carbon|null                                                           $created_at
- * @property \Illuminate\Support\Carbon|null                                                           $updated_at
- * @property string                                                                                    $type
- * @property array|null                                                                                $rules
- * @property string|null                                                                               $created_by
- * @property string|null                                                                               $updated_by
- * @property array|null                                                                                $options
- * @property string|null                                                                               $attributes
- * @property \Kalnoy\Nestedset\Collection<int, \Modules\Blog\Models\Category>                          $categories
- * @property int|null                                                                                  $categories_count
- * @property \Illuminate\Database\Eloquent\Collection<int, \Modules\ExtraField\Models\ExtraFieldGroup> $extraFieldGroups
- * @property int|null                                                                                  $extra_field_groups_count
- * @property \Modules\ExtraField\Models\ExtraFieldMorph|null                                           $extraFieldMorph
- * @property \Illuminate\Database\Eloquent\Collection<int, \Modules\ExtraField\Models\ExtraFieldGroup> $groups
- * @property int|null                                                                                  $groups_count
+ * @property int                                                              $id
+ * @property string                                                           $name
+ * @property \Illuminate\Support\Carbon|null                                  $created_at
+ * @property \Illuminate\Support\Carbon|null                                  $updated_at
+ * @property string                                                           $type
+ * @property array|null                                                       $rules
+ * @property string|null                                                      $created_by
+ * @property string|null                                                      $updated_by
+ * @property array|null                                                       $options
+ * @property string|null                                                      $attributes
+ * @property \Kalnoy\Nestedset\Collection<int, \Modules\Blog\Models\Category> $categories
+ * @property int|null                                                         $categories_count
+ * @property \Illuminate\Database\Eloquent\Collection<int, ExtraFieldGroup>   $extraFieldGroups
+ * @property int|null                                                         $extra_field_groups_count
+ * @property ExtraFieldMorph|null                                             $extraFieldMorph
+ * @property \Illuminate\Database\Eloquent\Collection<int, ExtraFieldGroup>   $groups
+ * @property int|null                                                         $groups_count
  *
  * @method static \Modules\ExtraField\Database\Factories\ExtraFieldFactory factory($count = null, $state = [])
  * @method static \Illuminate\Database\Eloquent\Builder|ExtraField         newModelQuery()
@@ -50,9 +50,9 @@ use Modules\UI\Datas\FieldData;
  * @method static \Illuminate\Database\Eloquent\Builder|ExtraField         withoutAnyCategories()
  * @method static \Illuminate\Database\Eloquent\Builder|ExtraField         withoutCategories($categories)
  *
- * @property \Kalnoy\Nestedset\Collection<int, \Modules\Blog\Models\Category>                          $categories
- * @property \Illuminate\Database\Eloquent\Collection<int, \Modules\ExtraField\Models\ExtraFieldGroup> $extraFieldGroups
- * @property \Illuminate\Database\Eloquent\Collection<int, \Modules\ExtraField\Models\ExtraFieldGroup> $groups
+ * @property \Kalnoy\Nestedset\Collection<int, \Modules\Blog\Models\Category> $categories
+ * @property \Illuminate\Database\Eloquent\Collection<int, ExtraFieldGroup>   $extraFieldGroups
+ * @property \Illuminate\Database\Eloquent\Collection<int, ExtraFieldGroup>   $groups
  *
  * @mixin \Eloquent
  */

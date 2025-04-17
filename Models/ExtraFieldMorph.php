@@ -32,7 +32,7 @@ use Spatie\Activitylog\Traits\LogsActivity;
  * @property array|null                                                                       $rules
  * @property \Illuminate\Database\Eloquent\Collection<int, \Modules\Activity\Models\Activity> $activities
  * @property int|null                                                                         $activities_count
- * @property \Modules\ExtraField\Models\ExtraField|null                                       $extraField
+ * @property ExtraField|null                                                                  $extraField
  *
  * @method static \Illuminate\Database\Eloquent\Builder|ExtraFieldMorph newModelQuery()
  * @method static \Illuminate\Database\Eloquent\Builder|ExtraFieldMorph newQuery()
@@ -143,7 +143,7 @@ class ExtraFieldMorph extends BaseMorphPivot
     /**
      * Undocumented function.
      */
-    public function createUserValue(string $user_id, $value, string $uuid = null): self
+    public function createUserValue(string $user_id, $value, ?string $uuid = null): self
     {
         $row = ExtraFieldMorph::create([
             'user_id' => (string) $user_id,

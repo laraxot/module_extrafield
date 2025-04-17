@@ -58,7 +58,7 @@ class Verified extends Component
         });
     }
 
-    public function getValuesList(string $user_id = null)
+    public function getValuesList(?string $user_id = null)
     {
         $list = app(GetUserExtraFieldsDataByGroupId::class)->execute($this->extra_field_group_id, $user_id, 'profile');
 

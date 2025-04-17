@@ -13,30 +13,30 @@ use Spatie\Translatable\HasTranslations;
 /**
  * Modules\ExtraField\Models\ExtraFieldGroup.
  *
- * @property int                                                                                            $id
- * @property mixed|null                                                                                     $name
- * @property \Illuminate\Support\Carbon|null                                                                $created_at
- * @property \Illuminate\Support\Carbon|null                                                                $updated_at
- * @property string|null                                                                                    $created_by
- * @property string|null                                                                                    $updated_by
- * @property int|null                                                                                       $cardinality
- * @property string|null                                                                                    $description
- * @property \Kalnoy\Nestedset\Collection<int, \Modules\Blog\Models\Category>                               $categories
- * @property int|null                                                                                       $categories_count
- * @property \Illuminate\Database\Eloquent\Collection<int, \Modules\ExtraField\Models\ExtraFieldGroupMorph> $extraFieldGroupMorphs
- * @property int|null                                                                                       $extra_field_group_morphs_count
- * @property \Illuminate\Database\Eloquent\Collection<int, \Modules\ExtraField\Models\ExtraField>           $extraFields
- * @property int|null                                                                                       $extra_fields_count
- * @property \Illuminate\Database\Eloquent\Collection<int, \Modules\ExtraField\Models\ExtraField>           $fields
- * @property int|null                                                                                       $fields_count
- * @property \Illuminate\Database\Eloquent\Collection<int, \Modules\ExtraField\Models\ExtraFieldGroupMorph> $noUserExtraFieldGroupMorphs
- * @property int|null                                                                                       $no_user_extra_field_group_morphs_count
- * @property \Illuminate\Database\Eloquent\Collection<int, \Modules\ExtraField\Models\ExtraField>           $noUserFields
- * @property int|null                                                                                       $no_user_fields_count
- * @property \Illuminate\Database\Eloquent\Collection<int, \Modules\ExtraField\Models\ExtraField>           $userFields
- * @property int|null                                                                                       $user_fields_count
- * @property bool                                                                                           $mandatory
- * @property bool                                                                                           $can_verified
+ * @property int                                                                 $id
+ * @property mixed|null                                                          $name
+ * @property \Illuminate\Support\Carbon|null                                     $created_at
+ * @property \Illuminate\Support\Carbon|null                                     $updated_at
+ * @property string|null                                                         $created_by
+ * @property string|null                                                         $updated_by
+ * @property int|null                                                            $cardinality
+ * @property string|null                                                         $description
+ * @property \Kalnoy\Nestedset\Collection<int, \Modules\Blog\Models\Category>    $categories
+ * @property int|null                                                            $categories_count
+ * @property \Illuminate\Database\Eloquent\Collection<int, ExtraFieldGroupMorph> $extraFieldGroupMorphs
+ * @property int|null                                                            $extra_field_group_morphs_count
+ * @property \Illuminate\Database\Eloquent\Collection<int, ExtraField>           $extraFields
+ * @property int|null                                                            $extra_fields_count
+ * @property \Illuminate\Database\Eloquent\Collection<int, ExtraField>           $fields
+ * @property int|null                                                            $fields_count
+ * @property \Illuminate\Database\Eloquent\Collection<int, ExtraFieldGroupMorph> $noUserExtraFieldGroupMorphs
+ * @property int|null                                                            $no_user_extra_field_group_morphs_count
+ * @property \Illuminate\Database\Eloquent\Collection<int, ExtraField>           $noUserFields
+ * @property int|null                                                            $no_user_fields_count
+ * @property \Illuminate\Database\Eloquent\Collection<int, ExtraField>           $userFields
+ * @property int|null                                                            $user_fields_count
+ * @property bool                                                                $mandatory
+ * @property bool                                                                $can_verified
  *
  * @method static \Modules\ExtraField\Database\Factories\ExtraFieldGroupFactory factory($count = null, $state = [])
  * @method static \Illuminate\Database\Eloquent\Builder|ExtraFieldGroup         newModelQuery()
@@ -57,13 +57,13 @@ use Spatie\Translatable\HasTranslations;
  * @method static \Illuminate\Database\Eloquent\Builder|ExtraFieldGroup         withoutAnyCategories()
  * @method static \Illuminate\Database\Eloquent\Builder|ExtraFieldGroup         withoutCategories($categories)
  *
- * @property \Kalnoy\Nestedset\Collection<int, \Modules\Blog\Models\Category>                               $categories
- * @property \Illuminate\Database\Eloquent\Collection<int, \Modules\ExtraField\Models\ExtraFieldGroupMorph> $extraFieldGroupMorphs
- * @property \Illuminate\Database\Eloquent\Collection<int, \Modules\ExtraField\Models\ExtraField>           $extraFields
- * @property \Illuminate\Database\Eloquent\Collection<int, \Modules\ExtraField\Models\ExtraField>           $fields
- * @property \Illuminate\Database\Eloquent\Collection<int, \Modules\ExtraField\Models\ExtraFieldGroupMorph> $noUserExtraFieldGroupMorphs
- * @property \Illuminate\Database\Eloquent\Collection<int, \Modules\ExtraField\Models\ExtraField>           $noUserFields
- * @property \Illuminate\Database\Eloquent\Collection<int, \Modules\ExtraField\Models\ExtraField>           $userFields
+ * @property \Kalnoy\Nestedset\Collection<int, \Modules\Blog\Models\Category>    $categories
+ * @property \Illuminate\Database\Eloquent\Collection<int, ExtraFieldGroupMorph> $extraFieldGroupMorphs
+ * @property \Illuminate\Database\Eloquent\Collection<int, ExtraField>           $extraFields
+ * @property \Illuminate\Database\Eloquent\Collection<int, ExtraField>           $fields
+ * @property \Illuminate\Database\Eloquent\Collection<int, ExtraFieldGroupMorph> $noUserExtraFieldGroupMorphs
+ * @property \Illuminate\Database\Eloquent\Collection<int, ExtraField>           $noUserFields
+ * @property \Illuminate\Database\Eloquent\Collection<int, ExtraField>           $userFields
  *
  * @method static \Illuminate\Database\Eloquent\Builder|ExtraFieldGroup whereCanVerified($value)
  * @method static \Illuminate\Database\Eloquent\Builder|ExtraFieldGroup whereMandatory($value)
@@ -133,17 +133,17 @@ class ExtraFieldGroup extends BaseModel
         ->where('user_id', $user_id);
     }
 
-     /**
-      * @param \Illuminate\Database\Eloquent\Builder $query
-      * @param string                                $model_type
-      * @param string                                $model_id
-      *
-      * @return \Illuminate\Database\Eloquent\Builder
-      */
-     public function scopeWithPivotFields($query, $model_type, $model_id)
-     {
-         return $query->with(['noUserExtraFieldGroupMorphs' => function ($q) use ($model_type) {
-             $q->where('model_type', $model_type)->where('model_id', null);
-         }]);
-     }
+    /**
+     * @param \Illuminate\Database\Eloquent\Builder $query
+     * @param string                                $model_type
+     * @param string                                $model_id
+     *
+     * @return \Illuminate\Database\Eloquent\Builder
+     */
+    public function scopeWithPivotFields($query, $model_type, $model_id)
+    {
+        return $query->with(['noUserExtraFieldGroupMorphs' => function ($q) use ($model_type) {
+            $q->where('model_type', $model_type)->where('model_id', null);
+        }]);
+    }
 }
